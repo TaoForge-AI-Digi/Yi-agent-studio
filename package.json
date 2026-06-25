@@ -1,0 +1,14 @@
+{
+  "name": "yi-agent-studio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter @yi/desktop dev",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
+  }
+}
