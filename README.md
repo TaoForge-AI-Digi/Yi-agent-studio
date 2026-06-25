@@ -1,7 +1,7 @@
 # 弈 (Yi)
 
 <p align="center">
-  <img src="../yi-logo.png" alt="弈 Yi" width="160">
+  <img src="assets/yi-logo.png" alt="弈 Yi" width="160">
 </p>
 
 <p align="center">
