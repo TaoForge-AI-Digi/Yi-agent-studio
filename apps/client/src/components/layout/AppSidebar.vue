@@ -6,7 +6,7 @@ import { NButton, NModal, useMessage } from "naive-ui";
 import { useAppStore } from "@/stores/hermes/app";
 import { usePersistentRecord } from '@/composables/usePersistentRecord'
 import RouteLinkItem from '@/components/common/RouteLinkItem.vue'
-import ModelSelector from "@/components/layout/ModelSelector.vue";
+// import ModelSelector from "@/components/layout/ModelSelector.vue"; // ponytail: 移到 ChatInput 工具栏
 import LanguageSwitch from "@/components/layout/LanguageSwitch.vue";
 import ThemeSwitch from "@/components/layout/ThemeSwitch.vue";
 import VersionManagementModal from "@/components/layout/VersionManagementModal.vue";
@@ -242,8 +242,6 @@ function openVersionManagement() {
         </div>
       </div>
     </nav>
-
-    <ModelSelector />
 
     <div class="sidebar-footer">
       <button class="nav-item logout-item" @click="handleLogout">
