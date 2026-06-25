@@ -1,7 +1,7 @@
 export default {
   // 登录
   login: {
-    title: 'Hermes Web UI',
+    title: '弈',
     description: '输入用户名和密码以继续。',
     placeholder: '访问令牌',
     submit: '登录',
@@ -15,10 +15,10 @@ export default {
     defaultCredentialsHint: '默认登录名：admin，默认密码：123456',
     credentialsRequired: '请输入用户名和密码',
     invalidCredentials: '用户名或密码错误',
-    tooManyAttempts: '登录失败次数过多，请稍后重试',
-    lockResetHint: '如果这是你的服务器，可以执行以下命令清除登录锁定：',
-    defaultLoginResetHint: '如需重置默认 admin 密码，可以执行：',
-    sessionExpired: '登录已过期，请重新登录',
+    tooManyAttempts: '登录失败次数过多,请稍后重试',
+    lockResetHint: '如果这是你的服务器,可以执行以下命令清除登录锁定:',
+    defaultLoginResetHint: '如需重置默认 admin 密码,可以执行:',
+    sessionExpired: '登录已过期,请重新登录',
     accessDenied: '你没有权限访问该资源',
     passwordMismatch: '两次密码不一致',
     passwordTooShort: '密码长度至少 6 个字符',

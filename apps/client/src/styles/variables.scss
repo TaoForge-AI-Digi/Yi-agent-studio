@@ -57,54 +57,55 @@
 }
 
 .dark {
-  // Backgrounds
-  --bg-primary: #1a1a1a;
-  --bg-secondary: #252525;
-  --bg-sidebar: #202020;
-  --bg-card: #333333;
-  --bg-card-hover: #333333;
-  --bg-input: #2a2a2a;
+  // ponytail: 奕深色木质主题 (棋枰/棋子)
+  // Backgrounds — 深木色
+  --bg-primary: #1a1208;
+  --bg-secondary: #2a2018;
+  --bg-sidebar: #221a10;
+  --bg-card: #2a2018;
+  --bg-card-hover: #322a20;
+  --bg-input: #221a10;
 
-  // Borders
-  --border-color: #3a3a3a;
-  --border-light: #333333;
+  // Borders — 暖灰木纹
+  --border-color: #5a4a38;
+  --border-light: #4a3a28;
 
-  // Accent
-  --accent-primary: #e0e0e0;
-  --accent-hover: #f5f5f5;
-  --accent-muted: #888888;
+  // Accent — 暖金 (棋枰高亮)
+  --accent-primary: #c8a060;
+  --accent-hover: #d8b070;
+  --accent-muted: #8a7a60;
 
-  // Text
-  --text-primary: #f0f0f0;
-  --text-secondary: #c0c0c0;
-  --text-muted: #888888;
+  // Text — 棋子白/暖灰
+  --text-primary: #e8d8b8;
+  --text-secondary: #c8b898;
+  --text-muted: #8a7a60;
 
   // Status
   --success: #66bb6a;
-  --error: #ef5350;
-  --warning: #ffb74d;
+  --error: #d04040;
+  --warning: #e0a040;
 
   // Message bubbles
-  --msg-user-bg: #252525;
-  --msg-assistant-bg: #252525;
-  --msg-system-border: #555555;
+  --msg-user-bg: #322a20;
+  --msg-assistant-bg: #2a2018;
+  --msg-system-border: #5a4a38;
 
   // Code
-  --code-bg: #1e1e1e;
+  --code-bg: #221a10;
 
   // Utility
-  --text-on-accent: #1a1a1a;
-  --text-on-overlay: #ffffff;
+  --text-on-accent: #1a1208;
+  --text-on-overlay: #e8d8b8;
   --accent-info: #6ba3d6;
 
   // RGB components
-  --accent-primary-rgb: 240, 240, 240;
-  --accent-hover-rgb: 245, 245, 245;
-  --text-primary-rgb: 240, 240, 240;
-  --text-muted-rgb: 136, 136, 136;
+  --accent-primary-rgb: 200, 160, 96;
+  --accent-hover-rgb: 216, 176, 112;
+  --text-primary-rgb: 232, 216, 184;
+  --text-muted-rgb: 138, 122, 96;
   --success-rgb: 102, 187, 106;
-  --error-rgb: 239, 83, 80;
-  --warning-rgb: 255, 183, 77;
+  --error-rgb: 208, 64, 64;
+  --warning-rgb: 224, 160, 64;
   --accent-info-rgb: 107, 163, 214;
 }
 
