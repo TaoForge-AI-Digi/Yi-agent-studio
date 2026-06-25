@@ -99,7 +99,7 @@ defineExpose({ scrollToBottom })
         >
             <template #empty>
                 <div class="empty-state">
-                <img :src="'/coding-agents/hermes.png'" alt="Hermes" class="empty-logo" />
+                <img :src="'/yi.svg'" alt="弈" class="empty-logo" />
                 <p>{{ t("chat.emptyState") }}</p>
             </div>
             </template>

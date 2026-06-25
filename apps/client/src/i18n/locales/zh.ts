@@ -413,7 +413,7 @@ export default {
     contextEditInvalid: '请输入有效的上下文长度',
     contextEditSuccess: '上下文长度已更新',
     contextEditFailed: '更新失败',
-    emptyState: '开始与 Hermes Agent 对话',
+    emptyState: '开始对话',
     emptyStateAgent: '开始与 {agent} 对话',
     viewOlderInHistory: '前面的消息请到历史记录查看',
     scrollToBottom: '滚动到底部',

@@ -111,8 +111,8 @@ const emptyState = computed(() => {
     };
   }
   return {
-    logo: "/coding-agents/hermes.png",
-    alt: "Hermes",
+    logo: "/yi.svg",
+    alt: "弈",
     text: t("chat.emptyState"),
   };
 });
