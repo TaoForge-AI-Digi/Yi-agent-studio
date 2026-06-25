@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+﻿import { createRouter, createWebHashHistory } from 'vue-router'
 import { isStoredSuperAdmin } from '@/api/client'
 
 const router = createRouter({
@@ -6,134 +6,143 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/hermes/chat',
+      redirect: '/yi/chat',
     },
     {
-      path: '/hermes/chat',
-      name: 'hermes.chat',
+      path: '/yi/chat',
+      name: 'yi.chat',
       component: () => import('@/views/hermes/ChatView.vue'),
     },
     {
-      path: '/hermes/session/:sessionId',
-      name: 'hermes.session',
+      path: '/yi/session/:sessionId',
+      name: 'yi.session',
       component: () => import('@/views/hermes/ChatView.vue'),
     },
     {
-      path: '/hermes/history',
-      name: 'hermes.history',
+      path: '/yi/history',
+      name: 'yi.history',
       component: () => import('@/views/hermes/HistoryView.vue'),
     },
     {
-      path: '/hermes/history/session/:sessionId',
-      name: 'hermes.historySession',
+      path: '/yi/history/session/:sessionId',
+      name: 'yi.historySession',
       component: () => import('@/views/hermes/HistoryView.vue'),
     },
     {
-      path: '/hermes/global-agent',
-      name: 'hermes.globalAgent',
+      path: '/yi/global-agent',
+      name: 'yi.globalAgent',
       component: () => import('@/views/hermes/GlobalAgentView.vue'),
     },
     {
-      path: '/hermes/global-agent/session/:sessionId',
-      name: 'hermes.globalAgentSession',
+      path: '/yi/global-agent/session/:sessionId',
+      name: 'yi.globalAgentSession',
       component: () => import('@/views/hermes/GlobalAgentView.vue'),
     },
     {
-      path: '/hermes/jobs',
-      name: 'hermes.jobs',
+      path: '/yi/jobs',
+      name: 'yi.jobs',
       component: () => import('@/views/hermes/JobsView.vue'),
     },
     {
-      path: '/hermes/kanban',
-      name: 'hermes.kanban',
+      path: '/yi/kanban',
+      name: 'yi.kanban',
       component: () => import('@/views/hermes/KanbanView.vue'),
     },
     {
-      path: '/hermes/workflow',
-      name: 'hermes.workflow',
+      path: '/yi/workflow',
+      name: 'yi.workflow',
       component: () => import('@/views/hermes/WorkflowView.vue'),
     },
     {
-      path: '/hermes/models',
-      name: 'hermes.models',
+      path: '/yi/models',
+      name: 'yi.models',
       component: () => import('@/views/hermes/ModelsView.vue'),
     },
     {
-      path: '/hermes/profiles',
-      name: 'hermes.profiles',
+      path: '/yi/profiles',
+      name: 'yi.profiles',
       component: () => import('@/views/hermes/ProfilesView.vue'),
-      meta: { requiresSuperAdmin: true },
     },
     {
-      path: '/hermes/logs',
-      name: 'hermes.logs',
+      path: '/yi/logs',
+      name: 'yi.logs',
       component: () => import('@/views/hermes/LogsView.vue'),
     },
     {
-      path: '/hermes/usage',
-      name: 'hermes.usage',
+      path: '/yi/usage',
+      name: 'yi.usage',
       component: () => import('@/views/hermes/UsageView.vue'),
     },
     {
-      path: '/hermes/performance',
-      name: 'hermes.performance',
+      path: '/yi/performance',
+      name: 'yi.performance',
       component: () => import('@/views/hermes/PerformanceView.vue'),
       meta: { requiresSuperAdmin: true },
     },
     {
-      path: '/hermes/skills-usage',
-      name: 'hermes.skillsUsage',
+      path: '/yi/skills-usage',
+      name: 'yi.skillsUsage',
       component: () => import('@/views/hermes/SkillsUsageView.vue'),
     },
     {
-      path: '/hermes/skills',
-      name: 'hermes.skills',
+      path: '/yi/skills',
+      name: 'yi.skills',
       component: () => import('@/views/hermes/SkillsView.vue'),
     },
     {
-      path: '/hermes/plugins',
-      name: 'hermes.plugins',
+      path: '/yi/plugins',
+      name: 'yi.plugins',
       component: () => import('@/views/hermes/PluginsView.vue'),
     },
     {
-      path: '/hermes/memory',
-      name: 'hermes.memory',
+      path: '/yi/memory',
+      name: 'yi.memory',
       component: () => import('@/views/hermes/MemoryView.vue'),
     },
     {
-      path: '/hermes/settings',
-      name: 'hermes.settings',
+      path: '/yi/archive',
+      name: 'yi.archive',
+      component: () => import('@/views/hermes/ArchiveView.vue'),
+    },
+    {
+      path: '/yi/marketplace',
+      name: 'yi.marketplace',
+      component: () => import('@/views/hermes/MarketplaceView.vue'),
+    },
+    {
+      path: '/yi/settings',
+      name: 'yi.settings',
       component: () => import('@/views/hermes/SettingsView.vue'),
     },
     {
-      path: '/hermes/channels',
-      name: 'hermes.channels',
+      path: '/yi/channels',
+      name: 'yi.channels',
       component: () => import('@/views/hermes/ChannelsView.vue'),
     },
     {
-      path: '/hermes/terminal',
-      name: 'hermes.terminal',
+      path: '/yi/terminal',
+      name: 'yi.terminal',
       component: () => import('@/views/hermes/TerminalView.vue'),
       meta: { requiresSuperAdmin: true },
     },
     {
-      path: '/hermes/group-chat',
-      name: 'hermes.groupChat',
+      path: '/yi/group-chat',
+      name: 'yi.groupChat',
       component: () => import('@/views/hermes/GroupChatView.vue'),
     },
     {
-      path: '/hermes/group-chat/room/:roomId',
-      name: 'hermes.groupChatRoom',
+      path: '/yi/group-chat/room/:roomId',
+      name: 'yi.groupChatRoom',
       component: () => import('@/views/hermes/GroupChatView.vue'),
     },
     {
-      path: '/hermes/files',
-      name: 'hermes.files',
+      path: '/yi/files',
+      name: 'yi.files',
       component: () => import('@/views/hermes/FilesView.vue'),
     },
     {
-      path: '/hermes/mcp',
-      name: 'hermes.mcp',
+      path: '/yi/mcp',
+      name: 'yi.mcp',
       component: () => import('@/views/hermes/McpManagerView.vue'),
       meta: { requiresSuperAdmin: true },
     },
@@ -143,7 +152,7 @@ const router = createRouter({
 router.beforeEach((to, _from, next) => {
   // ponytail: 奕无登录,直接放行(除 super-admin 页面)
   if (to.meta.requiresSuperAdmin && !isStoredSuperAdmin()) {
-    next({ name: 'hermes.chat' })
+    next({ name: 'yi.chat' })
     return
   }
   next()

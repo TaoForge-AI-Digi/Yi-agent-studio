@@ -77,6 +77,7 @@ export default {
   // Common
   common: {
     loading: 'Loading...',
+    comingSoon: 'Coming soon',
     cancel: 'Cancel',
     delete: 'Delete',
     edit: 'Edit',
@@ -188,11 +189,13 @@ export default {
     kanban: 'Kanban',
     workflow: 'Workflow',
     models: 'Models',
-    profiles: 'Profiles',
+    profiles: 'Characters',
     skills: 'Skills',
     plugins: 'Plugins',
     mcp: 'MCP',
     memory: 'Memory',
+    archive: 'Archive',
+    marketplace: 'Marketplace',
     logs: 'Logs',
     usage: 'Usage',
     performance: 'Performance',

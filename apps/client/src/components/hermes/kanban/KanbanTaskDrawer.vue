@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { NDrawer, NDrawerContent, NButton, NSelect, NInput, NSpin, NModal, useMessage } from 'naive-ui'
 import { useI18n } from 'vue-i18n'
@@ -474,7 +474,7 @@ function handleNavigateTask(taskId: string) {
               <NSpin v-if="sessionLoading" :size="12" style="margin-left: 6px;" />
             </div>
             <div v-if="showSessions && sessionResults.length > 0" class="session-list">
-              <div v-for="session in sessionResults" :key="session.id" class="session-item" @click="router.push({ name: 'hermes.chat', query: { session: session.id } })">
+              <div v-for="session in sessionResults" :key="session.id" class="session-item" @click="router.push({ name: 'yi.chat', query: { session: session.id } })">
                 <div class="session-title">{{ session.title || session.id }}</div>
                 <div class="session-meta">
                   <span>{{ session.source }}</span>

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ChatPanel from '@/components/hermes/chat/ChatPanel.vue'
@@ -27,7 +27,7 @@ const routeProfile = computed(() => {
 async function loadRouteSession() {
   await chatStore.loadSessions(chatStore.sessionProfileFilter, routeSessionId.value)
   if (routeSessionId.value && chatStore.activeSessionId !== routeSessionId.value) {
-    await router.replace({ name: 'hermes.globalAgent' })
+    await router.replace({ name: 'yi.globalAgent' })
   }
 }
 

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import GroupChatPanel from '@/components/hermes/group-chat/GroupChatPanel.vue'
@@ -17,13 +17,13 @@ async function syncRouteRoom() {
     const roomId = routeRoomId.value
     if (!roomId) {
         if (!store.currentRoomId && store.rooms.length > 0) {
-            await router.replace({ name: 'hermes.groupChatRoom', params: { roomId: store.rooms[0].id } })
+            await router.replace({ name: 'yi.groupChatRoom', params: { roomId: store.rooms[0].id } })
         }
         return
     }
 
     if (!store.rooms.some(room => room.id === roomId)) {
-        await router.replace({ name: 'hermes.groupChat' })
+        await router.replace({ name: 'yi.groupChat' })
         return
     }
 

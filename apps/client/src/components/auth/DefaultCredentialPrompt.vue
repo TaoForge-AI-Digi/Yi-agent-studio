@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
@@ -60,7 +60,7 @@ function remindLater() {
 
 function goToAccountSettings() {
   show.value = false;
-  router.push({ name: "hermes.settings", query: { tab: "account" } });
+  router.push({ name: "yi.settings", query: { tab: "account" } });
 }
 
 watch(() => route.fullPath, () => {

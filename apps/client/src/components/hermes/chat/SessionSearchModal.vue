@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { NButton, NInput, NModal, NSpin, useMessage } from 'naive-ui'
@@ -150,7 +150,7 @@ async function openItem(item: SearchItem) {
     })
   }
   await chatStore.switchSession(item.id, messageId)
-  const routeName = chatStore.runtimeMode === 'global_agent' ? 'hermes.globalAgentSession' : 'hermes.session'
+  const routeName = chatStore.runtimeMode === 'global_agent' ? 'yi.globalAgentSession' : 'yi.session'
   if (router.currentRoute.value.name !== routeName || router.currentRoute.value.params.sessionId !== item.id) {
     await router.push({ name: routeName, params: { sessionId: item.id } })
   }

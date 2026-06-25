@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ChatPanel from '@/components/hermes/chat/ChatPanel.vue'
@@ -26,7 +26,7 @@ const routeProfile = computed(() => {
 
 const productTitle = 'Hermes Studio'
 const tabTitle = computed(() => {
-  if (route.name !== 'hermes.session') return productTitle
+  if (route.name !== 'yi.session') return productTitle
   return chatStore.activeSession?.title?.trim() || productTitle
 })
 
@@ -41,7 +41,7 @@ onUnmounted(() => {
 async function loadRouteSession() {
   await chatStore.loadSessions(chatStore.sessionProfileFilter, routeSessionId.value)
   if (routeSessionId.value && chatStore.activeSessionId !== routeSessionId.value) {
-    await router.replace({ name: 'hermes.chat' })
+    await router.replace({ name: 'yi.chat' })
   }
 }
 

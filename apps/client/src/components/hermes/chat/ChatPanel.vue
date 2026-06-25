@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { renameSession, setSessionWorkspace, batchDeleteSessions, exportSession } from "@/api/hermes/sessions";
 import type { AvailableModelGroup } from "@/api/hermes/system";
 import { fetchCodingAgentsStatus, inferCodingAgentApiMode, normalizeCodingAgentApiMode, type CodingAgentApiMode, type CodingAgentId } from "@/api/coding-agents";
@@ -55,7 +55,7 @@ const showToolPanel = ref(false);
 const activeToolPanel = ref<"files" | "terminal">("files");
 const TOOL_PANEL_MIN_WIDTH = 360;
 const TOOL_PANEL_DEFAULT_WIDTH = 560;
-const TOOL_PANEL_STORAGE_KEY = "hermes.chat.toolPanelWidth";
+const TOOL_PANEL_STORAGE_KEY = "yi.`chat.toolPanelWidth";
 const toolPanelWidth = ref(loadToolPanelWidth());
 const toolResizeStart = ref<{ x: number; width: number } | null>(null);
 
@@ -85,7 +85,7 @@ const toolPanelStyle = computed(() => ({
 
 function sessionHref(sessionId: string) {
   return router.resolve({
-    name: chatStore.runtimeMode === "global_agent" ? "hermes.globalAgentSession" : "hermes.session",
+    name: chatStore.runtimeMode === "global_agent" ? "yi.`globalAgentSession" : "yi.`session",
     params: { sessionId },
   }).href;
 }
@@ -200,7 +200,7 @@ function handleChatDrop(event: DragEvent) {
 async function handleSessionClick(sessionId: string) {
   chatStore.clearSessionCompletedUnread(sessionId);
   await router.push({
-    name: chatStore.runtimeMode === "global_agent" ? "hermes.globalAgentSession" : "hermes.session",
+    name: chatStore.runtimeMode === "global_agent" ? "yi.`globalAgentSession" : "yi.`session",
     params: { sessionId },
   });
   if (chatStore.activeSessionId !== sessionId) {
@@ -495,7 +495,7 @@ watch(
 async function quickNewChat() {
   const session = chatStore.newChat({})
   await router.push({
-    name: chatStore.runtimeMode === 'global_agent' ? 'hermes.globalAgentSession' : 'hermes.session',
+    name: chatStore.runtimeMode === 'global_agent' ? 'yi.globalAgentSession' : 'yi.session',
     params: { sessionId: session.id },
   })
 }
@@ -572,7 +572,7 @@ async function confirmNewChat() {
     workspace: newChatWorkspace.value || null,
   });
   await router.push({
-    name: chatStore.runtimeMode === "global_agent" ? "hermes.globalAgentSession" : "hermes.session",
+    name: chatStore.runtimeMode === "global_agent" ? "yi.`globalAgentSession" : "yi.`session",
     params: { sessionId: session.id },
   });
   showNewChatModal.value = false;
@@ -584,7 +584,7 @@ function sessionProfile(sessionId: string): string | null {
 
 function buildSessionUrl(sessionId: string, profile?: string | null): string {
   const href = router.resolve({
-    name: chatStore.runtimeMode === "global_agent" ? "hermes.globalAgentSession" : "hermes.session",
+    name: chatStore.runtimeMode === "global_agent" ? "yi.`globalAgentSession" : "yi.`session",
     params: { sessionId },
     query: profile ? { profile } : undefined,
   }).href;
@@ -763,7 +763,7 @@ const contextMenuOptions = computed(() => {
 });
 
 function openSettingsPage() {
-  router.push({ name: "hermes.settings" });
+  router.push({ name: "yi.settings" });
 }
 
 function handleContextMenu(e: MouseEvent, sessionId: string) {
@@ -1608,37 +1608,6 @@ async function handleSessionModelCustomSubmit() {
               </template>
               {{ t("chat.copySessionId") }}
             </NTooltip>
-            <NButton
-              class="header-model-button"
-              size="small"
-              :circle="isMobile"
-              :title="activeSessionModelLabel"
-              @click="handleHeaderModelClick"
-            >
-              <template #icon>
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.8"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <circle cx="12" cy="12" r="3" />
-                  <path d="M12 1v4" />
-                  <path d="M12 19v4" />
-                  <path d="M1 12h4" />
-                  <path d="M19 12h4" />
-                  <path d="M4.22 4.22l2.83 2.83" />
-                  <path d="M16.95 16.95l2.83 2.83" />
-                  <path d="M4.22 19.78l2.83-2.83" />
-                  <path d="M16.95 7.05l2.83-2.83" />
-                </svg>
-              </template>
-              <template v-if="!isMobile">{{ activeSessionModelLabel }}</template>
-            </NButton>
           </template>
         </div>
       </header>

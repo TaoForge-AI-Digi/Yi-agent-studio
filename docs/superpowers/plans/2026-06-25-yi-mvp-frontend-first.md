@@ -1,18 +1,20 @@
-# 弈 MVP · 子计划 C:前端先行 (Electron + React UI, Mock State) Implementation Plan
+# 弈 MVP · 子计划 C:前端先行 (Vue 3 + Vite SPA, Mock State) Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** 搭出弈的完整前端——Electron 窗口里看见棋枰/棋子/小目/收官/布势输入/模式切换/资产开关,状态用 mock(硬编码对话树 + 假 stream),棋谱可 load/save。让创始人先看见产品样子,真能力(B)和运行时(A 残余)后续接入。
+> **状态:** 历史规划稿。原计划为 Electron + React + Zustand + pnpm monorepo,**实际落地已改方案**:Vue 3 + Vite + Pinia + Naive UI 的单 SPA(`apps/client/`),无 monorepo,无 Electron,状态走 mock。Phase 1 任务见同目录 `2026-06-25-yi-mvp-walking-skeleton.md`。技术栈全景见 `docs/superpowers/specs/2026-06-25-yi-tech-architecture.md` §1.1 / §1.4 / §3.6 / §五 ADR。
 
-**Architecture:** pnpm monorepo。`packages/shared` 纯类型(UI 契约),`packages/assets` 棋谱读写,`apps/desktop` Electron + React + Vite。Renderer 通过 preload 桥接 mock 状态源(后续换 IPC)。状态管理用 Zustand(轻、免 boilerplate)。
+**Goal:** 搭出弈的完整前端——浏览器/Vite dev server 窗口里看见棋枰/侧栏/对话/输入条/模式切换/资产开关/角色/典藏/市场,状态用 mock(硬编码对话树 + 假 stream),棋谱可 load/save。让创始人先看见产品样子,真能力(后端 / 三层进程 / utility 沙箱)后续接入。
 
-**Tech Stack:** TypeScript、Electron 30+、Vite、React 18、Zustand、Framer Motion(棋子动画)、`ulid`、`js-yaml`、Vitest。
+**Architecture:** 单 Vue 3 SPA(`apps/client/`)。Vite 8 跑 dev server + 生产构建,Pinia 3 管状态,Naive UI 2 提供组件,vue-router 4 (hash 模式)管路由,vue-i18n 11 管多语言。当前由抄自 hermes-studio 的 287 个 Vue 文件 + 9 语言 i18n + 深色木质主题构成壳,内填奕品牌。
+
+**Tech Stack:** TypeScript 5.8、Vue 3.5、`<script setup>`、Vite 8、Pinia 3、Naive UI 2、vue-router 4、vue-i18n 11、monaco-editor、xterm.js、@vue-flow/core、markdown-it + katex + highlight.js + mermaid、Vitest 3、Playwright、js-yaml、adm-zip。详见 `docs/superpowers/specs/2026-06-25-yi-tech-architecture.md` §1.1。
 
 ## Global Constraints
 
-- 全 TypeScript,`strict: true`。Renderer 用 Vite 的 ESBuild,main 用 tsx/tsc
-- 包间依赖用 `workspace:*`
-- ESM,相对导入写 `.js` 扩展名(NodeNext 要求,main 侧);Renderer 侧 Vite 处理可不写
+- 全 TypeScript,`strict: true`。SPA 由 Vite 处理 ESBuild,无 main 进程
+- 单包,无 workspace
+- ESM,`vite.config.ts` 配 `manualChunks` 拆 monaco/mermaid/xterm/vue-vendor/ui-vendor
 - TDD:每个任务先写失败测试再实现(组件测试用 Vitest + @testing-library/react)
 - 提交粒度:每任务一 commit,约定式 message
 - 不引入未列出依赖。LLM/真工具/真 AgentLoop 在 B/A 残余,本计划全 mock

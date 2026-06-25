@@ -2,6 +2,8 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
+> **状态:** 历史规划稿。原计划为 pnpm monorepo + headless Node CLI + stub LLM,**实际落地已改方案**:Phase 1 跳过本子计划,直接走前端先行(子计划 C) + 抄自 hermes-studio 的 Vue 3 SPA。Agent 核心 / 对话树 / stub LLM / 工具注册全部未启动。后端 / 三层进程 / utility 沙箱等 Phase 2 再起。技术栈全景见 `docs/superpowers/specs/2026-06-25-yi-tech-architecture.md`。
+
 **Goal:** 搭出弈的端到端架构骨架——headless CLI 跑通"布势→长考→分投→落子→收官",棋谱读写,STOP/FORK。架构是真的,能力用 stub(LLM 返回 canned 计划、一个真 fs.list 工具)。
 
 **Architecture:** pnpm monorepo。`packages/shared` 纯类型,`packages/storage` 文件 IO,`packages/assets` 棋谱读写,`apps/desktop` 主进程含对话树/stub LLM/工具注册/Agent 循环/headless 入口。无 Electron、无 UI(留子计划 C)。

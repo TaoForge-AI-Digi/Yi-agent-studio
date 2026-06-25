@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { computed } from 'vue'
 import { NTooltip } from 'naive-ui'
 import { useI18n } from 'vue-i18n'
@@ -29,25 +29,25 @@ const historyButtonLabel = computed(() =>
 
 function openChat() {
   if (props.active === 'chat') return
-  void router.push({ name: 'hermes.chat' })
+  void router.push({ name: 'yi.chat' })
 }
 
 function openHistory() {
   if (props.active === 'history') {
-    void router.push({ name: 'hermes.chat' })
+    void router.push({ name: 'yi.chat' })
     return
   }
-  void router.push({ name: 'hermes.history' })
+  void router.push({ name: 'yi.history' })
 }
 
 function openGroupChat() {
   if (props.active === 'group') return
-  void router.push({ name: 'hermes.groupChat' })
+  void router.push({ name: 'yi.groupChat' })
 }
 
 function openWorkflow() {
   if (props.active === 'workflow') return
-  void router.push({ name: 'hermes.workflow' })
+  void router.push({ name: 'yi.workflow' })
 }
 </script>
 

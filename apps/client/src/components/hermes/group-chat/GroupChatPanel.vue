@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -84,7 +84,7 @@ function openPageSidebar() {
 }
 
 function openSettingsPage() {
-    router.push({ name: 'hermes.settings' })
+    router.push({ name: 'yi.settings' })
 }
 
 function hasDraggedFiles(event: DragEvent) {
@@ -164,7 +164,7 @@ async function handleCreateRoom(name: string, inviteCode: string, userName: stri
         const failureMessage = formatAgentFailures(res.agentResults)
         if (failureMessage) message.warning(failureMessage)
         else message.success(t('groupChat.roomCreated'))
-        await router.push({ name: 'hermes.groupChatRoom', params: { roomId: res.room.id } })
+        await router.push({ name: 'yi.groupChatRoom', params: { roomId: res.room.id } })
     } catch {
         message.error(t('common.saveFailed'))
     }
@@ -174,7 +174,7 @@ async function handleDeleteRoom(roomId: string) {
     try {
         await store.deleteRoom(roomId)
         if (store.currentRoomId === roomId) {
-            await router.replace({ name: 'hermes.groupChat' })
+            await router.replace({ name: 'yi.groupChat' })
         }
         message.success(t('groupChat.roomDeleted'))
     } catch {
@@ -183,7 +183,7 @@ async function handleDeleteRoom(roomId: string) {
 }
 
 function buildRoomUrl(roomId: string) {
-    const href = router.resolve({ name: 'hermes.groupChatRoom', params: { roomId } }).href
+    const href = router.resolve({ name: 'yi.groupChatRoom', params: { roomId } }).href
     return `${window.location.origin}${window.location.pathname}${href}`
 }
 
@@ -240,7 +240,7 @@ async function confirmCloneRoom() {
         cloneSourceRoomId.value = null
         cloneRoomName.value = ''
         cloneInviteCode.value = ''
-        await router.push({ name: 'hermes.groupChatRoom', params: { roomId: res.room.id } })
+        await router.push({ name: 'yi.groupChatRoom', params: { roomId: res.room.id } })
         const failureMessage = formatAgentFailures(res.agentResults)
         if (failureMessage) message.warning(failureMessage)
         else message.success(t('groupChat.roomCloned'))
@@ -265,7 +265,7 @@ async function handleClearRoomContext() {
 
 async function handleSelectRoom(roomId: string) {
     try {
-        await router.push({ name: 'hermes.groupChatRoom', params: { roomId } })
+        await router.push({ name: 'yi.groupChatRoom', params: { roomId } })
         if (window.innerWidth <= 768) showSidebar.value = false
     } catch {
         message.error(t('groupChat.joinFailed'))

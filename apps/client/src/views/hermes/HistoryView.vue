@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { type Session } from '@/stores/hermes/chat'
@@ -63,7 +63,7 @@ function handleOutlineNavigate(target: { messageId: string; anchorId: string }) 
 }
 
 function openNewChatPage() {
-  void router.push({ name: 'hermes.chat' })
+  void router.push({ name: 'yi.chat' })
 }
 
 async function loadHermesSessions() {
@@ -247,7 +247,7 @@ async function loadOlderHistoryMessages(sessionId: string): Promise<boolean> {
 
 async function handleSessionClick(sessionId: string, profile?: string | null) {
   await router.push({
-    name: 'hermes.historySession',
+    name: 'yi.historySession',
     params: { sessionId },
     query: profile ? { profile } : undefined,
   })
@@ -259,7 +259,7 @@ async function openDefaultHistorySession(replace = false) {
   if (!firstSession) {
     historySessionId.value = null
     historySession.value = null
-    if (routeSessionId.value) await router.replace({ name: 'hermes.history' })
+    if (routeSessionId.value) await router.replace({ name: 'yi.history' })
     return
   }
 
@@ -268,7 +268,7 @@ async function openDefaultHistorySession(replace = false) {
   }
 
   const location = {
-    name: 'hermes.historySession',
+    name: 'yi.historySession',
     params: { sessionId: firstSession.id },
     query: firstSession.profile ? { profile: firstSession.profile } : undefined,
   }
@@ -283,7 +283,7 @@ async function syncRouteSession() {
   if (!hermesSessions.value.some(s => s.id === sessionId)) {
     historySessionId.value = null
     historySession.value = null
-    await router.replace({ name: 'hermes.history' })
+    await router.replace({ name: 'yi.history' })
     return
   }
 
@@ -538,7 +538,7 @@ function historySessionProfile(sessionId: string): string | null {
 
 function buildHistorySessionUrl(sessionId: string, profile?: string | null) {
   const href = router.resolve({
-    name: 'hermes.historySession',
+    name: 'yi.historySession',
     params: { sessionId },
     query: profile ? { profile } : undefined,
   }).href
@@ -612,7 +612,7 @@ async function handleDeleteSession(id: string, profile?: string | null) {
     historySession.value = null
     const next = historySessions.value[0]
     if (next) await handleSessionClick(next.id, next.profile)
-    else await router.replace({ name: 'hermes.history' })
+    else await router.replace({ name: 'yi.history' })
   }
 
   message.success(t('chat.sessionDeleted'))

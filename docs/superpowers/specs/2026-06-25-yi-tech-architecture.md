@@ -1,6 +1,6 @@
 # 弈 (Yi) — 技术架构设计
 
-> Electron + TypeScript 全栈,三层进程,对话树为任务流核心,资产目录制 + manifest,云端 LLM(自定义 URL)。
+> Vue 3 + TypeScript SPA,对话树为任务流核心(概念模型),资产目录制 + manifest,云端 LLM(自定义 URL)。当前实现 = 前端先行 + mock 状态;后端/Electron/三层进程是原设计稿,留待 Phase 2。
 
 - **状态**:设计稿(Draft,待审)
 - **日期**:2026-06-25
@@ -21,27 +21,38 @@
 
 ## 1.1 技术栈总览
 
+> **当前实现(已落地):** 前端 SPA + 抄自 hermes-studio 的完整客户端壳。Agent core / 工具进程 / 棋谱记录未启动,后端走 mock 状态。`docs/superpowers/plans/2026-06-25-yi-mvp-frontend-first.md` 是当前阶段实施计划。
+
 | 层 | 技术 | 角色 |
 |---|---|---|
-| Shell | Electron | 跨平台桌面壳 |
-| UI | React 18 + TypeScript + Vite | 棋枰/棋子可视化 + 交互 |
-| 主进程 | Node.js (Electron main) | Agent 循环:规划/调度/棋谱/状态机 |
-| 工具进程 | Electron utilityProcess | 工具执行:fs/shell/browser/mcp,隔离沙箱 |
-| LLM | OpenAI 兼容 HTTP client,自定义 baseURL | 用户填云端或本地 ollama url,弈不做本地集成 |
-| 棋经存储 | md 文件 + 全文检索 | MVP;向量检索 Phase 2 |
+| Shell | (Phase 2: Electron) | 当前跑在浏览器 + Vite dev server;`apps/client/index.html` 入口 |
+| UI 框架 | Vue 3.5 + `<script setup>` + TypeScript | 棋枰/侧栏/对话/输入/模式切换/资产开关 |
+| 构建 | Vite 8 | dev server(HMR) + 生产构建(esbuild 压缩,es2020 target) |
+| 状态管理 | Pinia 3 | session/chat/profiles/app/settings 等模块化 store |
+| 路由 | vue-router 4(hash 模式) | 全部 URL 形如 `#/yi/...` |
+| 组件库 | Naive UI 2 | NButton/NModal/NDropdown/NIcon 等 + theme overrides(深色木质) |
+| i18n | vue-i18n 11 | 9 语言(中/英/日/韩/法/德/俄/西/葡) |
+| 编辑器/终端 | monaco-editor + xterm.js + xterm-addon-fit/web-links | 代码编辑 + Web 终端模拟 |
+| 流程图 | @vue-flow/core + background/controls/minimap | 棋枰 / 任务流图可视化 |
+| Markdown | markdown-it + katex + highlight.js + mermaid | 消息渲染 + 公式 + 代码高亮 + 流程图 |
+| 网络 | axios + socket.io(-client) + eventsource + ws | REST + 实时流 + Server-Sent Events |
+| LLM | js-tiktoken(分词)+ node-pty(伪终端)+ node-edge-tts(TTS) | 客户端侧模型工具链 |
+| 工具 | adm-zip + js-yaml + qrcode | 资产打包 / YAML 解析 / 二维码 |
+| 后端原型 | koa + @koa/router + @koa/cors + @koa/bodyparser + koa-static + koa-send + pino + pino-pretty | 依赖已装,代码未起;为 Phase 2 预留 |
+| 搜索 | minisearch / ripgrep(规划中) | 棋经 digest 全文检索(MVP) |
 | 元数据/棋谱 | 文件(yaml/json) | 全文件化,可 git、可打包、可上架 |
-| 包管理 | pnpm | monorepo |
-| 测试 | Vitest | 单元;Playwright 留给后续 E2E |
+| 测试 | Vitest 3 + @vue/test-utils + jsdom | 单元;Playwright 用于 E2E + 截屏 |
+| 包管理 | npm | 单包(`apps/client`);非 monorepo |
 
-**为什么 Electron + 单语言全栈:** 一种语言贯穿 main/renderer/utility,IPC 用类型安全 channel,类型从 main 单向流向 renderer。三进程同语言 = 零序列化摩擦。
+**为什么 Vue 3 + Naive UI + Vite 单语言栈:** 一种语言贯穿 UI/状态/路由,Vue SFC 让组件可独立迭代,Naive UI 主题化天然支持深色 + 木质配色,生态最契合"轻巧 + 可视化强"的 MVP 目标。Pinia 比 Vuex 简洁,vue-i18n 多语言无 boilerplate。
 
 **为什么全文件、不上 SQLite:** 棋谱/棋经/资产清单都要能 git 版本化、能打包上架交易。SQLite 是二进制,git 不友好、打包不透明。文件优先,数据库留到真有检索瓶颈再上。
 
-## 1.2 进程拓扑(三层)
+## 1.2 进程拓扑(单 SPA + 规划中的三层)
 
 ```
 ┌─────────────────────────────────────────┐
-│ Renderer Process (React UI)             │
+│ Renderer Process (Vue 3 UI, 当前)        │
 │  棋枰视图 / 布势输入条 / 推演窗 / 总结卡   │
 │  状态订阅: 通过 IPC stream 订阅 main 状态  │
 └──────────────┬──────────────────────────┘
@@ -56,7 +67,7 @@
 │  LLM Client / Planner / 棋谱 Recorder   │
 │  权限网关 (PLAN/ASK/TRUSTED/BYPASS)      │
 └──────────────┬──────────────────────────┘
-               │ IPC (utilityProcess.fork)
+                │ IPC (utilityProcess.fork)
 ┌──────────────┴──────────────────────────┐
 │ Utility Process(es) (Tool Sandbox)      │
 │  fs 工具 / shell 工具 / browser 工具      │
@@ -65,7 +76,9 @@
 └─────────────────────────────────────────┘
 ```
 
-**职责切分:**
+> **当前(已落地):** 单 SPA,浏览器进程内 Vue 3 直接跑。Pinia store 充当"main 状态"的代理(用 mock 数据)。Renderer/Mian/Utility 仍是一个 JS 线程内的不同 store + composable,等 Phase 2 上 Electron + Koa 时再拆。
+
+**职责切分(规划):**
 - **Renderer** 只画状态,不持有业务逻辑。状态从 main 推下来(stream)。
 - **Main** 是 Agent 的大脑:对话树、节点状态机、规划、LLM 调用、棋谱记录、权限判定。不直接碰危险操作。
 - **Utility** 是 Agent 的手:每个 task fork 一个临时 utility,执行完销毁。崩了不垮 main。安全边界在这里。
@@ -110,50 +123,45 @@
 - FORK = 在任意历史节点下创建新 intent 节点,原分支保留。
 - **MVP 边界:** fork 只重置对话与计划,**不自动回滚已执行的文件改动**。已改文件由棋谱记录,用户手动逆向。文件级快照是 Phase 2。
 
-## 1.4 项目结构(monorepo)
+## 1.4 项目结构(单 client app)
+
+> **当前(已落地):** 单一 Vue 3 SPA,无 monorepo。`apps/client/` 跑全部前端 + 集成第三方能力(monaco / xterm / vue-flow)。后端 / Electron / utility 进程未启动。
 
 ```
 yi-agent-studio/
 ├── apps/
-│   └── desktop/                    Electron app
-│       ├── src/main/               Main process: Agent core
-│       │   ├── agent/              对话树 / 节点状态机
-│       │   ├── planner/            LLM 规划
-│       │   ├── llm-client/         OpenAI-兼容 client(自定义 baseURL)
-│       │   ├── recorder/           棋谱记录
-│       │   ├── permission/         权限网关 PLAN/ASK/TRUSTED/BYPASS
-│       │   ├── assets/             资产加载器(含锁定检查)
-│       │   └── index.ts
-│       ├── src/utility/            Utility process: 工具沙箱
-│       │   ├── tools/
-│       │   │   ├── fs.ts
-│       │   │   ├── shell.ts
-│       │   │   ├── browser.ts
-│       │   │   └── mcp.ts
-│       │   └── index.ts
-│       ├── src/renderer/           React UI
-│       │   ├── components/         棋枰/棋子/小目/总结卡
-│       │   ├── state/              状态订阅
-│       │   └── index.tsx
-│       └── electron-main.ts        入口
-├── packages/
-│   ├── shared/                     共享类型/IPC 协议
-│   │   ├── types/                  资产类型/对话树类型/IPC channel
-│   │   └── ipc/                    类型安全 IPC channel 定义
-│   ├── assets/                     资产格式与 IO
-│   │   ├── qijing/                 棋经: md 解析 + 全文检索
-│   │   ├── qipu/                   棋谱: .yi.json 读写
-│   │   ├── tesuji/                 手筋格式
-│   │   ├── soul/                   棋魂格式
-│   │   └── install-state/        资产安装状态(autoUpdate/editable)
-│   └── storage/                    文件 IO 层(yaml/json 读写)
+│   └── client/                     Vue 3 SPA (Phase 1 主战场)
+│       ├── public/                 静态资源 (logo.png / favicon.ico)
+│       ├── src/
+│       │   ├── App.vue             根组件 + 路由出口
+│       │   ├── main.ts             入口:createApp + Pinia + router + i18n
+│       │   ├── router/             vue-router 4 (hash 模式, 全部 #/yi/...)
+│       │   ├── stores/             Pinia: chat/profiles/app/settings/...
+│       │   ├── components/         业务组件 (chat / skills / settings / layout)
+│       │   │   ├── layout/         AppSidebar / PageSidebar / ThemeSwitch / ...
+│       │   │   ├── chat/           ChatPanel / ChatInput / MessageList / ModelSelector
+│       │   │   └── ...
+│       │   ├── views/              路由 view: ChatView / SkillsView / ProfilesView / ...
+│       │   ├── api/                REST + WebSocket 客户端封装
+│       │   ├── composables/        useTheme / useKeyboard / ...
+│       │   ├── i18n/               vue-i18n 多语言 (9 语言)
+│       │   │   └── locales/        zh / en / ja / ko / fr / de / ru / es / pt + zh-TW
+│       │   └── styles/             variables.scss (深色木质配色) + 全局样式
+│       ├── index.html              SPA 入口
+│       ├── vite.config.ts          Vite 构建配置 (manualChunks: monaco/mermaid/xterm 分包)
+│       ├── tsconfig.json           TypeScript 5.8 配置
+│       └── package.json            见 1.1 表
 └── docs/
-    └── superpowers/specs/
-        ├── 2026-06-25-yi-product-design.md   (已有)
-        └── 2026-06-25-yi-tech-architecture.md (本文档)
+    └── superpowers/
+        ├── specs/                  设计与架构文档
+        │   ├── 2026-06-25-yi-product-design.md
+        │   └── 2026-06-25-yi-tech-architecture.md  (本文档)
+        └── plans/                  实施计划
+            ├── 2026-06-25-yi-mvp-walking-skeleton.md
+            └── 2026-06-25-yi-mvp-frontend-first.md
 ```
 
-**拆包原则:** `shared` 是零依赖纯类型包,被三进程共同引用,IPC 契约在这里。`packages/assets` 是资产格式的单一实现,main 和 utility 都用。`apps/desktop` 是唯一可发布物。
+**演进路径:** Phase 2 起 Koa 后端 + Electron 壳 + utilityProcess 时,会拆 monorepo(`apps/desktop` + `packages/shared` + `packages/assets` + `packages/storage`)。当前为节省迁移成本,所有代码集中在 `apps/client/`。
 
 ---
 
@@ -564,12 +572,15 @@ Utility process 内置工具,实现 `Tool` 接口(见 2.2.3)。
 
 ## 3.6 路线图(技术,对齐产品阶段)
 
-| 阶段 | 技术 | 对应产品阶段 |
-|---|---|---|
-| **MVP** | Electron + React + TS,三层进程,对话树,4 工具(fs/shell/browser/mcp),OpenAI 兼容 LLM(自定义 baseURL),棋经 md+全文检索,资产目录制+manifest,资产锁定,4 级权限 | MVP(0→1) |
-| **Phase 2** | 向量检索、资产沙箱强隔离、资产自动更新检查 | 种子期 |
-| **Phase 3** | 弈林市场协议(上传/拉取/分账)、引用依赖解析与冻结、云端棋经同步 | 商业化 |
-| **Phase 4** | 官方专家包矩阵 infra、创作者 dashboard、团队协作 | 生态期 |
+> **当前进度:** Phase 1(前端先行)已在跑,后端 / 三层进程 / 对话树 / 工具集 / 资产全部**未实现**,等 Phase 2 起步。
+
+| 阶段 | 技术 | 对应产品阶段 | 状态 |
+|---|---|---|---|
+| **Phase 1**(当前) | **Vue 3 + Vite + Pinia + Naive UI + TS 单 SPA**,跑前端 + mock 状态;9 语言 i18n;深色木质主题 | MVP 前置(0→0.5) | ✅ 在跑 |
+| **MVP** | Electron + Vue 3 + TS,三层进程,对话树,4 工具(fs/shell/browser/mcp),OpenAI 兼容 LLM(自定义 baseURL),棋经 md+全文检索,资产目录制+manifest,资产锁定,4 级权限 | MVP(0→1) | ⏳ Phase 2 |
+| **Phase 2** | Koa 后端 + utilityProcess 拆进程;向量检索、资产沙箱强隔离、资产自动更新检查 | 种子期 | ⏳ |
+| **Phase 3** | 弈林市场协议(上传/拉取/分账)、引用依赖解析与冻结、云端棋经同步 | 商业化 | ⏳ |
+| **Phase 4** | 官方专家包矩阵 infra、创作者 dashboard、团队协作 | 生态期 | ⏳ |
 
 ## 3.7 MVP 验收标准(技术)
 
@@ -597,17 +608,26 @@ Utility process 内置工具,实现 `Tool` 接口(见 2.2.3)。
 
 # 五、技术决策记录(ADR 摘要)
 
-| 决策 | 选择 | 理由 |
-|---|---|---|
-| Shell + 语言 | Electron + TS 全栈 | 单语言贯穿三进程,零序列化摩擦 |
-| UI 框架 | React + TS | 生态最大,棋盘可视化动画库成熟 |
-| 进程拓扑 | 三层(renderer/main/utility) | 安全边界 + 稳定性 + Electron 原生 utilityProcess |
-| LLM 集成 | 仅 OpenAI 兼容 client,自定义 baseURL | 不做本地集成,用户填云端或 ollama url |
-| 存储 | 全文件(yaml/json/md) | 可 git、可打包、可上架;SQLite 留到检索瓶颈 |
-| 棋经检索(MVP) | md + 全文检索 | 简单可版本化;向量留 Phase 2 |
-| 权限模型 | 4 级(PLAN/ASK/TRUSTED/BYPASS) | 对齐 opencode,TRUSTED 为日常本地任务 |
-| Undo 模型 | 对话树 fork(非文件回滚) | 对齐 opencode,文件快照 Phase 2 |
-| 工具集(MVP) | fs/shell/browser/mcp 4 件 | 覆盖核心场景,读屏/键鼠不做 |
-| 资产格式 | 目录制 + manifest.yaml | 统一、可 git、可上架、支持引用依赖 |
-| 资产版本 | installed-assets.yaml + 双开关互斥(autoUpdate/editable) | 互斥:autoUpdate 控上游跟随,editable 控本地改;不能同时 on |
-| 包管理 | pnpm monorepo | shared/assets/storage 清晰拆包 |
+> Phase 1(已落地) vs Phase 2+(规划)分开记。当前 Phase 1 单 SPA 跑前端 + mock 状态;Phase 2 起 Electron 壳 + Koa 后端 + utilityProcess 时再启用相关项。
+
+| 决策 | 状态 | 选择 | 理由 |
+|---|---|---|---|
+| UI 框架 | ✅ Phase 1 | **Vue 3.5 + TypeScript + `<script setup>`** | 生态成熟,Naive UI 主题化适合深色木质,Pinia 简洁,vue-i18n 多语言零 boilerplate |
+| 构建 | ✅ Phase 1 | **Vite 8** | HMR 快,manualChunks 拆 monaco/mermaid/xterm,esbuild 压缩 |
+| 状态管理 | ✅ Phase 1 | **Pinia 3** | 模块化 store(chat/profiles/app/settings),TypeScript 友好 |
+| 组件库 | ✅ Phase 1 | **Naive UI 2** | 完整 NButton/NModal/NDropdown/...;CSS 变量驱动主题切换 |
+| 路由 | ✅ Phase 1 | **vue-router 4 (hash 模式)** | 静态文件部署友好;`#/yi/...` |
+| Shell | ⏳ Phase 2 | Electron 30+ | 跨平台桌面壳,等 SPA 跑稳后接 |
+| 主进程 | ⏳ Phase 2 | Node.js (Electron main) | Agent 循环:规划/调度/棋谱/状态机 |
+| 工具进程 | ⏳ Phase 2 | Electron utilityProcess | 工具执行:fs/shell/browser/mcp,隔离沙箱 |
+| 三层进程拓扑 | ⏳ Phase 2 | renderer / main / utility | 安全边界 + 稳定性 + Electron 原生 utilityProcess |
+| 后端运行时 | ⏳ Phase 2 | Koa + @koa/router/cors/bodyparser | 依赖已装,代码未起;REST + WebSocket |
+| LLM 集成 | ⏳ Phase 2 | OpenAI 兼容 HTTP client,自定义 baseURL | 不做本地集成,用户填云端或 ollama url |
+| 存储 | ✅(概念)/ ⏳(实现) | 全文件(yaml/json/md) | 可 git、可打包、可上架;SQLite 留到检索瓶颈 |
+| 棋经检索(MVP) | ⏳ Phase 2 | md + 全文检索 | 简单可版本化;向量留 Phase 2 |
+| 权限模型 | ⏳ Phase 2 | 4 级(PLAN/ASK/TRUSTED/BYPASS) | 对齐 opencode,TRUSTED 为日常本地任务 |
+| Undo 模型 | ⏳ Phase 2 | 对话树 fork(非文件回滚) | 对齐 opencode,文件快照 Phase 2 |
+| 工具集(MVP) | ⏳ Phase 2 | fs/shell/browser/mcp 4 件 | 覆盖核心场景,读屏/键鼠不做 |
+| 资产格式 | ⏳ Phase 2 | 目录制 + manifest.yaml | 统一、可 git、可上架、支持引用依赖 |
+| 资产版本 | ⏳ Phase 2 | installed-assets.yaml + 双开关互斥(autoUpdate/editable) | 互斥:autoUpdate 控上游跟随,editable 控本地改;不能同时 on |
+| 包管理 | ✅ Phase 1 | **npm 单包**;Phase 2 起迁 pnpm monorepo | 当前节省迁移成本;Phase 2 拆 `shared`/`assets`/`storage` 清晰拆包 |

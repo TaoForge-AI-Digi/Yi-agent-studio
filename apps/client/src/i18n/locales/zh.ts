@@ -77,6 +77,7 @@ export default {
   // 通用
   common: {
     loading: '加载中...',
+    comingSoon: '正在开发中',
     cancel: '取消',
     delete: '删除',
     retry: '重试',
@@ -188,11 +189,13 @@ export default {
     kanban: '看板',
     workflow: '工作流',
     models: '模型',
-    profiles: '用户',
+    profiles: '角色',
     plugins: '插件',
     mcp: 'MCP',
     skills: '技能',
     memory: '记忆',
+    archive: '典藏',
+    marketplace: '市场',
     logs: '日志',
     usage: '用量',
     performance: '性能监控',
