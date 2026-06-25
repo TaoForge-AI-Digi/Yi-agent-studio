@@ -5,3 +5,8 @@ dist/
 
 # codegraph index
 .codegraph/
+
+# debug / scratch
+shoot.mjs
+inspect.mjs
+debug.mjs
