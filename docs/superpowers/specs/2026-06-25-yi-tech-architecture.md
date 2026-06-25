@@ -145,7 +145,7 @@ yi-agent-studio/
 │   │   ├── qipu/                   棋谱: .yi.json 读写
 │   │   ├── tesuji/                 手筋格式
 │   │   ├── soul/                   棋魂格式
-│   │   └── lock/                   资产锁定状态管理
+│   │   └── install-state/        资产安装状态(autoUpdate/editable)
 │   └── storage/                    文件 IO 层(yaml/json 读写)
 └── docs/
     └── superpowers/specs/
@@ -406,9 +406,23 @@ relays:
 
 **引用组包的关键:** 这里 `ref` 指向别人已上架的资产,不复制内容。买家拿到专家包,运行时按 ref + version 拉取(若已购/免费则直取;若未购则提示购买)。分账按 `share` 字段总和 ≤ 100 校验。
 
-## 2.3 资产锁定机制
+## 2.3 资产锁定机制(双开关)
 
-用户对自己资产库里的每个资产可设锁定状态。**自己用的资产可自由进化(不锁);下载别人的可锁定防变化。**
+用户对自己资产库里的每个资产有**两个独立开关**,分别控制"是否跟随上游"和"是否允许本地改":
+
+| 开关 | 作用 | on | off |
+|---|---|---|---|
+| **autoUpdate** | 是否从上游拉新版 | 自动跟随满足 manifest `version` 约束的新版 | 钉当前版本,不拉上游 |
+| **editable** | 是否允许本地改动资产内容 | 可本地改(自己进化) | 内容锁定,防本地改动 |
+
+四种组合覆盖所有场景:
+
+| autoUpdate | editable | 场景 |
+|---|---|---|
+| on | off | 下载别人的、信任上游(订阅模式) |
+| off | off | 下载别人的、不信任上游(完全冻结) |
+| off | on | fork 别人的自己改(钉版本 + 本地改) |
+| —(无上游) | on | 自己的资产(自由) |
 
 用户级 `installed-assets.yaml`(`~/.yi/installed-assets.yaml`):
 
@@ -416,16 +430,19 @@ relays:
 installed:
   - ref: <asset id>
     version: 0.1.2        # 当前装的版本
-    locked: false         # false = 可进化(检查/拉新版),true = 锁定不动
+    autoUpdate: false     # false = 钉当前版本不拉上游;true = 自动跟随满足 manifest 约束的新版
+    editable: false       # false = 内容锁定防本地改;true = 允许本地改动(自己进化)
     source: registry | local | git
     installedAt: <iso>
 ```
 
 **行为:**
-- `locked: true` —— 资产加载器跳过更新检查,永远用 `version` 指定版本。上游变更不影响本地。
-- `locked: false` —— 可手动触发更新到最新满足 manifest `version` 约束的版本;可选自动跟随。
-- 锁定/解锁是用户显式操作(UI 里一个开关)。
-- **MVP 简化:** 不做自动更新检查,只做"锁定 = 不动 / 未锁 = 可手动 pull 新版"。自动检查是 Phase 2。
+- `autoUpdate: true` —— 资产加载器定期(或启动时)检查上游,拉取满足 manifest `version` 约束的最新版替换。
+- `autoUpdate: false` —— 跳过更新检查,永远用 `version` 指定版本。上游变更不影响本地。
+- `editable: false` —— 资产内容只读,UI 不允许编辑,文件系统层标只读。防自己意外改坏下载的资产。
+- `editable: true` —— 内容可本地修改,本地改动不回传上游(除非显式 publish)。
+- 两个开关都是用户显式操作(UI 里各一个开关),互相独立。
+- **MVP 简化:** autoUpdate 只做"启动时检查一次",不做后台定时轮询。定时轮询是 Phase 2。editable 的只读保护 MVP 用文件权限标记 + UI 禁编辑,不做文件系统级强隔离(那是 Phase 2 资产沙箱)。
 
 ## 2.4 IPC 协议(三进程通信)
 
@@ -458,8 +475,9 @@ export const rendererRouter = {
     state: () => AsyncIterable<AgentState>;
   },
   assets: {
-    lock: (ref: string, locked: boolean) => void;
-    update: (ref: string) => void;     # 手动拉新版(未锁定的)
+    setAutoUpdate: (ref: string, on: boolean) => void;
+    setEditable: (ref: string, on: boolean) => void;
+    update: (ref: string) => void;     # 手动拉新版(autoUpdate 关时也可手动触发)
   },
 };
 ```
@@ -520,7 +538,7 @@ Utility process 内置工具,实现 `Tool` 接口(见 2.2.3)。
 | **Planner** | 两步:① 生成 PlanPayload(调 LLM 出步骤列表)② 逐步执行调 tool。MVP 线性执行 + 用户 fork 修正,不做多轮 ReAct | ✅ |
 | **棋谱 Recorder** | 监听状态机事件,写 `.yi/tree.json` + 收官时导出 `.yi.json` | ✅ |
 | **全文检索** | 调 ripgrep 子进程或 minisearch(TS),检索棋经 digest | ✅ |
-| **资产加载器** | 读 manifest.yaml + composition.yaml,解析依赖,校验 share 和 ≤ 100,查 installed-assets.yaml 判锁定 | ✅ |
+| **资产加载器** | 读 manifest.yaml + composition.yaml,解析依赖,校验 share 和 ≤ 100,查 installed-assets.yaml 判 autoUpdate/editable | ✅ |
 | **权限网关** | 在 EXECUTE 每步前按 4 级模式判定 | ✅ |
 | **向量检索** | digest + vectors | Phase 2 |
 | **弈林市场协议** | 上传/拉取/分账/引用依赖解析 | Phase 3 |
@@ -558,7 +576,7 @@ Utility process 内置工具,实现 `Tool` 接口(见 2.2.3)。
 4. 随时 STOP,从任意历史节点 FORK 改指令重跑
 5. 收官生成 `.yi.json` 棋谱,可重新加载查看
 6. 4 级权限模式可切换:PLAN 只推演,ASK 逐次确认,TRUSTED workdir 内直放越界询问,BYPASS 全放
-7. 资产可装/锁/解锁,锁定后不自动变化
+7. 资产可装/设双开关(autoUpdate/editable),autoUpdate 控上游跟随,editable 控本地改保护
 8. LLM baseURL 可配,填云端或本地 ollama url 都能跑
 
 ---
@@ -588,5 +606,5 @@ Utility process 内置工具,实现 `Tool` 接口(见 2.2.3)。
 | Undo 模型 | 对话树 fork(非文件回滚) | 对齐 opencode,文件快照 Phase 2 |
 | 工具集(MVP) | fs/shell/browser/mcp 4 件 | 覆盖核心场景,读屏/键鼠不做 |
 | 资产格式 | 目录制 + manifest.yaml | 统一、可 git、可上架、支持引用依赖 |
-| 资产版本 | installed-assets.yaml + locked 字段 | 锁定防变化,解锁可进化 |
+| 资产版本 | installed-assets.yaml + 双开关(autoUpdate/editable) | autoUpdate 控上游跟随,editable 控本地改保护 |
 | 包管理 | pnpm monorepo | shared/assets/storage 清晰拆包 |
