@@ -538,7 +538,7 @@ async function confirmNewChat() {
         const fallbackName = agentId === "codex" ? "Codex" : "Claude Code";
         message.warning(t("codingAgents.installRequired", { agent: tool?.name || fallbackName }));
         showNewChatModal.value = false;
-        await router.push({ name: "hermes.codingAgents" });
+        // ponytail: coding-agents 页面已删,不再跳转
         return;
       }
     } catch {
