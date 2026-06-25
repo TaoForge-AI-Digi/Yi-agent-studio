@@ -7,7 +7,6 @@ import { useAppStore } from "@/stores/hermes/app";
 import { usePersistentRecord } from '@/composables/usePersistentRecord'
 import RouteLinkItem from '@/components/common/RouteLinkItem.vue'
 import ModelSelector from "@/components/layout/ModelSelector.vue";
-import ProfileSelector from "@/components/layout/ProfileSelector.vue";
 import LanguageSwitch from "@/components/layout/LanguageSwitch.vue";
 import ThemeSwitch from "@/components/layout/ThemeSwitch.vue";
 import VersionManagementModal from "@/components/layout/VersionManagementModal.vue";
@@ -285,7 +284,6 @@ function openVersionManagement() {
       </div>
     </nav>
 
-    <ProfileSelector />
     <ModelSelector />
 
     <div class="sidebar-footer">
