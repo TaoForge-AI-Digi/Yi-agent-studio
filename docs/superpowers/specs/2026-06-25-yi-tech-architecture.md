@@ -406,23 +406,26 @@ relays:
 
 **引用组包的关键:** 这里 `ref` 指向别人已上架的资产,不复制内容。买家拿到专家包,运行时按 ref + version 拉取(若已购/免费则直取;若未购则提示购买)。分账按 `share` 字段总和 ≤ 100 校验。
 
-## 2.3 资产锁定机制(双开关)
+## 2.3 资产锁定机制(双开关,互斥)
 
-用户对自己资产库里的每个资产有**两个独立开关**,分别控制"是否跟随上游"和"是否允许本地改":
+用户对自己资产库里的每个资产有**两个独立开关**,分别控制"是否跟随上游"和"是否允许本地改"。**两个开关互斥:不能同时为 on**——本地改动会被上游更新覆盖,语义冲突。
 
 | 开关 | 作用 | on | off |
 |---|---|---|---|
 | **autoUpdate** | 是否从上游拉新版 | 自动跟随满足 manifest `version` 约束的新版 | 钉当前版本,不拉上游 |
 | **editable** | 是否允许本地改动资产内容 | 可本地改(自己进化) | 内容锁定,防本地改动 |
 
-四种组合覆盖所有场景:
+**互斥约束:** `autoUpdate && editable` 是非法状态。UI 里开一个、另一个自动关。资产加载器加载时校验,违反则报错。
+
+三种有效组合:
 
 | autoUpdate | editable | 场景 |
 |---|---|---|
 | on | off | 下载别人的、信任上游(订阅模式) |
 | off | off | 下载别人的、不信任上游(完全冻结) |
-| off | on | fork 别人的自己改(钉版本 + 本地改) |
-| —(无上游) | on | 自己的资产(自由) |
+| off | on | fork 别人的自己改,或自有资产(钉/无上游 + 本地改) |
+
+> 注:自有资产无上游,autoUpdate 实质为 off,editable 为 on,落在这三组合里。
 
 用户级 `installed-assets.yaml`(`~/.yi/installed-assets.yaml`):
 
@@ -437,11 +440,11 @@ installed:
 ```
 
 **行为:**
-- `autoUpdate: true` —— 资产加载器定期(或启动时)检查上游,拉取满足 manifest `version` 约束的最新版替换。
+- `autoUpdate: true`(且 editable 必为 false)—— 资产加载器定期(或启动时)检查上游,拉取满足 manifest `version` 约束的最新版替换。
 - `autoUpdate: false` —— 跳过更新检查,永远用 `version` 指定版本。上游变更不影响本地。
 - `editable: false` —— 资产内容只读,UI 不允许编辑,文件系统层标只读。防自己意外改坏下载的资产。
-- `editable: true` —— 内容可本地修改,本地改动不回传上游(除非显式 publish)。
-- 两个开关都是用户显式操作(UI 里各一个开关),互相独立。
+- `editable: true`(且 autoUpdate 必为 false)—— 内容可本地修改,本地改动不回传上游(除非显式 publish)。
+- **互斥校验:** 两个开关不能同时 true。UI 开一个自动关另一个;加载器加载时校验,违反报错。
 - **MVP 简化:** autoUpdate 只做"启动时检查一次",不做后台定时轮询。定时轮询是 Phase 2。editable 的只读保护 MVP 用文件权限标记 + UI 禁编辑,不做文件系统级强隔离(那是 Phase 2 资产沙箱)。
 
 ## 2.4 IPC 协议(三进程通信)
@@ -475,8 +478,8 @@ export const rendererRouter = {
     state: () => AsyncIterable<AgentState>;
   },
   assets: {
-    setAutoUpdate: (ref: string, on: boolean) => void;
-    setEditable: (ref: string, on: boolean) => void;
+    setAutoUpdate: (ref: string, on: boolean) => void;  # 开 autoUpdate 自动关 editable
+    setEditable: (ref: string, on: boolean) => void;    # 开 editable 自动关 autoUpdate
     update: (ref: string) => void;     # 手动拉新版(autoUpdate 关时也可手动触发)
   },
 };
@@ -576,7 +579,7 @@ Utility process 内置工具,实现 `Tool` 接口(见 2.2.3)。
 4. 随时 STOP,从任意历史节点 FORK 改指令重跑
 5. 收官生成 `.yi.json` 棋谱,可重新加载查看
 6. 4 级权限模式可切换:PLAN 只推演,ASK 逐次确认,TRUSTED workdir 内直放越界询问,BYPASS 全放
-7. 资产可装/设双开关(autoUpdate/editable),autoUpdate 控上游跟随,editable 控本地改保护
+7. 资产可装/设双开关(autoUpdate/editable,互斥),autoUpdate 控上游跟随,editable 控本地改保护
 8. LLM baseURL 可配,填云端或本地 ollama url 都能跑
 
 ---
@@ -606,5 +609,5 @@ Utility process 内置工具,实现 `Tool` 接口(见 2.2.3)。
 | Undo 模型 | 对话树 fork(非文件回滚) | 对齐 opencode,文件快照 Phase 2 |
 | 工具集(MVP) | fs/shell/browser/mcp 4 件 | 覆盖核心场景,读屏/键鼠不做 |
 | 资产格式 | 目录制 + manifest.yaml | 统一、可 git、可上架、支持引用依赖 |
-| 资产版本 | installed-assets.yaml + 双开关(autoUpdate/editable) | autoUpdate 控上游跟随,editable 控本地改保护 |
+| 资产版本 | installed-assets.yaml + 双开关互斥(autoUpdate/editable) | 互斥:autoUpdate 控上游跟随,editable 控本地改;不能同时 on |
 | 包管理 | pnpm monorepo | shared/assets/storage 清晰拆包 |
