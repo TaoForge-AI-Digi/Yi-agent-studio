@@ -1,5 +1,5 @@
 import { defineConfig } from 'electron-vite';
-import react from '@vitejs/plugin-react';
+import vue from '@vitejs/plugin-vue';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -22,6 +22,6 @@ export default defineConfig({
   },
   renderer: {
     root: 'src/renderer',
-    plugins: [react()],
+    plugins: [vue()],
   },
 });
