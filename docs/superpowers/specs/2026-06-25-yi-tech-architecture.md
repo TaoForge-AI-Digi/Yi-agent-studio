@@ -415,9 +415,9 @@ relays:
 | **autoUpdate** | 是否从上游拉新版 | 自动跟随满足 manifest `version` 约束的新版 | 钉当前版本,不拉上游 |
 | **editable** | 是否允许本地改动资产内容 | 可本地改(自己进化) | 内容锁定,防本地改动 |
 
-**互斥约束:** `autoUpdate && editable` 是非法状态。UI 里开一个、另一个自动关。资产加载器加载时校验,违反则报错。
+**互斥约束:** `autoUpdate && editable` 是非法状态(本地改动会被上游更新覆盖,语义冲突)。`!autoUpdate && !editable`(双 off)是合法的(完全冻结)。即:至多一个 on,可以都 off。UI 里开一个、另一个自动关;两个都关则保持都关。资产加载器加载时校验,违反则报错。
 
-三种有效组合:
+三种有效组合(第四种 both on 禁止):
 
 | autoUpdate | editable | 场景 |
 |---|---|---|
