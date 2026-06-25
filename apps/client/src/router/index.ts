@@ -1,14 +1,12 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import { hasApiKey, isStoredSuperAdmin } from '@/api/client'
+import { isStoredSuperAdmin } from '@/api/client'
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     {
       path: '/',
-      name: 'login',
-      component: () => import('@/views/LoginView.vue'),
-      meta: { public: true },
+      redirect: '/hermes/chat',
     },
     {
       path: '/hermes/chat',
@@ -159,28 +157,11 @@ const router = createRouter({
 })
 
 router.beforeEach((to, _from, next) => {
-  // Public pages don't need auth
-  if (to.meta.public) {
-    // Already has key, skip login
-    if (to.name === 'login' && hasApiKey()) {
-      next({ path: '/hermes/chat' })
-      return
-    }
-    next()
-    return
-  }
-
-  // All other pages require token
-  if (!hasApiKey()) {
-    next({ name: 'login' })
-    return
-  }
-
+  // ponytail: 奕无登录,直接放行(除 super-admin 页面)
   if (to.meta.requiresSuperAdmin && !isStoredSuperAdmin()) {
     next({ name: 'hermes.chat' })
     return
   }
-
   next()
 })
 

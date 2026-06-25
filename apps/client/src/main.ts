@@ -6,11 +6,9 @@ import App from './App.vue'
 import './styles/global.scss'
 import 'katex/dist/katex.min.css'
 
-// ponytail: 奕启动时设默认主题
+// ponytail: 奕默认暗色主题
 localStorage.setItem('hermes_brightness', 'dark')
 localStorage.setItem('hermes_style', 'ink')
-// 临时: 无后端时不预设 token,让 router 跳 LoginView(纯前端)
-// 后端接入后恢复:  if (!localStorage.getItem('hermes_api_key')) setItem fake-jwt
 
 const savedBrightness = localStorage.getItem('hermes_brightness') || 'system'
 const savedStyle = localStorage.getItem('hermes_style') || 'ink'

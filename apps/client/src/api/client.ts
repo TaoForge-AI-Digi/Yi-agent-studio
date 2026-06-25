@@ -35,11 +35,9 @@ function clearAuthSessionState() {
   localStorage.removeItem(ACTIVE_PROFILE_STORAGE_KEY)
 }
 
-// ponytail: 奕 MVP 跳过登录,永远 true;后端接入时改回
+// ponytail: 奕无登录,永远 true
 export function hasApiKey(): boolean {
-  // 临时: 无后端时 ChatView 依赖 API 会崩,默认跳登录页(纯前端可渲染)
-  if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('direct')) return true
-  return false
+  return true
 }
 
 export type StoredUserRole = 'super_admin' | 'admin'
@@ -58,7 +56,7 @@ export function getStoredUserRole(): StoredUserRole | null {
   }
 }
 
-// ponytail: 奕 MVP 跳过权限,永远 true
+// ponytail: 奕无登录无权限,永远 true
 export function isStoredSuperAdmin(): boolean {
   return true
 }
