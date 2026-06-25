@@ -1,24 +1,16 @@
 import React from 'react';
+import { ConfigProvider, theme } from 'antd';
+import { Sidebar } from './components/Sidebar.js';
+import { ChatView } from './components/ChatView.js';
 import './styles.css';
-import { Qipan } from './components/Qipan.js';
-import { Xiaomu } from './components/Xiaomu.js';
-import { ShouGuan } from './components/ShouGuan.js';
-import { BuShiBar } from './components/BuShiBar.js';
-import { ModeSwitch } from './components/ModeSwitch.js';
-import { AssetLocks } from './components/AssetLocks.js';
-import { QipuIO } from './components/QipuIO.js';
 
 export function App() {
   return (
-    <div>
-      <h1 style={{ padding: 24, margin: 0, borderBottom: '1px solid var(--line)' }}>弈</h1>
-      <ModeSwitch />
-      <QipuIO />
-      <Qipan />
-      <ShouGuan />
-      <AssetLocks />
-      <Xiaomu />
-      <BuShiBar />
-    </div>
+    <ConfigProvider theme={{ algorithm: theme.defaultAlgorithm, token: { colorPrimary: '#1677ff', borderRadius: 6 } }}>
+      <div style={{ display: 'flex', height: '100vh' }}>
+        <Sidebar />
+        <ChatView />
+      </div>
+    </ConfigProvider>
   );
 }

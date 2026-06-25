@@ -6,9 +6,18 @@ let win: BrowserWindow | null = null;
 app.whenReady().then(() => {
   win = new BrowserWindow({
     width: 1200, height: 800, show: true,
-    webPreferences: { preload: join(__dirname, '../preload/index.mjs'), contextIsolation: true },
+    webPreferences: {
+      preload: join(__dirname, '../preload/preload.mjs'),
+      contextIsolation: true,
+    },
   });
-  win.loadFile(join(__dirname, '../renderer/index.html'));
+
+  // ponytail: dev 加载 dev server URL,prod 加载打包文件
+  if (process.env['ELECTRON_RENDERER_URL']) {
+    win.loadURL(process.env['ELECTRON_RENDERER_URL']);
+  } else {
+    win.loadFile(join(__dirname, '../renderer/index.html'));
+  }
 
   ipcMain.handle('yi:save-qipu', async (_e, data: unknown) => {
     const res = await dialog.showSaveDialog(win!, {

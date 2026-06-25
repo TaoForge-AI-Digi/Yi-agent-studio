@@ -1,9 +1,25 @@
 import { defineConfig } from 'electron-vite';
 import react from '@vitejs/plugin-react';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-  main: { build: { rollupOptions: { input: { index: 'electron/main.ts' } } } },
-  preload: { build: { rollupOptions: { input: { index: 'electron/preload.ts' } } } },
+  main: {
+    build: {
+      rollupOptions: {
+        input: resolve(__dirname, 'electron/main.ts'),
+      },
+    },
+  },
+  preload: {
+    build: {
+      rollupOptions: {
+        input: resolve(__dirname, 'electron/preload.ts'),
+      },
+    },
+  },
   renderer: {
     root: 'src/renderer',
     plugins: [react()],

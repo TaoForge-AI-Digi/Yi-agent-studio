@@ -5,7 +5,7 @@ export const mockTree: YiNode[] = [
     payload: { input: '整理下载文件夹里上个月的照片', attachments: [], mountedAssets: [], mode: 'trusted' },
     childrenIds: ['n2'] },
   { id: 'n2', parentId: 'n1', type: 'ponder', status: 'done', createdAt: '2026-06-25T10:00:01Z',
-    payload: { reasoning: '解读布局:需扫描下载文件夹→过滤上月→按日期重命名', modelUsed: 'stub', tokensIn: 12, tokensOut: 34 },
+    payload: { reasoning: '需要扫描下载文件夹 → 过滤上月文件 → 按日期重命名', modelUsed: 'mock', tokensIn: 12, tokensOut: 34 },
     childrenIds: ['n3'] },
   { id: 'n3', parentId: 'n2', type: 'plan', status: 'done', createdAt: '2026-06-25T10:00:02Z',
     payload: { steps: [
@@ -26,13 +26,13 @@ export const mockTree: YiNode[] = [
 ];
 
 export const mockAssets: AssetInstallState[] = [
-  { ref: 'tesuji-photo-org', version: '0.1.0', autoUpdate: true, editable: false, source: 'registry', installedAt: 't' },
-  { ref: 'qijing-investment', version: '0.2.1', autoUpdate: false, editable: false, source: 'registry', installedAt: 't' },
-  { ref: 'my-own-soul', version: '0.0.1', autoUpdate: false, editable: true, source: 'local', installedAt: 't' },
+  { ref: 'photo-organizer', version: '0.1.0', autoUpdate: true, editable: false, source: 'registry', installedAt: 't' },
+  { ref: 'investment-analysis', version: '0.2.1', autoUpdate: false, editable: false, source: 'registry', installedAt: 't' },
+  { ref: 'my-custom-skill', version: '0.0.1', autoUpdate: false, editable: true, source: 'local', installedAt: 't' },
 ];
 
 export async function* mockPonderStream(): AsyncIterable<string> {
-  const text = '解读布局:需扫描下载文件夹 → 过滤上月 → 按日期重命名 → 生成索引';
+  const text = '分析任务: 需要扫描下载文件夹 → 过滤上月文件 → 按日期重命名 → 生成索引';
   for (const ch of text) {
     yield ch;
     await new Promise((r) => setTimeout(r, 30));

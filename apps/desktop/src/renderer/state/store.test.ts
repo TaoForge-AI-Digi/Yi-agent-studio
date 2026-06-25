@@ -7,22 +7,22 @@ beforeEach(() => {
 });
 
 describe('useYiStore', () => {
-  it('toggleAutoUpdate 开则 editable 自动关(互斥)', () => {
-    useYiStore.getState().toggleAutoUpdate('tesuji-photo-org');
-    const a = useYiStore.getState().assets.find((x) => x.ref === 'tesuji-photo-org')!;
+  it('toggleAutoUpdate disables editable (mutual exclusion)', () => {
+    useYiStore.getState().toggleAutoUpdate('photo-organizer');
+    const a = useYiStore.getState().assets.find((x) => x.ref === 'photo-organizer')!;
     expect(a.autoUpdate).toBe(false);
     expect(a.editable).toBe(false);
   });
-  it('toggleEditable 开则 autoUpdate 自动关(互斥)', () => {
-    useYiStore.getState().toggleEditable('tesuji-photo-org');
-    const a = useYiStore.getState().assets.find((x) => x.ref === 'tesuji-photo-org')!;
+  it('toggleEditable disables autoUpdate (mutual exclusion)', () => {
+    useYiStore.getState().toggleEditable('photo-organizer');
+    const a = useYiStore.getState().assets.find((x) => x.ref === 'photo-organizer')!;
     expect(a.editable).toBe(true);
     expect(a.autoUpdate).toBe(false);
   });
-  it('都 off 合法', () => {
+  it('both off is valid', () => {
     useYiStore.setState({ assets: [{ ...mockAssets[0], autoUpdate: true, editable: false }] });
-    useYiStore.getState().toggleAutoUpdate('tesuji-photo-org');
-    const a = useYiStore.getState().assets.find((x) => x.ref === 'tesuji-photo-org')!;
+    useYiStore.getState().toggleAutoUpdate('photo-organizer');
+    const a = useYiStore.getState().assets.find((x) => x.ref === 'photo-organizer')!;
     expect(a.autoUpdate).toBe(false);
     expect(a.editable).toBe(false);
   });
