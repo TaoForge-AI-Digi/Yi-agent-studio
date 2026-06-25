@@ -192,7 +192,7 @@ defineExpose({
     >
       <template #empty>
         <div class="empty-state">
-          <img :src="'/yi.svg'" alt="弈" class="empty-logo" />
+          <img :src="'/yi.png'" alt="弈" class="empty-logo" />
           <p>{{ t("chat.emptyState") }}</p>
         </div>
       </template>

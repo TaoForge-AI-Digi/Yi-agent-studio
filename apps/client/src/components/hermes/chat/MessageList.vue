@@ -111,7 +111,7 @@ const emptyState = computed(() => {
     };
   }
   return {
-    logo: "/yi.svg",
+    logo: "/yi.png",
     alt: "弈",
     text: t("chat.emptyState"),
   };
