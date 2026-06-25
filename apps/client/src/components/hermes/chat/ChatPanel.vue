@@ -491,6 +491,15 @@ watch(
   () => ensureNewChatProviderSelection(),
 );
 
+// ponytail: 新建对话直接创建一个 session 并跳过去, 不弹模态
+async function quickNewChat() {
+  const session = chatStore.newChat({})
+  await router.push({
+    name: chatStore.runtimeMode === 'global_agent' ? 'hermes.globalAgentSession' : 'hermes.session',
+    params: { sessionId: session.id },
+  })
+}
+
 async function openNewChatModal() {
   isBatchMode.value = false;
   selectedSessionKeys.value.clear();
@@ -549,26 +558,18 @@ async function confirmNewChat() {
     }
   }
 
-  const group = selectedNewChatProviderGroup.value;
+  // ponytail: 弹窗只剩 agent + workspace,profile/provider/model 用 store 默认
   const source = newChatAgent.value === "hermes" ? "cli" : "coding_agent";
-  const isGlobalCodingAgent = source === "coding_agent" && newChatAgentMode.value === "global";
   const agent = newChatAgent.value === "codex"
     ? "codex"
     : newChatAgent.value === "claude-code"
       ? "claude"
       : "hermes";
   const session = chatStore.newChat({
-    profile: newChatProfile.value,
-    provider: isGlobalCodingAgent ? undefined : newChatProvider.value,
-    model: isGlobalCodingAgent ? undefined : newChatModel.value,
     source,
     agent,
     codingAgentId: newChatAgent.value === "hermes" ? undefined : newChatAgent.value,
-    codingAgentMode: source === "coding_agent" ? newChatAgentMode.value : undefined,
     workspace: newChatWorkspace.value || null,
-    baseUrl: source === "coding_agent" && !isGlobalCodingAgent ? group?.base_url || newChatBaseUrl.value.trim() || undefined : undefined,
-    apiKey: source === "coding_agent" && !isGlobalCodingAgent ? group?.api_key || newChatApiKey.value.trim() || undefined : undefined,
-    apiMode: source === "coding_agent" && !isGlobalCodingAgent ? newChatApiMode.value : undefined,
   });
   await router.push({
     name: chatStore.runtimeMode === "global_agent" ? "hermes.globalAgentSession" : "hermes.session",
@@ -1085,7 +1086,7 @@ async function handleSessionModelCustomSubmit() {
         <PageSidebarNav
           :active="chatStore.runtimeMode === 'global_agent' ? 'global' : 'chat'"
           :primary-label="t('chat.newChat')"
-          @primary="openNewChatModal"
+          @primary="quickNewChat"
         />
         <div class="session-list-toolbar">
           <NSelect
@@ -1457,69 +1458,6 @@ async function handleSessionModelCustomSubmit() {
               v-model:value="newChatAgent"
               :options="newChatAgentOptions"
               :disabled="newChatLoading"
-            />
-          </label>
-          <label v-if="isNewChatCodingAgent" class="new-chat-field">
-            <span class="new-chat-label">{{ t("codingAgents.launchModeScope") }}</span>
-            <NRadioGroup v-model:value="newChatAgentMode" name="new-chat-coding-agent-mode">
-              <NRadioButton
-                v-for="option in newChatAgentModeOptions"
-                :key="option.value"
-                :value="option.value"
-              >
-                {{ option.label }}
-              </NRadioButton>
-            </NRadioGroup>
-          </label>
-          <label class="new-chat-field">
-            <span class="new-chat-label">{{ t("sidebar.profiles") }}</span>
-            <NSelect
-              :value="newChatProfile"
-              :options="newChatProfileOptions"
-              :loading="newChatLoading || profilesStore.loading"
-              @update:value="handleNewChatProfileChange"
-            />
-          </label>
-          <label v-if="newChatUsesProviderModel" class="new-chat-field">
-            <span class="new-chat-label">{{ t("models.provider") }}</span>
-            <NSelect
-              :value="newChatProvider"
-              :options="newChatProviderOptions"
-              :disabled="newChatLoading"
-              @update:value="handleNewChatProviderChange"
-            />
-          </label>
-          <label v-if="newChatUsesProviderModel" class="new-chat-field">
-            <span class="new-chat-label">{{ t("models.models") }}</span>
-            <NSelect
-              v-model:value="newChatModel"
-              :options="newChatModelOptions"
-              :disabled="newChatLoading || !newChatProvider"
-              filterable
-            />
-          </label>
-          <label v-if="isNewChatCodingAgent && newChatAgentMode === 'scoped'" class="new-chat-field">
-            <span class="new-chat-label">{{ t("codingAgents.protocolScope") }}</span>
-            <NSelect
-              v-model:value="newChatApiMode"
-              :options="newChatApiModeOptions"
-              :disabled="newChatLoading"
-            />
-          </label>
-          <label v-if="newChatNeedsBaseUrl" class="new-chat-field">
-            <span class="new-chat-label">{{ t("models.baseUrl") }}</span>
-            <NInput
-              v-model:value="newChatBaseUrl"
-              :placeholder="t('models.baseUrlPlaceholder')"
-            />
-          </label>
-          <label v-if="newChatNeedsApiKey" class="new-chat-field">
-            <span class="new-chat-label">{{ t("models.apiKey") }}</span>
-            <NInput
-              v-model:value="newChatApiKey"
-              type="password"
-              show-password-on="click"
-              :placeholder="t('models.apiKeyPlaceholder')"
             />
           </label>
           <div class="new-chat-field">
