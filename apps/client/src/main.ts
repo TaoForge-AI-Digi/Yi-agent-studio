@@ -6,9 +6,11 @@ import App from './App.vue'
 import './styles/global.scss'
 import 'katex/dist/katex.min.css'
 
-// ponytail: 奕默认暗色主题
-localStorage.setItem('hermes_brightness', 'dark')
-localStorage.setItem('hermes_style', 'ink')
+// ponytail: 奕默认亮色主题 (用户偏好)
+// 不强制设 dark; 让 useTheme 走 system 偏好; theme switch 切 light/dark
+if (!localStorage.getItem('hermes_brightness')) {
+  localStorage.setItem('hermes_brightness', 'light')
+}
 
 const savedBrightness = localStorage.getItem('hermes_brightness') || 'system'
 const savedStyle = localStorage.getItem('hermes_style') || 'ink'

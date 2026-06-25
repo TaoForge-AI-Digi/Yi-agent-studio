@@ -25,7 +25,7 @@ const isLoginPage = computed(() => route.name === 'login')
 const usesPageSidebar = computed(() =>
   ['hermes.chat', 'hermes.session', 'hermes.history', 'hermes.historySession', 'hermes.globalAgent', 'hermes.globalAgentSession', 'hermes.groupChat', 'hermes.groupChatRoom', 'hermes.workflow'].includes(route.name as string),
 )
-const showAppSidebar = computed(() => !isLoginPage.value && !usesPageSidebar.value)
+const showAppSidebar = computed(() => !isLoginPage.value)
 const showMobileMenuButton = computed(() => !isLoginPage.value && (showAppSidebar.value || usesPageSidebar.value))
 
 const nodeVersionLow = computed(() => {
