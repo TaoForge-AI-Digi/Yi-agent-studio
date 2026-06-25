@@ -1,7 +1,0 @@
-{
-  "name": "@yi/shared",
-  "version": "0.0.0",
-  "type": "module",
-  "main": "./src/index.ts",
-  "scripts": { "typecheck": "tsc --noEmit", "test": "vitest run" }
-}
