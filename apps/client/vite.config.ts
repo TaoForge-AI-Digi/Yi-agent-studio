@@ -2,8 +2,36 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
 
+function corsProxyPlugin() {
+  return {
+    name: 'cors-proxy',
+    configureServer(server: any) {
+      server.middlewares.use('/api/proxy', async (req: any, res: any) => {
+        const url = new URL(req.url!, `http://${req.headers.host}`)
+        const target = url.searchParams.get('url')
+        if (!target) {
+          res.writeHead(400)
+          res.end('Missing url param')
+          return
+        }
+        try {
+          const headers: Record<string, string> = {}
+          if (req.headers.authorization) headers['Authorization'] = req.headers.authorization
+          const resp = await fetch(target, { headers })
+          res.writeHead(resp.status, { 'Content-Type': 'application/json' })
+          const body = await resp.text()
+          res.end(body)
+        } catch (e: any) {
+          res.writeHead(502)
+          res.end(JSON.stringify({ error: e.message }))
+        }
+      })
+    },
+  }
+}
+
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [vue(), corsProxyPlugin()],
   define: {
     __APP_VERSION__: JSON.stringify('0.0.1-yi'),
   },

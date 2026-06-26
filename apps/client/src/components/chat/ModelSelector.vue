@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, h } from 'vue'
 import { NInput, NPopover, NScrollbar } from 'naive-ui'
-import { useAppStore } from '@/stores/hermes/app'
-import { useProfilesStore } from '@/stores/hermes/profiles'
+import { useAppStore } from '@/stores/yi/app'
+import { useProfilesStore } from '@/stores/yi/profiles'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()

@@ -1,10 +1,10 @@
 import { ref, watch } from 'vue'
-import { fetchSttSettings } from '@/api/hermes/stt-settings'
+import { fetchSttSettings } from '@/api/yi/stt-settings'
 import type {
   FetchSttSettingsResponse,
   SttProvider,
   SttProviderSettingsResponse,
-} from '@/api/hermes/stt-settings'
+} from '@/api/yi/stt-settings'
 
 interface SttSettingsData {
   provider: SttProvider

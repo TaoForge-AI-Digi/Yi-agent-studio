@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { NButton, NModal, NSpin, useMessage } from 'naive-ui'
-import { useProfilesStore } from '@/stores/hermes/profiles'
+import { useProfilesStore } from '@/stores/yi/profiles'
 import {
   fetchProfileRuntimeStatusesWithMeta,
   restartProfileGateway,
@@ -9,8 +9,8 @@ import {
   type HermesProfile,
   type ProfileAvatar,
   type ProfileRuntimeStatus,
-} from '@/api/hermes/profiles'
-import ProfileAvatarView from '@/components/hermes/profiles/ProfileAvatar.vue'
+} from '@/api/yi/profiles'
+import ProfileAvatarView from '@/components/yi/profiles/ProfileAvatar.vue'
 import { useI18n } from 'vue-i18n'
 
 const emit = defineEmits<{

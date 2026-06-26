@@ -18,7 +18,7 @@ import {
   type VersionDownloadJobStatus,
   type VersionDownloadKind,
   type VersionDownloadSource,
-} from '@/api/hermes/runtime-versions'
+} from '@/api/yi/runtime-versions'
 
 const props = defineProps<{ show: boolean }>()
 const emit = defineEmits<{ (event: 'update:show', value: boolean): void }>()

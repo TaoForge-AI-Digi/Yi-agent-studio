@@ -2,7 +2,7 @@
 import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { useAppStore } from "@/stores/hermes/app";
+import { useAppStore } from "@/stores/yi/app";
 import { usePersistentRecord } from '@/composables/usePersistentRecord'
 import RouteLinkItem from '@/components/common/RouteLinkItem.vue'
 import LanguageSwitch from "@/components/layout/LanguageSwitch.vue";
@@ -113,20 +113,13 @@ function handleSidebarClick(event: MouseEvent) {
             </svg>
             <span>{{ t("sidebar.mcp") }}</span>
           </RouteLinkItem>
-          <RouteLinkItem class="nav-item" :to="{ name: 'yi.memory' }" :active="selectedKey === 'yi.memory'">
+          <RouteLinkItem class="nav-item" :to="{ name: 'yi.agents' }" :active="selectedKey === 'yi.agents'">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 18h6" />
-              <path d="M10 22h4" />
-              <path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z" />
+              <rect x="3" y="11" width="18" height="10" rx="2" />
+              <circle cx="12" cy="5" r="2" />
+              <path d="M12 7v4" />
             </svg>
-            <span>{{ t("sidebar.memory") }}</span>
-          </RouteLinkItem>
-          <RouteLinkItem class="nav-item" :to="{ name: 'yi.profiles' }" :active="selectedKey === 'yi.profiles'">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-            <span>{{ t("sidebar.profiles") }}</span>
+            <span>{{ t("sidebar.agents") }}</span>
           </RouteLinkItem>
           <RouteLinkItem class="nav-item" :to="{ name: 'yi.archive' }" :active="selectedKey === 'yi.archive'">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
