@@ -5,6 +5,7 @@ import { fetchCodingAgentsStatus, inferCodingAgentApiMode, normalizeCodingAgentA
 import { useChatStore, type Session } from "@/stores/yi/chat";
 import { useAppStore } from "@/stores/yi/app";
 import { useProfilesStore } from "@/stores/yi/profiles";
+import { useModelsStore } from "@/stores/yi/models";
 import { useSessionBrowserPrefsStore } from "@/stores/yi/session-browser-prefs";
 import {
   NButton,
@@ -39,6 +40,7 @@ import { isStoredSuperAdmin } from "@/api/client";
 const chatStore = useChatStore();
 const appStore = useAppStore();
 const profilesStore = useProfilesStore();
+const modelsStore = useModelsStore();
 const sessionBrowserPrefsStore = useSessionBrowserPrefsStore();
 const router = useRouter();
 const message = useMessage();
@@ -929,8 +931,8 @@ const sessionModelProviderOptions = computed(() =>
   sessionModelBaseGroups.value.map((group) => ({ label: group.label, value: group.provider })),
 );
 
-const sessionModelGroupsWithCustom = computed(() =>
-  sessionModelBaseGroups.value.map((group) => ({
+const sessionModelGroupsWithCustom = computed(() => {
+  const serverGroups = sessionModelBaseGroups.value.map((group) => ({
     ...group,
     models: [
       ...group.models,
@@ -938,8 +940,17 @@ const sessionModelGroupsWithCustom = computed(() =>
         (model) => !group.models.includes(model),
       ),
     ],
-  })),
-);
+  }));
+  const existingProviders = new Set(serverGroups.map((g) => g.provider));
+  const localGroups = modelsStore.enabledProviders
+    .filter((p) => p.models.some((m) => m.visible) && !existingProviders.has(p.id))
+    .map((p) => ({
+      provider: p.id,
+      label: p.name,
+      models: p.models.filter((m) => m.visible).map((m) => m.id),
+    }));
+  return [...serverGroups, ...localGroups];
+});
 
 const filteredSessionModelGroups = computed(() => {
   const query = sessionModelSearch.value.trim().toLowerCase();

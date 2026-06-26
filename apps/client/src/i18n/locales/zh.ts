@@ -208,7 +208,7 @@ export default {
     groupChat: '群聊',
     files: '文件',
     devices: '设备',
-    agents: '智能体',
+    agents: '角色',
     groupConversation: '对话',
     groupConversationShort: '对话',
     groupPlatform: '平台',

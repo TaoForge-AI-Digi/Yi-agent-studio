@@ -3,15 +3,19 @@ import { ref, computed, h } from 'vue'
 import { NInput, NPopover, NScrollbar } from 'naive-ui'
 import { useAppStore } from '@/stores/yi/app'
 import { useProfilesStore } from '@/stores/yi/profiles'
+import { useModelsStore } from '@/stores/yi/models'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 const appStore = useAppStore()
 const profilesStore = useProfilesStore()
+const modelsStore = useModelsStore()
 
 const show = ref(false)
 const search = ref('')
 const collapsedGroups = ref<Record<string, boolean>>({})
+
+const LOCAL_MODEL_KEY = 'yi_local_selected_model'
 
 const activeProfileName = computed(() => profilesStore.activeProfileName || 'default')
 const activeModelGroups = computed(() => {
@@ -19,24 +23,51 @@ const activeModelGroups = computed(() => {
   return pm?.groups || []
 })
 
-const modelGroupsWithCustom = computed(() =>
-  activeModelGroups.value.map(g => ({
+const localModelGroups = computed(() =>
+  modelsStore.enabledProviders
+    .filter(p => p.models.some(m => m.visible))
+    .map(p => ({
+      provider: p.id,
+      label: p.name,
+      models: p.models.filter(m => m.visible).map(m => m.id),
+    })),
+)
+
+const mergedGroups = computed(() => {
+  const serverGroups = activeModelGroups.value.map(g => ({
     ...g,
     models: [
       ...g.models,
       ...(appStore.customModels[g.provider] || []).filter(m => !g.models.includes(m)),
     ],
-  })),
-)
+  }))
+  const existingProviders = new Set(serverGroups.map(g => g.provider))
+  const localOnly = localModelGroups.value.filter(g => !existingProviders.has(g.provider))
+  return [...serverGroups, ...localOnly]
+})
 
 function lower(v: unknown) {
   return typeof v === 'string' ? v.toLowerCase() : ''
 }
 
+const effectiveSelection = computed(() => {
+  if (appStore.selectedModel && appStore.selectedProvider) {
+    return { model: appStore.selectedModel, provider: appStore.selectedProvider }
+  }
+  try {
+    const raw = localStorage.getItem(LOCAL_MODEL_KEY)
+    if (raw) {
+      const { model, provider } = JSON.parse(raw)
+      if (model && provider) return { model, provider }
+    }
+  } catch { /* ignore */ }
+  return { model: '', provider: '' }
+})
+
 const filteredGroups = computed(() => {
   const q = lower(search.value).trim()
-  if (!q) return modelGroupsWithCustom.value
-  return modelGroupsWithCustom.value
+  if (!q) return mergedGroups.value
+  return mergedGroups.value
     .map(g => ({
       ...g,
       models: g.models.filter(m => {
@@ -54,11 +85,21 @@ function modelMeta(model: string, provider: string) {
   return activeModelGroups.value.find(g => g.provider === provider)?.model_meta?.[model]
 }
 function isCustom(model: string, provider: string) {
-  return (appStore.customModels[provider] || []).includes(model)
+  if ((appStore.customModels[provider] || []).includes(model)) return true
+  const localProvider = modelsStore.getProvider(provider)
+  return !!(localProvider && localProvider.models.some(m => m.id === model))
 }
 function pick(model: string, provider: string) {
   if (modelMeta(model, provider)?.disabled) return
-  appStore.switchModel(model, provider)
+  const isLocalOnly = !activeModelGroups.value.some(g => g.provider === provider) &&
+    !appStore.modelGroups.some(g => g.provider === provider)
+  if (isLocalOnly) {
+    localStorage.setItem(LOCAL_MODEL_KEY, JSON.stringify({ model, provider }))
+    appStore.selectedModel = model
+    appStore.selectedProvider = provider
+  } else {
+    appStore.switchModel(model, provider)
+  }
   show.value = false
   search.value = ''
 }
@@ -72,9 +113,21 @@ function onOpen(v: boolean) {
     search.value = ''
   }
 }
-const triggerLabel = computed(() =>
-  appStore.displayModelName(appStore.selectedModel, appStore.selectedProvider) || '—',
-)
+const triggerLabel = computed(() => {
+  const serverName = appStore.displayModelName(appStore.selectedModel, appStore.selectedProvider)
+  if (serverName) return serverName
+  try {
+    const raw = localStorage.getItem(LOCAL_MODEL_KEY)
+    if (raw) {
+      const { model, provider } = JSON.parse(raw)
+      const localGroup = localModelGroups.value.find(g => g.provider === provider)
+      if (localGroup?.models.includes(model)) {
+        return modelsStore.getProvider(provider)?.name || model
+      }
+    }
+  } catch { /* ignore */ }
+  return '—'
+})
 </script>
 
 <template>
@@ -123,7 +176,7 @@ const triggerLabel = computed(() =>
                 :key="m"
                 class="yi-model-item"
                 :class="{
-                  active: m === appStore.selectedModel && g.provider === appStore.selectedProvider,
+                  active: m === effectiveSelection.model && g.provider === effectiveSelection.provider,
                   disabled: !!modelMeta(m, g.provider)?.disabled,
                 }"
                 @click="pick(m, g.provider)"
@@ -132,7 +185,7 @@ const triggerLabel = computed(() =>
                 <span v-if="modelMeta(m, g.provider)?.preview" class="yi-model-badge-preview">预览</span>
                 <span v-if="isCustom(m, g.provider)" class="yi-model-badge-custom">自定义</span>
                 <svg
-                  v-if="m === appStore.selectedModel && g.provider === appStore.selectedProvider"
+                  v-if="m === effectiveSelection.model && g.provider === effectiveSelection.provider"
                   class="yi-model-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
                 >
                   <polyline points="20 6 9 17 4 12" />

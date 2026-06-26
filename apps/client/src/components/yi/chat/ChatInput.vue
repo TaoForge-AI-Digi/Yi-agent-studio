@@ -12,6 +12,7 @@ import { useI18n } from 'vue-i18n'
 import { useToolTraceVisibility } from '@/composables/useToolTraceVisibility'
 import VoiceDialogueControls from './VoiceDialogueControls.vue'
 import YiModelSelector from '@/components/chat/ModelSelector.vue'
+import AgentSelector from '@/components/yi/agents/AgentSelector.vue'
 import { useMicRecorder } from '@/composables/useMicRecorder'
 import { useGlobalSpeech } from '@/composables/useSpeech'
 import { useVoiceDialogue } from '@/composables/useVoiceDialogue'
@@ -873,6 +874,8 @@ function isImage(type: string): boolean {
   <div class="chat-input-area">
     <!-- Top bar: attach + auto play speech + context info -->
     <div class="input-top-bar">
+      <AgentSelector v-if="!isCodingAgentSession" />
+
       <NTooltip trigger="hover">
         <template #trigger>
           <NButton quaternary size="tiny" @click="handleAttachClick" circle>
