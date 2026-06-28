@@ -1,5 +1,5 @@
-import { startRunViaSocket, resumeSession, registerSessionHandlers, unregisterSessionHandlers, getChatRunSocket, respondToolApproval, onPeerUserMessage, onSessionCommand, onSessionTitleUpdated, respondClarify, type ChatRunTransport, type RunEvent, type ResumeSessionPayload, type StartRunRequest, type ContentBlock as ContentBlockImport } from '@/api/yi/chat'
-import { deleteSession as deleteSessionApi, fetchSessionMessagesPage, fetchSessions, setSessionModel, type HermesMessage, type SessionSummary } from '@/api/yi/sessions'
+﻿import { startRunViaSocket, resumeSession, registerSessionHandlers, unregisterSessionHandlers, getChatRunSocket, respondToolApproval, onPeerUserMessage, onSessionCommand, onSessionTitleUpdated, respondClarify, type ChatRunTransport, type RunEvent, type ResumeSessionPayload, type StartRunRequest, type ContentBlock as ContentBlockImport } from '@/api/yi/chat'
+import { deleteSession as deleteSessionApi, fetchSessionMessagesPage, fetchSessions, setSessionModel, type YiMessage, type SessionSummary } from '@/api/yi/sessions'
 import { getActiveProfileName } from '@/api/client'
 import { inferCodingAgentApiMode, normalizeCodingAgentApiMode } from '@/api/coding-agents'
 import { getDownloadUrl } from '@/api/yi/download'
@@ -45,7 +45,7 @@ export interface Message {
   isStreaming?: boolean
   attachments?: Attachment[]
   // 思考/推理文本。两条来源：
-  //   1) 历史消息：来自 HermesMessage.reasoning 字段
+  //   1) 历史消息：来自 YiMessage.reasoning 字段
   //   2) 流式：由 reasoning.delta / thinking.delta / reasoning.available 事件累加
   // 不含 <think> 包裹标签；内容自身可以为多段纯文本。
   reasoning?: string
@@ -173,11 +173,11 @@ async function uploadFiles(attachments: Attachment[]): Promise<{ name: string; p
   for (const att of attachments) {
     if (att.file) formData.append('file', att.file, att.name)
   }
-  const token = localStorage.getItem('hermes_api_key') || ''
+  const token = localStorage.getItem('yi_api_key') || ''
   const profileName = getActiveProfileName()
   const headers: Record<string, string> = {}
   if (token) headers.Authorization = `Bearer ${token}`
-  if (profileName) headers['X-Hermes-Profile'] = profileName
+  if (profileName) headers['X-Yi-Profile'] = profileName
   const res = await fetch('/upload', {
     method: 'POST',
     body: formData,
@@ -335,7 +335,7 @@ function resolveResumedAssistantState(
   }
 }
 
-function mapHermesMessages(msgs: HermesMessage[]): Message[] {
+function mapYiMessages(msgs: YiMessage[]): Message[] {
   // Filter out assistant messages with no display content unless they carry tool call metadata
   // needed to name later tool result rows when resuming persisted history.
   const filteredMsgs = msgs.filter(m => {
@@ -470,7 +470,7 @@ function lastVisibleMessageRole(messages?: Message[] | null): string | null {
   return lastVisibleMessage(messages)?.role || null
 }
 
-function mapHermesSession(s: SessionSummary): Session {
+function mapYiSession(s: SessionSummary): Session {
   const isCodingAgentSession = s.source === 'coding_agent' || s.agent === 'claude' || s.agent === 'codex'
   const codingAgentId = s.agent === 'codex' ? 'codex' : s.agent === 'claude' ? 'claude-code' : undefined
   const codingAgentMode = isCodingAgentSession
@@ -560,8 +560,8 @@ function recoverStorageQuota() {
     const prefixes = [
       'hermes_sessions_cache_v1_',
       'hermes_session_msgs_v1_',
-      'hermes_session_pins_v1_',
-      'hermes_human_only_v1_',
+      'yi_session_pins_v1_',
+      'yi_human_only_v1_',
     ]
     const keysToRemove: string[] = []
     for (let i = 0; i < localStorage.length; i++) {
@@ -782,7 +782,7 @@ export const useChatStore = defineStore('chat', () => {
 
   function ensureSessionLoaded(summary: SessionSummary): Session {
     const existing = sessions.value.find(session => session.id === summary.id)
-    const mapped = mapHermesSession(summary)
+    const mapped = mapYiSession(summary)
     if (existing) {
       Object.assign(existing, {
         ...mapped,
@@ -801,7 +801,7 @@ export const useChatStore = defineStore('chat', () => {
     isLoadingSessions.value = true
     try {
       const list = await fetchRuntimeSessions(profile)
-      const fresh = list.map(mapHermesSession)
+      const fresh = list.map(mapYiSession)
       // Preserve already-loaded messages for sessions that are still present,
       // so we don't blow away the active session's messages on refresh.
       const runtimeByIdBefore = new Map(sessions.value.map(s => [s.id, {
@@ -813,7 +813,10 @@ export const useChatStore = defineStore('chat', () => {
         if (prev?.messages?.length) s.messages = prev.messages
         if (prev?.contextTokens != null) s.contextTokens = prev.contextTokens
       }
-      sessions.value = fresh
+      // Merge: keep local-only sessions that aren't in the API response
+      const freshIds = new Set(fresh.map(s => s.id))
+      const localOnly = sessions.value.filter(s => !freshIds.has(s.id))
+      sessions.value = [...fresh, ...localOnly]
       pruneCompletedUnreadSessions(new Set(sessions.value.map(s => s.id)))
 
       // Restore route-selected session first (tab-local source of truth),
@@ -849,7 +852,7 @@ export const useChatStore = defineStore('chat', () => {
   // churn.
   //
   // CRITICAL: this MERGES IN-PLACE into the existing session objects instead of
-  // replacing the array with `mapHermesSession` clones. `activeSession` is a ref
+  // replacing the array with `mapYiSession` clones. `activeSession` is a ref
   // bound to a specific object inside `sessions.value` (see switchSession), and
   // streaming deltas mutate that same object via `sessions.value.find(...)`. If
   // we swapped in fresh objects, `activeSession.value` would point at an orphan
@@ -860,7 +863,7 @@ export const useChatStore = defineStore('chat', () => {
     if (isLoadingSessions.value) return
     try {
       const list = await fetchRuntimeSessions(profile ?? sessionProfileFilter.value)
-      const incoming = list.map(mapHermesSession)
+      const incoming = list.map(mapYiSession)
       const existingById = new Map(sessions.value.map(s => [s.id, s]))
       const incomingIds = new Set(incoming.map(s => s.id))
 
@@ -929,7 +932,7 @@ export const useChatStore = defineStore('chat', () => {
       )
       const detail = await fetchSessionMessagesPage(sid, 0, limit, activeSession.value?.profile)
       if (!detail) return false
-      const mapped = mapHermesMessages(detail.messages || [])
+      const mapped = mapYiMessages(detail.messages || [])
       target.messages = mapped
       target.loadedMessageCount = detail.messages.length
       target.messageTotal = detail.total
@@ -954,7 +957,7 @@ export const useChatStore = defineStore('chat', () => {
     model?: string
     provider?: string
     source?: 'api_server' | 'cli' | 'coding_agent' | 'global_agent' | 'workflow'
-    agent?: 'hermes' | 'claude' | 'codex'
+    agent?: 'yi' | 'claude' | 'codex'
     codingAgentId?: 'claude-code' | 'codex'
     codingAgentMode?: 'global' | 'scoped'
     workspace?: string | null
@@ -970,7 +973,7 @@ export const useChatStore = defineStore('chat', () => {
       profile: options.profile || useProfilesStore().activeProfileName || 'default',
       title: '',
       source,
-      agent: options.agent || (codingAgentId ? (codingAgentId === 'codex' ? 'codex' : 'claude') : 'hermes'),
+      agent: options.agent || (codingAgentId ? (codingAgentId === 'codex' ? 'codex' : 'claude') : 'yi'),
       codingAgentId,
       codingAgentMode,
       messages: [],
@@ -1003,7 +1006,7 @@ export const useChatStore = defineStore('chat', () => {
       id: `${ts}_${hex}`,
       title: '',
       source: runtimeMode.value === 'global_agent' ? 'global_agent' : 'cli',
-      agent: 'hermes',
+      agent: 'yi',
       messages: [],
       createdAt: Date.now(),
       updatedAt: Date.now(),
@@ -1023,6 +1026,12 @@ export const useChatStore = defineStore('chat', () => {
     clearSessionCompletedUnread(sessionId)
 
     if (!activeSession.value) return
+
+    // Skip Socket.IO resume for locally-created sessions with no server state
+    if (activeSession.value.messages.length === 0 && !activeSession.value.messageCount && !activeSession.value.endedAt) {
+      isLoadingMessages.value = false
+      return
+    }
 
     isLoadingMessages.value = true
 
@@ -1071,7 +1080,7 @@ export const useChatStore = defineStore('chat', () => {
           target.parentLastMessage = (data as any).parentLastMessage || target.parentLastMessage || null
           target.parentLastMessageRole = (data as any).parentLastMessageRole || target.parentLastMessageRole || null
           if (data.messages?.length) {
-            target.messages = mapHermesMessages(data.messages as any[])
+            target.messages = mapYiMessages(data.messages as any[])
             target.loadedMessageCount = data.messageLoadedCount ?? data.messages.length
             target.messageTotal = data.messageTotal ?? target.messageCount ?? target.loadedMessageCount
             target.messageCount = target.messageTotal
@@ -1204,7 +1213,7 @@ export const useChatStore = defineStore('chat', () => {
       }
 
       const existingIds = new Set(target.messages.map(message => message.id))
-      const olderMessages = mapHermesMessages(page.messages).filter(message => !existingIds.has(message.id))
+      const olderMessages = mapYiMessages(page.messages).filter(message => !existingIds.has(message.id))
       target.messages = [...olderMessages, ...target.messages]
       target.loadedMessageCount = offset + page.messages.length
       target.messageTotal = page.total
@@ -1224,7 +1233,7 @@ export const useChatStore = defineStore('chat', () => {
     model?: string
     provider?: string
     source?: 'api_server' | 'cli' | 'coding_agent' | 'global_agent' | 'workflow'
-    agent?: 'hermes' | 'claude' | 'codex'
+    agent?: 'yi' | 'claude' | 'codex'
     codingAgentId?: 'claude-code' | 'codex'
     codingAgentMode?: 'global' | 'scoped'
     workspace?: string | null
@@ -1903,7 +1912,7 @@ export const useChatStore = defineStore('chat', () => {
     if (codingAgentId === 'claude-code') {
       return { icon: '/coding-agents/claude-code.svg' }
     }
-    return { icon: '/coding-agents/hermes.png' }
+    return { icon: '/coding-agents/yi.png' }
   }
 
   function completionNotificationBody(session: Session, message?: Message): string {
@@ -1923,10 +1932,10 @@ export const useChatStore = defineStore('chat', () => {
 
     const agent = completionNotificationAgent(session)
     void showCompletionNotification({
-      title: truncateNotificationText(session.title || 'Hermes', 80),
+      title: truncateNotificationText(session.title || 'Yi', 80),
       body: completionNotificationBody(session, message),
       icon: agent.icon,
-      tag: `hermes-complete-${sessionId}-${message?.id || Date.now()}`,
+      tag: `yi-complete-${sessionId}-${message?.id || Date.now()}`,
     })
   }
 
@@ -2153,7 +2162,7 @@ export const useChatStore = defineStore('chat', () => {
           const previousActiveAssistantMessageId = activeAssistantMessageId
           const previousReasoningAssistantMessageId = reasoningAssistantMessageId
           const replayRunMarker = getReplayRunMarker(data.events) ?? activeRunMarker
-          target.messages = mapHermesMessages(data.messages as any[])
+          target.messages = mapYiMessages(data.messages as any[])
           target.loadedMessageCount = data.messageLoadedCount ?? data.messages.length
           target.messageTotal = data.messageTotal ?? target.messageCount ?? target.loadedMessageCount
           target.messageCount = target.messageTotal
@@ -2638,7 +2647,7 @@ export const useChatStore = defineStore('chat', () => {
                   runProducedAssistantContent = true
                 }
               }
-              // Workaround for upstream hermes-agent bug: when the agent
+              // Workaround for upstream yi-agent bug: when the agent
               // layer silently swallows an error (e.g. invalid API key,
               // unsupported model), the gateway still emits run.completed
               // with an empty output. Without surfacing it here the chat UI
@@ -2655,7 +2664,7 @@ export const useChatStore = defineStore('chat', () => {
                 addMessage(sid, {
                   id: uid(),
                   role: 'system',
-                  content: 'Error: Agent returned no output. The model call may have failed (e.g. invalid API key, model not supported by provider, or context exceeded). Check the hermes-agent logs for details.',
+                  content: 'Error: Agent returned no output. The model call may have failed (e.g. invalid API key, model not supported by provider, or context exceeded). Check the yi-agent logs for details.',
                   timestamp: Date.now(),
                 })
               } else {
@@ -3214,7 +3223,7 @@ export const useChatStore = defineStore('chat', () => {
             addMessage(sid, {
               id: uid(),
               role: 'system',
-              content: 'Error: Agent returned no output. The model call may have failed (e.g. invalid API key, model not supported by provider, or context exceeded). Check the hermes-agent logs for details.',
+              content: 'Error: Agent returned no output. The model call may have failed (e.g. invalid API key, model not supported by provider, or context exceeded). Check the yi-agent logs for details.',
               timestamp: Date.now(),
             })
           } else {
@@ -3439,7 +3448,7 @@ export const useChatStore = defineStore('chat', () => {
             }
             if (!data.isWorking) setCompressionState(sid, null)
             if (data.messages?.length && activeSession.value) {
-              activeSession.value.messages = mapHermesMessages(data.messages as any[])
+              activeSession.value.messages = mapYiMessages(data.messages as any[])
               activeSession.value.loadedMessageCount = data.messageLoadedCount ?? data.messages.length
               activeSession.value.messageTotal = data.messageTotal ?? activeSession.value.messageCount ?? activeSession.value.loadedMessageCount
               activeSession.value.messageCount = activeSession.value.messageTotal
@@ -3519,7 +3528,7 @@ export const useChatStore = defineStore('chat', () => {
   // Persisted in localStorage keyed by sessionId so the choice survives
   // page reloads. Cleared on session deletion is NOT implemented (best-effort
   // — orphan keys are tiny and never read again).
-  const REASONING_LS_PREFIX = 'hermes:reasoning_effort:'
+  const REASONING_LS_PREFIX = 'yi:reasoning_effort:'
   function setSessionReasoningEffort(sessionId: string, effort: string) {
     const session = sessions.value.find(s => s.id === sessionId)
     if (!session) return
@@ -3542,7 +3551,7 @@ export const useChatStore = defineStore('chat', () => {
     }
   }
   // Hydrate reasoningEffort onto sessions whenever they come in fresh from
-  // the server (mapHermesSession doesn't carry this — it's client-only state).
+  // the server (mapYiSession doesn't carry this — it's client-only state).
   watch(sessions, (list) => {
     for (const s of list) {
       if (s.reasoningEffort === undefined) {

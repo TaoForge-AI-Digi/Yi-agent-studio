@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { NButton, NModal, NSpin, useMessage } from 'naive-ui'
 import { useProfilesStore } from '@/stores/yi/profiles'
@@ -6,7 +6,7 @@ import {
   fetchProfileRuntimeStatusesWithMeta,
   restartProfileGateway,
   restartProfileRuntime,
-  type HermesProfile,
+  type YiProfile,
   type ProfileAvatar,
   type ProfileRuntimeStatus,
 } from '@/api/yi/profiles'
@@ -28,7 +28,7 @@ const runtimeStatuses = ref<ProfileRuntimeStatus[]>([])
 const runtimeLoading = ref(false)
 const showProfileModal = ref(false)
 const showAvatarModal = ref(false)
-const editingProfile = ref<HermesProfile | null>(null)
+const editingProfile = ref<YiProfile | null>(null)
 const avatarSaving = ref(false)
 const fileInputRef = ref<HTMLInputElement | null>(null)
 const gatewayRestarting = ref<Record<string, boolean>>({})
@@ -83,7 +83,7 @@ function handleProfileModalShowChange(show: boolean) {
   setProfileModalShow(show)
 }
 
-function openAvatarModal(profile: HermesProfile) {
+function openAvatarModal(profile: YiProfile) {
   editingProfile.value = profile
   showAvatarModal.value = true
 }

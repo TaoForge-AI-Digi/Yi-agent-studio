@@ -3,7 +3,6 @@ import { computed } from 'vue'
 import { NTooltip } from 'naive-ui'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { useSessionSearch } from '@/composables/useSessionSearch'
 
 type ActiveSection = 'chat' | 'history' | 'group' | 'global' | 'workflow'
 
@@ -19,25 +18,13 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 const router = useRouter()
-const { openSessionSearch } = useSessionSearch()
 
 const primaryText = computed(() => props.primaryLabel || t('chat.newChat'))
 const showModeSwitch = computed(() => !props.hideModeSwitch)
-const historyButtonLabel = computed(() =>
-  props.active === 'history' ? t('chat.sessions') : t('sidebar.history'),
-)
 
 function openChat() {
   if (props.active === 'chat') return
   void router.push({ name: 'yi.chat' })
-}
-
-function openHistory() {
-  if (props.active === 'history') {
-    void router.push({ name: 'yi.chat' })
-    return
-  }
-  void router.push({ name: 'yi.history' })
 }
 
 function openGroupChat() {
@@ -53,74 +40,6 @@ function openWorkflow() {
 
 <template>
   <div class="page-sidebar-nav">
-    <div class="page-sidebar-tabs" role="tablist" aria-label="Chat actions">
-      <button
-        class="page-sidebar-tab"
-        type="button"
-        @click="emit('primary')"
-      >
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <line x1="12" y1="5" x2="12" y2="19" />
-          <line x1="5" y1="12" x2="19" y2="12" />
-        </svg>
-        <span>{{ primaryText }}</span>
-      </button>
-      <button class="page-sidebar-tab" type="button" @click="openSessionSearch">
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-        >
-          <circle cx="11" cy="11" r="7" />
-          <path d="m20 20-3.5-3.5" />
-        </svg>
-        <span>{{ t('sidebar.search') }}</span>
-      </button>
-      <button
-        class="page-sidebar-tab"
-        type="button"
-        @click="openHistory"
-      >
-        <svg
-          v-if="active === 'history'"
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-        </svg>
-        <svg
-          v-else
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <circle cx="12" cy="12" r="9" />
-          <path d="M12 7v5l3 2" />
-        </svg>
-        <span>{{ historyButtonLabel }}</span>
-      </button>
-    </div>
     <div v-if="showModeSwitch" class="conversation-switch conversation-switch--three" role="tablist" aria-label="Conversation type">
       <NTooltip trigger="hover" placement="top">
         <template #trigger>
@@ -184,6 +103,20 @@ function openWorkflow() {
         {{ t('sidebar.workflow') }}
       </NTooltip>
     </div>
+    <button class="new-chat-btn" type="button" @click="emit('primary')">
+      <svg
+        width="15"
+        height="15"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <line x1="12" y1="5" x2="12" y2="19" />
+        <line x1="5" y1="12" x2="19" y2="12" />
+      </svg>
+      <span>{{ primaryText }}</span>
+    </button>
   </div>
 </template>
 
@@ -194,51 +127,6 @@ function openWorkflow() {
   display: flex;
   flex-direction: column;
   gap: 8px;
-}
-
-.page-sidebar-tabs {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.page-sidebar-tab {
-  width: 100%;
-  min-width: 0;
-  height: 34px;
-  border: none;
-  border-radius: $radius-sm;
-  background: transparent;
-  color: $text-secondary;
-  display: inline-flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 8px;
-  padding: 7px 10px;
-  cursor: pointer;
-  transition:
-    background-color $transition-fast,
-    color $transition-fast;
-
-  svg {
-    flex-shrink: 0;
-  }
-
-  span {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 13px;
-    line-height: 18px;
-  }
-
-  &:hover,
-  &.active {
-    background: rgba(var(--accent-primary-rgb), 0.06);
-    color: $text-primary;
-  }
 }
 
 .conversation-switch {
@@ -282,6 +170,43 @@ function openWorkflow() {
     background: $bg-card;
     color: $text-primary;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.new-chat-btn {
+  width: 100%;
+  height: 34px;
+  border: 1px solid $border-color;
+  border-radius: $radius-sm;
+  background: transparent;
+  color: $text-secondary;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 10px;
+  cursor: pointer;
+  font-size: 13px;
+  transition:
+    background-color $transition-fast,
+    color $transition-fast,
+    border-color $transition-fast;
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &:hover {
+    background: rgba(var(--accent-primary-rgb), 0.06);
+    color: $text-primary;
+    border-color: var(--accent-primary-rgb);
   }
 }
 </style>

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { NBadge, NButton, NDrawer, NDrawerContent, NInput, NSelect } from 'naive-ui'
 import { useI18n } from 'vue-i18n'
@@ -23,7 +23,7 @@ const selectedSkill = ref('')
 const searchQuery = ref('')
 const showSidebar = ref(true)
 const sourceFilter = ref<SourceFilter | null>(null)
-const skillTarget = ref<SkillTarget>('hermes')
+const skillTarget = ref<SkillTarget>('yi')
 const showImportModal = ref(false)
 const showExternalDirsModal = ref(false)
 const showWriteApprovalDrawer = ref(false)
@@ -41,12 +41,12 @@ const selectedSkillData = computed(() => {
 })
 
 const skillTargetOptions = computed(() => [
-  { label: t('skills.targets.hermes'), value: 'hermes' },
+  { label: t('skills.targets.yi'), value: 'yi' },
   { label: t('skills.targets.claude'), value: 'claude' },
   { label: t('skills.targets.codex'), value: 'codex' },
 ])
 
-const isHermesTarget = computed(() => skillTarget.value === 'hermes')
+const isYiTarget = computed(() => skillTarget.value === 'yi')
 
 function handleMobileChange(e: MediaQueryListEvent | MediaQueryList) {
   showSidebar.value = !e.matches
@@ -86,7 +86,7 @@ function handleTargetChange() {
   selectedSkill.value = ''
   sourceFilter.value = null
   loadSkills()
-  if (skillTarget.value === 'hermes') loadPendingWriteCount()
+  if (skillTarget.value === 'yi') loadPendingWriteCount()
 }
 
 async function loadPendingWriteCount() {
@@ -183,7 +183,7 @@ function handlePinToggled(name: string, pinned: boolean) {
       </div>
       <div class="header-actions">
         <NButton
-          v-if="isHermesTarget && writeApprovalSupported"
+          v-if="isYiTarget && writeApprovalSupported"
           class="header-action-btn"
           size="small"
           :title="t('skills.writeApprovalTitle')"
@@ -203,7 +203,7 @@ function handlePinToggled(name: string, pinned: boolean) {
           </span>
         </NButton>
         <NButton
-          v-if="isHermesTarget"
+          v-if="isYiTarget"
           class="header-action-btn"
           size="small"
           :title="t('skills.import')"
@@ -220,7 +220,7 @@ function handlePinToggled(name: string, pinned: boolean) {
           <span class="header-action-label">{{ t('skills.import') }}</span>
         </NButton>
         <NButton
-          v-if="isHermesTarget"
+          v-if="isYiTarget"
           class="header-action-btn"
           size="small"
           :title="t('skills.externalDirs.manage')"
@@ -281,7 +281,7 @@ function handlePinToggled(name: string, pinned: boolean) {
               :selected-skill="selectedCategory && selectedSkill ? `${selectedCategory}/${selectedSkill}` : null"
               :search-query="searchQuery"
               :source-filter="sourceFilter"
-              :readonly="!isHermesTarget"
+              :readonly="!isYiTarget"
               @select="handleSelect"
               @deleted="handleSkillDeleted"
             />
@@ -297,7 +297,7 @@ function handlePinToggled(name: string, pinned: boolean) {
               :view-count="selectedSkillData?.viewCount"
               :pinned="selectedSkillData?.pinned"
               :target="skillTarget"
-              :readonly="!isHermesTarget"
+              :readonly="!isYiTarget"
               @pin-toggled="handlePinToggled"
             />
             <div v-else class="empty-detail">

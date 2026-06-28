@@ -1,0 +1,404 @@
+[
+  {
+    "id": "deepseek",
+    "name": "DeepSeek",
+    "baseUrl": "https://api.deepseek.com/v1",
+    "apiKey": "",
+    "enabled": true,
+    "builtin": true,
+    "models": [],
+    "createdAt": 1782619083537,
+    "updatedAt": 1782619083537
+  },
+  {
+    "id": "openai",
+    "name": "OpenAI",
+    "baseUrl": "https://api.openai.com/v1",
+    "apiKey": "",
+    "enabled": true,
+    "builtin": true,
+    "models": [],
+    "createdAt": 1782619083537,
+    "updatedAt": 1782619083537
+  },
+  {
+    "id": "anthropic",
+    "name": "Anthropic",
+    "baseUrl": "https://api.anthropic.com",
+    "apiKey": "",
+    "enabled": true,
+    "builtin": true,
+    "models": [],
+    "createdAt": 1782619083537,
+    "updatedAt": 1782619083537
+  },
+  {
+    "id": "opencode-zen",
+    "name": "OpenCode Zen",
+    "baseUrl": "https://opencode.ai/zen/v1/",
+    "apiKey": "",
+    "enabled": true,
+    "builtin": true,
+    "models": [
+      {
+        "id": "claude-fable-5",
+        "name": "claude-fable-5",
+        "visible": false
+      },
+      {
+        "id": "claude-opus-4-8",
+        "name": "claude-opus-4-8",
+        "visible": false
+      },
+      {
+        "id": "claude-opus-4-7",
+        "name": "claude-opus-4-7",
+        "visible": false
+      },
+      {
+        "id": "claude-opus-4-6",
+        "name": "claude-opus-4-6",
+        "visible": false
+      },
+      {
+        "id": "claude-opus-4-5",
+        "name": "claude-opus-4-5",
+        "visible": false
+      },
+      {
+        "id": "claude-opus-4-1",
+        "name": "claude-opus-4-1",
+        "visible": false
+      },
+      {
+        "id": "claude-sonnet-4-6",
+        "name": "claude-sonnet-4-6",
+        "visible": false
+      },
+      {
+        "id": "claude-sonnet-4-5",
+        "name": "claude-sonnet-4-5",
+        "visible": false
+      },
+      {
+        "id": "claude-sonnet-4",
+        "name": "claude-sonnet-4",
+        "visible": false
+      },
+      {
+        "id": "claude-haiku-4-5",
+        "name": "claude-haiku-4-5",
+        "visible": false
+      },
+      {
+        "id": "gemini-3.5-flash",
+        "name": "gemini-3.5-flash",
+        "visible": false
+      },
+      {
+        "id": "gemini-3.1-pro",
+        "name": "gemini-3.1-pro",
+        "visible": false
+      },
+      {
+        "id": "gemini-3-flash",
+        "name": "gemini-3-flash",
+        "visible": false
+      },
+      {
+        "id": "gpt-5.5",
+        "name": "gpt-5.5",
+        "visible": false
+      },
+      {
+        "id": "gpt-5.5-pro",
+        "name": "gpt-5.5-pro",
+        "visible": false
+      },
+      {
+        "id": "gpt-5.4",
+        "name": "gpt-5.4",
+        "visible": false
+      },
+      {
+        "id": "gpt-5.4-pro",
+        "name": "gpt-5.4-pro",
+        "visible": false
+      },
+      {
+        "id": "gpt-5.4-mini",
+        "name": "gpt-5.4-mini",
+        "visible": false
+      },
+      {
+        "id": "gpt-5.4-nano",
+        "name": "gpt-5.4-nano",
+        "visible": false
+      },
+      {
+        "id": "gpt-5.3-codex-spark",
+        "name": "gpt-5.3-codex-spark",
+        "visible": false
+      },
+      {
+        "id": "gpt-5.3-codex",
+        "name": "gpt-5.3-codex",
+        "visible": false
+      },
+      {
+        "id": "gpt-5.2",
+        "name": "gpt-5.2",
+        "visible": false
+      },
+      {
+        "id": "gpt-5.2-codex",
+        "name": "gpt-5.2-codex",
+        "visible": false
+      },
+      {
+        "id": "gpt-5.1",
+        "name": "gpt-5.1",
+        "visible": false
+      },
+      {
+        "id": "gpt-5.1-codex-max",
+        "name": "gpt-5.1-codex-max",
+        "visible": false
+      },
+      {
+        "id": "gpt-5.1-codex",
+        "name": "gpt-5.1-codex",
+        "visible": false
+      },
+      {
+        "id": "gpt-5.1-codex-mini",
+        "name": "gpt-5.1-codex-mini",
+        "visible": false
+      },
+      {
+        "id": "gpt-5",
+        "name": "gpt-5",
+        "visible": false
+      },
+      {
+        "id": "gpt-5-codex",
+        "name": "gpt-5-codex",
+        "visible": false
+      },
+      {
+        "id": "gpt-5-nano",
+        "name": "gpt-5-nano",
+        "visible": false
+      },
+      {
+        "id": "grok-build-0.1",
+        "name": "grok-build-0.1",
+        "visible": false
+      },
+      {
+        "id": "deepseek-v4-pro",
+        "name": "deepseek-v4-pro",
+        "visible": false
+      },
+      {
+        "id": "deepseek-v4-flash",
+        "name": "deepseek-v4-flash",
+        "visible": false
+      },
+      {
+        "id": "glm-5.2",
+        "name": "glm-5.2",
+        "visible": false
+      },
+      {
+        "id": "glm-5.1",
+        "name": "glm-5.1",
+        "visible": false
+      },
+      {
+        "id": "glm-5",
+        "name": "glm-5",
+        "visible": false
+      },
+      {
+        "id": "minimax-m2.7",
+        "name": "minimax-m2.7",
+        "visible": false
+      },
+      {
+        "id": "minimax-m2.5",
+        "name": "minimax-m2.5",
+        "visible": false
+      },
+      {
+        "id": "kimi-k2.6",
+        "name": "kimi-k2.6",
+        "visible": false
+      },
+      {
+        "id": "kimi-k2.5",
+        "name": "kimi-k2.5",
+        "visible": false
+      },
+      {
+        "id": "qwen3.6-plus",
+        "name": "qwen3.6-plus",
+        "visible": false
+      },
+      {
+        "id": "qwen3.5-plus",
+        "name": "qwen3.5-plus",
+        "visible": false
+      },
+      {
+        "id": "big-pickle",
+        "name": "big-pickle",
+        "visible": true
+      },
+      {
+        "id": "deepseek-v4-flash-free",
+        "name": "deepseek-v4-flash-free",
+        "visible": true
+      },
+      {
+        "id": "mimo-v2.5-free",
+        "name": "mimo-v2.5-free",
+        "visible": true
+      },
+      {
+        "id": "qwen3.6-plus-free",
+        "name": "qwen3.6-plus-free",
+        "visible": true
+      },
+      {
+        "id": "minimax-m3-free",
+        "name": "minimax-m3-free",
+        "visible": true
+      },
+      {
+        "id": "nemotron-3-ultra-free",
+        "name": "nemotron-3-ultra-free",
+        "visible": true
+      },
+      {
+        "id": "north-mini-code-free",
+        "name": "north-mini-code-free",
+        "visible": true
+      }
+    ],
+    "createdAt": 1782619083537,
+    "updatedAt": 1782619130458
+  },
+  {
+    "id": "opencode-go",
+    "name": "OpenCode Go",
+    "baseUrl": "https://opencode.ai/zen/go/v1/",
+    "apiKey": "",
+    "enabled": true,
+    "builtin": true,
+    "models": [
+      {
+        "id": "minimax-m3",
+        "name": "minimax-m3",
+        "visible": true
+      },
+      {
+        "id": "minimax-m2.7",
+        "name": "minimax-m2.7",
+        "visible": true
+      },
+      {
+        "id": "minimax-m2.5",
+        "name": "minimax-m2.5",
+        "visible": true
+      },
+      {
+        "id": "kimi-k2.7-code",
+        "name": "kimi-k2.7-code",
+        "visible": true
+      },
+      {
+        "id": "kimi-k2.6",
+        "name": "kimi-k2.6",
+        "visible": true
+      },
+      {
+        "id": "kimi-k2.5",
+        "name": "kimi-k2.5",
+        "visible": true
+      },
+      {
+        "id": "glm-5.2",
+        "name": "glm-5.2",
+        "visible": true
+      },
+      {
+        "id": "glm-5.1",
+        "name": "glm-5.1",
+        "visible": true
+      },
+      {
+        "id": "glm-5",
+        "name": "glm-5",
+        "visible": true
+      },
+      {
+        "id": "deepseek-v4-pro",
+        "name": "deepseek-v4-pro",
+        "visible": true
+      },
+      {
+        "id": "deepseek-v4-flash",
+        "name": "deepseek-v4-flash",
+        "visible": true
+      },
+      {
+        "id": "qwen3.7-max",
+        "name": "qwen3.7-max",
+        "visible": true
+      },
+      {
+        "id": "qwen3.7-plus",
+        "name": "qwen3.7-plus",
+        "visible": true
+      },
+      {
+        "id": "qwen3.6-plus",
+        "name": "qwen3.6-plus",
+        "visible": true
+      },
+      {
+        "id": "qwen3.5-plus",
+        "name": "qwen3.5-plus",
+        "visible": true
+      },
+      {
+        "id": "mimo-v2-pro",
+        "name": "mimo-v2-pro",
+        "visible": true
+      },
+      {
+        "id": "mimo-v2-omni",
+        "name": "mimo-v2-omni",
+        "visible": true
+      },
+      {
+        "id": "mimo-v2.5-pro",
+        "name": "mimo-v2.5-pro",
+        "visible": true
+      },
+      {
+        "id": "mimo-v2.5",
+        "name": "mimo-v2.5",
+        "visible": true
+      },
+      {
+        "id": "hy3-preview",
+        "name": "hy3-preview",
+        "visible": true
+      }
+    ],
+    "createdAt": 1782619083537,
+    "updatedAt": 1782619100387
+  }
+]

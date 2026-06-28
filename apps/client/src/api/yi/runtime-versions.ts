@@ -1,4 +1,4 @@
-import { request } from '@/api/client'
+﻿import { request } from '@/api/client'
 
 export interface ActiveVersionManifest {
   schema: number
@@ -68,53 +68,53 @@ export interface RuntimeVersionStatus {
 }
 
 export async function fetchRuntimeVersionStatus(): Promise<RuntimeVersionStatus> {
-  return request<RuntimeVersionStatus>('/api/hermes/runtime-versions')
+  return request<RuntimeVersionStatus>('/api/yi/runtime-versions')
 }
 
 export async function activateRuntimeVersion(version: string): Promise<{ success: boolean; active: ActiveVersionManifest }> {
-  return request<{ success: boolean; active: ActiveVersionManifest }>('/api/hermes/runtime-versions/active-runtime', {
+  return request<{ success: boolean; active: ActiveVersionManifest }>('/api/yi/runtime-versions/active-runtime', {
     method: 'POST',
     body: JSON.stringify({ version }),
   })
 }
 
 export async function activateWebUiVersion(version: string): Promise<{ success: boolean; active: ActiveVersionManifest }> {
-  return request<{ success: boolean; active: ActiveVersionManifest }>('/api/hermes/runtime-versions/active-webui', {
+  return request<{ success: boolean; active: ActiveVersionManifest }>('/api/yi/runtime-versions/active-webui', {
     method: 'POST',
     body: JSON.stringify({ version }),
   })
 }
 
 export async function downloadRuntimeVersion(version: string, source: VersionDownloadSource): Promise<{ success: boolean; job: VersionDownloadJob }> {
-  return request<{ success: boolean; job: VersionDownloadJob }>('/api/hermes/runtime-versions/runtime/download', {
+  return request<{ success: boolean; job: VersionDownloadJob }>('/api/yi/runtime-versions/runtime/download', {
     method: 'POST',
     body: JSON.stringify({ version, source }),
   })
 }
 
 export async function deleteRuntimeVersion(version: string): Promise<{ success: boolean; deleted: InstalledRuntimeVersion }> {
-  return request<{ success: boolean; deleted: InstalledRuntimeVersion }>(`/api/hermes/runtime-versions/runtime/${encodeURIComponent(version)}`, {
+  return request<{ success: boolean; deleted: InstalledRuntimeVersion }>(`/api/yi/runtime-versions/runtime/${encodeURIComponent(version)}`, {
     method: 'DELETE',
   })
 }
 
 export async function downloadWebUiVersion(version: string, source: VersionDownloadSource): Promise<{ success: boolean; job: VersionDownloadJob }> {
-  return request<{ success: boolean; job: VersionDownloadJob }>('/api/hermes/runtime-versions/webui/download', {
+  return request<{ success: boolean; job: VersionDownloadJob }>('/api/yi/runtime-versions/webui/download', {
     method: 'POST',
     body: JSON.stringify({ version, source }),
   })
 }
 
 export async function deleteWebUiVersion(version: string): Promise<{ success: boolean; deleted: InstalledWebUiVersion }> {
-  return request<{ success: boolean; deleted: InstalledWebUiVersion }>(`/api/hermes/runtime-versions/webui/${encodeURIComponent(version)}`, {
+  return request<{ success: boolean; deleted: InstalledWebUiVersion }>(`/api/yi/runtime-versions/webui/${encodeURIComponent(version)}`, {
     method: 'DELETE',
   })
 }
 
 export async function fetchVersionDownloadJobs(): Promise<{ jobs: VersionDownloadJob[] }> {
-  return request<{ jobs: VersionDownloadJob[] }>('/api/hermes/runtime-versions/jobs')
+  return request<{ jobs: VersionDownloadJob[] }>('/api/yi/runtime-versions/jobs')
 }
 
 export async function fetchVersionDownloadJob(id: string): Promise<VersionDownloadJob> {
-  return request<VersionDownloadJob>(`/api/hermes/runtime-versions/jobs/${encodeURIComponent(id)}`)
+  return request<VersionDownloadJob>(`/api/yi/runtime-versions/jobs/${encodeURIComponent(id)}`)
 }

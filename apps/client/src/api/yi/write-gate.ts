@@ -1,4 +1,4 @@
-import { request } from '../client'
+﻿import { request } from '../client'
 
 export type WriteGateSubsystem = 'memory' | 'skills'
 
@@ -37,16 +37,16 @@ export interface PendingWriteReview {
 }
 
 export async function fetchPendingWrites(): Promise<PendingWritesResponse> {
-  return request<PendingWritesResponse>('/api/hermes/write-gate/pending')
+  return request<PendingWritesResponse>('/api/yi/write-gate/pending')
 }
 
 export async function fetchPendingWriteDiff(subsystem: WriteGateSubsystem, id: string): Promise<string> {
-  const res = await request<{ diff: string; review?: PendingWriteReview }>(`/api/hermes/write-gate/pending/${encodeURIComponent(subsystem)}/${encodeURIComponent(id)}/diff`)
+  const res = await request<{ diff: string; review?: PendingWriteReview }>(`/api/yi/write-gate/pending/${encodeURIComponent(subsystem)}/${encodeURIComponent(id)}/diff`)
   return res.diff
 }
 
 export async function fetchPendingWriteReview(subsystem: WriteGateSubsystem, id: string): Promise<PendingWriteReview> {
-  const res = await request<{ diff: string; review?: PendingWriteReview }>(`/api/hermes/write-gate/pending/${encodeURIComponent(subsystem)}/${encodeURIComponent(id)}/diff`)
+  const res = await request<{ diff: string; review?: PendingWriteReview }>(`/api/yi/write-gate/pending/${encodeURIComponent(subsystem)}/${encodeURIComponent(id)}/diff`)
   if (res.review) return res.review
   return {
     subsystem,
@@ -62,14 +62,14 @@ export async function fetchPendingWriteReview(subsystem: WriteGateSubsystem, id:
 
 export async function approvePendingWrite(subsystem: WriteGateSubsystem, id: string): Promise<{ output: string }> {
   return request<{ success: boolean; output: string }>(
-    `/api/hermes/write-gate/pending/${encodeURIComponent(subsystem)}/${encodeURIComponent(id)}/approve`,
+    `/api/yi/write-gate/pending/${encodeURIComponent(subsystem)}/${encodeURIComponent(id)}/approve`,
     { method: 'POST' },
   )
 }
 
 export async function rejectPendingWrite(subsystem: WriteGateSubsystem, id: string): Promise<{ output: string }> {
   return request<{ success: boolean; output: string }>(
-    `/api/hermes/write-gate/pending/${encodeURIComponent(subsystem)}/${encodeURIComponent(id)}/reject`,
+    `/api/yi/write-gate/pending/${encodeURIComponent(subsystem)}/${encodeURIComponent(id)}/reject`,
     { method: 'POST' },
   )
 }

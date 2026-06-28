@@ -1,4 +1,4 @@
-import { request } from '../client'
+﻿import { request } from '../client'
 
 export interface HealthResponse {
   status: string
@@ -97,7 +97,7 @@ export interface AvailableModelGroup {
   api_key: string
   api_mode?: ProviderApiMode
   builtin?: boolean
-  /** Env var used by Hermes to override this provider's base URL. If present, the preset URL is editable. */
+  /** Env var used by Yi to override this provider's base URL. If present, the preset URL is editable. */
   base_url_env?: string
   /** Config source for custom providers. Dict-backed providers can be deleted from providers:<key>. */
   provider_source?: 'custom_providers' | 'providers'
@@ -140,51 +140,51 @@ export async function checkHealth(): Promise<HealthResponse> {
 }
 
 export async function triggerUpdate(): Promise<{ success: boolean; message: string }> {
-  return request<{ success: boolean; message: string }>('/api/hermes/update', { method: 'POST' })
+  return request<{ success: boolean; message: string }>('/api/yi/update', { method: 'POST' })
 }
 
 export async function fetchPreviewStatus(): Promise<PreviewStatus> {
-  return request<PreviewStatus>('/api/hermes/update/preview')
+  return request<PreviewStatus>('/api/yi/update/preview')
 }
 
 export async function fetchPreviewTags(): Promise<{ tags: PreviewTag[] }> {
-  return request<{ tags: PreviewTag[] }>('/api/hermes/update/preview/tags')
+  return request<{ tags: PreviewTag[] }>('/api/yi/update/preview/tags')
 }
 
 export async function preparePreview(tag: string): Promise<PreviewActionResponse> {
-  return request<PreviewActionResponse>('/api/hermes/update/preview/prepare', {
+  return request<PreviewActionResponse>('/api/yi/update/preview/prepare', {
     method: 'POST',
     body: JSON.stringify({ tag }),
   })
 }
 
 export async function installPreview(): Promise<PreviewActionResponse> {
-  return request<PreviewActionResponse>('/api/hermes/update/preview/install', { method: 'POST' })
+  return request<PreviewActionResponse>('/api/yi/update/preview/install', { method: 'POST' })
 }
 
 export async function startPreview(tag?: string): Promise<PreviewActionResponse> {
-  return request<PreviewActionResponse>('/api/hermes/update/preview/start', {
+  return request<PreviewActionResponse>('/api/yi/update/preview/start', {
     method: 'POST',
     body: JSON.stringify({ tag }),
   })
 }
 
 export async function stopPreview(): Promise<PreviewActionResponse> {
-  return request<PreviewActionResponse>('/api/hermes/update/preview/stop', { method: 'POST' })
+  return request<PreviewActionResponse>('/api/yi/update/preview/stop', { method: 'POST' })
 }
 
 export async function fetchConfigModels(): Promise<ConfigModelsResponse> {
-  return request<ConfigModelsResponse>('/api/hermes/config/models')
+  return request<ConfigModelsResponse>('/api/yi/config/models')
 }
 
 export async function fetchAvailableModels(): Promise<AvailableModelsResponse> {
-  return request<AvailableModelsResponse>('/api/hermes/available-models')
+  return request<AvailableModelsResponse>('/api/yi/available-models')
 }
 
 export async function fetchAvailableModelsForProfile(profile: string): Promise<AvailableModelsResponse> {
   const params = new URLSearchParams()
   params.set('profile', profile || 'default')
-  return request<AvailableModelsResponse>(`/api/hermes/available-models?${params.toString()}`)
+  return request<AvailableModelsResponse>(`/api/yi/available-models?${params.toString()}`)
 }
 
 export async function fetchProviderModels(data: {
@@ -195,14 +195,14 @@ export async function fetchProviderModels(data: {
   label?: string
   update_cache?: boolean
 }): Promise<{ models: string[] }> {
-  return request<{ models: string[] }>('/api/hermes/provider-models', {
+  return request<{ models: string[] }>('/api/yi/provider-models', {
     method: 'POST',
     body: JSON.stringify(data),
   })
 }
 
 export async function refreshProviderModelCache(): Promise<{ success: boolean }> {
-  return request<{ success: boolean }>('/api/hermes/provider-models/cache/refresh', {
+  return request<{ success: boolean }>('/api/yi/provider-models/cache/refresh', {
     method: 'POST',
   })
 }
@@ -213,7 +213,7 @@ export async function updateDefaultModel(data: {
   base_url?: string
   api_key?: string
 }): Promise<void> {
-  await request('/api/hermes/config/model', {
+  await request('/api/yi/config/model', {
     method: 'PUT',
     body: JSON.stringify(data),
   })
@@ -224,14 +224,14 @@ export async function updateModelAlias(data: {
   model: string
   alias: string
 }): Promise<void> {
-  await request('/api/hermes/model-alias', {
+  await request('/api/yi/model-alias', {
     method: 'PUT',
     body: JSON.stringify(data),
   })
 }
 
 export async function addCustomProvider(data: CustomProvider): Promise<void> {
-  await request('/api/hermes/config/providers', {
+  await request('/api/yi/config/providers', {
     method: 'POST',
     body: JSON.stringify(data),
   })
@@ -241,7 +241,7 @@ export async function removeCustomProvider(name: string, options: { source?: 'cu
   const query = new URLSearchParams()
   if (options.source) query.set('source', options.source)
   if (options.providerKey) query.set('providerKey', options.providerKey)
-  await request(`/api/hermes/config/providers/${encodeURIComponent(name)}${query.size ? `?${query}` : ''}`, {
+  await request(`/api/yi/config/providers/${encodeURIComponent(name)}${query.size ? `?${query}` : ''}`, {
     method: 'DELETE',
   })
 }
@@ -253,7 +253,7 @@ export async function updateProvider(poolKey: string, data: {
   model?: string
   api_mode?: ProviderApiMode
 }): Promise<void> {
-  await request(`/api/hermes/config/providers/${encodeURIComponent(poolKey)}`, {
+  await request(`/api/yi/config/providers/${encodeURIComponent(poolKey)}`, {
     method: 'PUT',
     body: JSON.stringify(data),
   })
@@ -264,7 +264,7 @@ export async function updateModelVisibility(data: {
   mode: 'all' | 'include'
   models: string[]
 }): Promise<{ success: boolean; model_visibility: ModelVisibility }> {
-  return request<{ success: boolean; model_visibility: ModelVisibility }>('/api/hermes/model-visibility', {
+  return request<{ success: boolean; model_visibility: ModelVisibility }>('/api/yi/model-visibility', {
     method: 'PUT',
     body: JSON.stringify(data),
   })
@@ -274,7 +274,7 @@ export async function addCustomModel(data: {
   provider: string
   model: string
 }): Promise<{ success: boolean; custom_models: CustomModels }> {
-  return request<{ success: boolean; custom_models: CustomModels }>('/api/hermes/custom-model', {
+  return request<{ success: boolean; custom_models: CustomModels }>('/api/yi/custom-model', {
     method: 'PUT',
     body: JSON.stringify(data),
   })
@@ -287,7 +287,7 @@ export async function removeCustomModel(data: {
   const params = new URLSearchParams()
   params.set('provider', data.provider)
   params.set('model', data.model)
-  return request<{ success: boolean; custom_models: CustomModels }>(`/api/hermes/custom-model?${params.toString()}`, {
+  return request<{ success: boolean; custom_models: CustomModels }>(`/api/yi/custom-model?${params.toString()}`, {
     method: 'DELETE',
   })
 }

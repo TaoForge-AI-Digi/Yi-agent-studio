@@ -1,12 +1,12 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { ref, computed } from 'vue'
 import { NButton, NTag, NSpin, useMessage, useDialog } from 'naive-ui'
-import type { HermesProfile, HermesProfileDetail } from '@/api/yi/profiles'
+import type { YiProfile, YiProfileDetail } from '@/api/yi/profiles'
 import { useProfilesStore } from '@/stores/yi/profiles'
 import { useI18n } from 'vue-i18n'
 import ProfileAvatar from './ProfileAvatar.vue'
 
-const props = defineProps<{ profile: HermesProfile }>()
+const props = defineProps<{ profile: YiProfile }>()
 const emit = defineEmits<{}>()
 
 const { t } = useI18n()
@@ -18,7 +18,7 @@ const expanded = ref(false)
 const detailLoading = ref(false)
 const exporting = ref(false)
 const switching = ref(false)
-const detail = ref<HermesProfileDetail | null>(null)
+const detail = ref<YiProfileDetail | null>(null)
 
 const isDefault = computed(() => props.profile.name === 'default')
 
@@ -42,14 +42,14 @@ async function handleSwitch() {
     content: t('profiles.switchConfirm', { name: props.profile.name }),
     positiveText: t('profiles.switchTo'),
     negativeText: t('common.cancel'),
-    onPositiveClick: performHermesSwitch,
+    onPositiveClick: performYiSwitch,
   })
 }
 
-async function performHermesSwitch() {
+async function performYiSwitch() {
   switching.value = true
   try {
-    const ok = await profilesStore.switchHermesProfile(props.profile.name)
+    const ok = await profilesStore.switchYiProfile(props.profile.name)
     if (ok) {
       message.success(t('profiles.switchSuccess', { name: props.profile.name }))
       // Reload to refresh all profile-dependent data

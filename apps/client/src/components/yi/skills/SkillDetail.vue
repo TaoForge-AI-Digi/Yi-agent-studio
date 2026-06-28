@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { ref, watch } from 'vue'
 import MarkdownRenderer from '@/components/yi/chat/MarkdownRenderer.vue'
 import { fetchSkillContent, fetchSkillFiles, pinSkillApi, type SkillFileEntry, type SkillTarget } from '@/api/yi/skills'
@@ -40,8 +40,8 @@ async function loadSkill() {
   try {
     const skillPath = `${props.category}/${props.skill}/SKILL.md`
     const [skillContent, skillFiles] = await Promise.all([
-      fetchSkillContent(skillPath, props.target || 'hermes'),
-      fetchSkillFiles(props.category, props.skill, props.target || 'hermes'),
+      fetchSkillContent(skillPath, props.target || 'yi'),
+      fetchSkillFiles(props.category, props.skill, props.target || 'yi'),
     ])
     content.value = skillContent
     files.value = skillFiles.filter(f => !f.isDir && f.path !== 'SKILL.md')
@@ -68,7 +68,7 @@ async function viewFile(filePath: string) {
         relPath = afterSkillDir
       }
     }
-    fileContent.value = await fetchSkillContent(`${base}${relPath}`, props.target || 'hermes')
+    fileContent.value = await fetchSkillContent(`${base}${relPath}`, props.target || 'yi')
   } catch (err: any) {
     fileContent.value = t('skills.fileLoadFailed') + `: ${err.message}`
   } finally {
@@ -97,7 +97,7 @@ async function handlePinToggle() {
   }
 }
 
-watch(() => `${props.target || 'hermes'}/${props.category}/${props.skill}`, loadSkill, { immediate: true })
+watch(() => `${props.target || 'yi'}/${props.category}/${props.skill}`, loadSkill, { immediate: true })
 </script>
 
 <template>

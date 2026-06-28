@@ -1,4 +1,4 @@
-import { request, getApiKey, getBaseUrlValue } from '../client'
+﻿import { request, getApiKey, getBaseUrlValue } from '../client'
 
 // ─── Types ──────────────────────────────────────────────────────
 
@@ -269,13 +269,13 @@ export function buildKanbanEventsWebSocketUrl(opts?: KanbanBoardOptions): string
   if (token) params.set('token', token)
   const profile = activeProfileName()
   if (profile) params.set('profile', profile)
-  const path = `/api/hermes/kanban/events?${params.toString()}`
+  const path = `/api/yi/kanban/events?${params.toString()}`
 
   if (base) {
     return `${websocketProtocol(base)}//${new URL(base).host}${path}`
   }
 
-  const directDevPort = import.meta.env.VITE_HERMES_DIRECT_WS_PORT
+  const directDevPort = import.meta.env.VITE_YI_DIRECT_WS_PORT
   const host = import.meta.env.DEV && directDevPort
     ? formatHostForPort(location.hostname, Number(directDevPort))
     : location.host
@@ -291,12 +291,12 @@ export function openKanbanEventStream(opts?: KanbanBoardOptions): WebSocket {
 export async function listBoards(opts?: { includeArchived?: boolean }): Promise<KanbanBoard[]> {
   const params = new URLSearchParams()
   if (opts?.includeArchived) params.set('includeArchived', 'true')
-  const res = await request<{ boards: KanbanBoard[] }>(appendQuery('/api/hermes/kanban/boards', params))
+  const res = await request<{ boards: KanbanBoard[] }>(appendQuery('/api/yi/kanban/boards', params))
   return res.boards
 }
 
 export async function createBoard(data: KanbanBoardCreateRequest): Promise<KanbanBoard> {
-  const res = await request<{ board: KanbanBoard }>('/api/hermes/kanban/boards', {
+  const res = await request<{ board: KanbanBoard }>('/api/yi/kanban/boards', {
     method: 'POST',
     body: JSON.stringify(data),
   })
@@ -304,13 +304,13 @@ export async function createBoard(data: KanbanBoardCreateRequest): Promise<Kanba
 }
 
 export async function archiveBoard(slug: string): Promise<{ ok: boolean }> {
-  return request<{ ok: boolean }>(`/api/hermes/kanban/boards/${encodeURIComponent(slug)}`, {
+  return request<{ ok: boolean }>(`/api/yi/kanban/boards/${encodeURIComponent(slug)}`, {
     method: 'DELETE',
   })
 }
 
 export async function getCapabilities(): Promise<KanbanCapabilities> {
-  const res = await request<{ capabilities: KanbanCapabilities }>('/api/hermes/kanban/capabilities')
+  const res = await request<{ capabilities: KanbanCapabilities }>('/api/yi/kanban/capabilities')
   return res.capabilities
 }
 
@@ -320,16 +320,16 @@ export async function listTasks(opts?: KanbanListOptions): Promise<KanbanTask[]>
   if (opts?.assignee) params.set('assignee', opts.assignee)
   if (opts?.tenant) params.set('tenant', opts.tenant)
   if (opts?.includeArchived) params.set('includeArchived', 'true')
-  const res = await request<{ tasks: KanbanTask[] }>(appendQuery('/api/hermes/kanban', params))
+  const res = await request<{ tasks: KanbanTask[] }>(appendQuery('/api/yi/kanban', params))
   return res.tasks
 }
 
 export async function getTask(id: string, opts?: KanbanBoardOptions): Promise<KanbanTaskDetail> {
-  return request<KanbanTaskDetail>(appendQuery(`/api/hermes/kanban/${encodeURIComponent(id)}`, boardParams(opts?.board)))
+  return request<KanbanTaskDetail>(appendQuery(`/api/yi/kanban/${encodeURIComponent(id)}`, boardParams(opts?.board)))
 }
 
 export async function createTask(data: KanbanCreateRequest, opts?: KanbanBoardOptions): Promise<KanbanTask> {
-  const res = await request<{ task: KanbanTask }>(appendQuery('/api/hermes/kanban', boardParams(opts?.board)), {
+  const res = await request<{ task: KanbanTask }>(appendQuery('/api/yi/kanban', boardParams(opts?.board)), {
     method: 'POST',
     body: JSON.stringify(data),
   })
@@ -337,42 +337,42 @@ export async function createTask(data: KanbanCreateRequest, opts?: KanbanBoardOp
 }
 
 export async function completeTasks(taskIds: string[], summary?: string, opts?: KanbanBoardOptions): Promise<{ ok: boolean }> {
-  return request<{ ok: boolean }>(appendQuery('/api/hermes/kanban/complete', boardParams(opts?.board)), {
+  return request<{ ok: boolean }>(appendQuery('/api/yi/kanban/complete', boardParams(opts?.board)), {
     method: 'POST',
     body: JSON.stringify({ task_ids: taskIds, summary }),
   })
 }
 
 export async function blockTask(taskId: string, reason: string, opts?: KanbanBoardOptions): Promise<{ ok: boolean }> {
-  return request<{ ok: boolean }>(appendQuery(`/api/hermes/kanban/${encodeURIComponent(taskId)}/block`, boardParams(opts?.board)), {
+  return request<{ ok: boolean }>(appendQuery(`/api/yi/kanban/${encodeURIComponent(taskId)}/block`, boardParams(opts?.board)), {
     method: 'POST',
     body: JSON.stringify({ reason }),
   })
 }
 
 export async function unblockTasks(taskIds: string[], opts?: KanbanBoardOptions): Promise<{ ok: boolean }> {
-  return request<{ ok: boolean }>(appendQuery('/api/hermes/kanban/unblock', boardParams(opts?.board)), {
+  return request<{ ok: boolean }>(appendQuery('/api/yi/kanban/unblock', boardParams(opts?.board)), {
     method: 'POST',
     body: JSON.stringify({ task_ids: taskIds }),
   })
 }
 
 export async function assignTask(taskId: string, profile: string, opts?: KanbanBoardOptions): Promise<{ ok: boolean }> {
-  return request<{ ok: boolean }>(appendQuery(`/api/hermes/kanban/${encodeURIComponent(taskId)}/assign`, boardParams(opts?.board)), {
+  return request<{ ok: boolean }>(appendQuery(`/api/yi/kanban/${encodeURIComponent(taskId)}/assign`, boardParams(opts?.board)), {
     method: 'POST',
     body: JSON.stringify({ profile }),
   })
 }
 
 export async function addComment(taskId: string, data: KanbanCommentCreateRequest, opts?: KanbanBoardOptions): Promise<{ ok: boolean; output?: string }> {
-  return request<{ ok: boolean; output?: string }>(appendQuery(`/api/hermes/kanban/${encodeURIComponent(taskId)}/comments`, boardParams(opts?.board)), {
+  return request<{ ok: boolean; output?: string }>(appendQuery(`/api/yi/kanban/${encodeURIComponent(taskId)}/comments`, boardParams(opts?.board)), {
     method: 'POST',
     body: JSON.stringify(data),
   })
 }
 
 export async function linkTasks(data: KanbanLinkRequest, opts?: KanbanBoardOptions): Promise<{ ok: boolean; output?: string }> {
-  return request<{ ok: boolean; output?: string }>(appendQuery('/api/hermes/kanban/links', boardParams(opts?.board)), {
+  return request<{ ok: boolean; output?: string }>(appendQuery('/api/yi/kanban/links', boardParams(opts?.board)), {
     method: 'POST',
     body: JSON.stringify(data),
   })
@@ -382,13 +382,13 @@ export async function unlinkTasks(data: KanbanLinkRequest, opts?: KanbanBoardOpt
   const params = boardParams(opts?.board)
   params.set('parent_id', data.parent_id)
   params.set('child_id', data.child_id)
-  return request<{ ok: boolean; output?: string }>(appendQuery('/api/hermes/kanban/links', params), {
+  return request<{ ok: boolean; output?: string }>(appendQuery('/api/yi/kanban/links', params), {
     method: 'DELETE',
   })
 }
 
 export async function bulkUpdateTasks(data: KanbanBulkUpdateRequest, opts?: KanbanBoardOptions): Promise<{ results: KanbanBulkTaskResult[] }> {
-  return request<{ results: KanbanBulkTaskResult[] }>(appendQuery('/api/hermes/kanban/tasks/bulk', boardParams(opts?.board)), {
+  return request<{ results: KanbanBulkTaskResult[] }>(appendQuery('/api/yi/kanban/tasks/bulk', boardParams(opts?.board)), {
     method: 'POST',
     body: JSON.stringify(data),
   })
@@ -397,33 +397,33 @@ export async function bulkUpdateTasks(data: KanbanBulkUpdateRequest, opts?: Kanb
 export async function getTaskLog(taskId: string, opts?: KanbanTaskLogOptions): Promise<KanbanTaskLog> {
   const params = boardParams(opts?.board)
   if (opts?.tail !== undefined) params.set('tail', String(opts.tail))
-  return request<KanbanTaskLog>(appendQuery(`/api/hermes/kanban/${encodeURIComponent(taskId)}/log`, params))
+  return request<KanbanTaskLog>(appendQuery(`/api/yi/kanban/${encodeURIComponent(taskId)}/log`, params))
 }
 
 export async function getDiagnostics(opts?: KanbanDiagnosticsOptions): Promise<unknown[]> {
   const params = boardParams(opts?.board)
   if (opts?.task) params.set('task', opts.task)
   if (opts?.severity) params.set('severity', opts.severity)
-  const res = await request<{ diagnostics: unknown[] }>(appendQuery('/api/hermes/kanban/diagnostics', params))
+  const res = await request<{ diagnostics: unknown[] }>(appendQuery('/api/yi/kanban/diagnostics', params))
   return res.diagnostics
 }
 
 export async function reclaimTask(taskId: string, opts?: KanbanReclaimOptions): Promise<{ ok: boolean; output?: string }> {
-  return request<{ ok: boolean; output?: string }>(appendQuery(`/api/hermes/kanban/${encodeURIComponent(taskId)}/reclaim`, boardParams(opts?.board)), {
+  return request<{ ok: boolean; output?: string }>(appendQuery(`/api/yi/kanban/${encodeURIComponent(taskId)}/reclaim`, boardParams(opts?.board)), {
     method: 'POST',
     body: JSON.stringify({ reason: opts?.reason }),
   })
 }
 
 export async function reassignTask(taskId: string, profile: string, opts?: KanbanReassignOptions): Promise<{ ok: boolean; output?: string }> {
-  return request<{ ok: boolean; output?: string }>(appendQuery(`/api/hermes/kanban/${encodeURIComponent(taskId)}/reassign`, boardParams(opts?.board)), {
+  return request<{ ok: boolean; output?: string }>(appendQuery(`/api/yi/kanban/${encodeURIComponent(taskId)}/reassign`, boardParams(opts?.board)), {
     method: 'POST',
     body: JSON.stringify({ profile, reclaim: opts?.reclaim, reason: opts?.reason }),
   })
 }
 
 export async function specifyTask(taskId: string, opts?: KanbanSpecifyOptions): Promise<unknown[]> {
-  const res = await request<{ results: unknown[] }>(appendQuery(`/api/hermes/kanban/${encodeURIComponent(taskId)}/specify`, boardParams(opts?.board)), {
+  const res = await request<{ results: unknown[] }>(appendQuery(`/api/yi/kanban/${encodeURIComponent(taskId)}/specify`, boardParams(opts?.board)), {
     method: 'POST',
     body: JSON.stringify({ author: opts?.author }),
   })
@@ -432,7 +432,7 @@ export async function specifyTask(taskId: string, opts?: KanbanSpecifyOptions): 
 
 export async function dispatch(opts?: KanbanDispatchOptions): Promise<unknown> {
   const params = boardParams(opts?.board)
-  const res = await request<{ result: unknown }>(appendQuery('/api/hermes/kanban/dispatch', params), {
+  const res = await request<{ result: unknown }>(appendQuery('/api/yi/kanban/dispatch', params), {
     method: 'POST',
     body: JSON.stringify({ dryRun: opts?.dryRun, max: opts?.max, failureLimit: opts?.failureLimit }),
   })
@@ -440,11 +440,11 @@ export async function dispatch(opts?: KanbanDispatchOptions): Promise<unknown> {
 }
 
 export async function getStats(opts?: KanbanBoardOptions): Promise<KanbanStats> {
-  const res = await request<{ stats: KanbanStats }>(appendQuery('/api/hermes/kanban/stats', boardParams(opts?.board)))
+  const res = await request<{ stats: KanbanStats }>(appendQuery('/api/yi/kanban/stats', boardParams(opts?.board)))
   return res.stats
 }
 
 export async function getAssignees(opts?: KanbanBoardOptions): Promise<KanbanAssignee[]> {
-  const res = await request<{ assignees: KanbanAssignee[] }>(appendQuery('/api/hermes/kanban/assignees', boardParams(opts?.board)))
+  const res = await request<{ assignees: KanbanAssignee[] }>(appendQuery('/api/yi/kanban/assignees', boardParams(opts?.board)))
   return res.assignees
 }

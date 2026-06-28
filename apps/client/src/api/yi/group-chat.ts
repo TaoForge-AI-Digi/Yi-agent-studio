@@ -1,4 +1,4 @@
-import { io } from 'socket.io-client'
+﻿import { io } from 'socket.io-client'
 import { request, getApiKey } from '../client'
 
 // ─── Types ──────────────────────────────────────────────────
@@ -146,7 +146,7 @@ export async function createRoom(data: {
     agents?: { profile: string; name?: string; description?: string; invited?: boolean }[]
     compression?: { triggerTokens?: number; maxHistoryTokens?: number; tailMessageCount?: number }
 }): Promise<{ room: RoomInfo; agents: RoomAgent[]; agentResults?: AgentAddResult[] }> {
-    return request('/api/hermes/group-chat/rooms', {
+    return request('/api/yi/group-chat/rooms', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -154,7 +154,7 @@ export async function createRoom(data: {
 }
 
 export async function cloneRoom(roomId: string, data?: { name?: string; inviteCode?: string }): Promise<{ room: RoomInfo; agents: RoomAgent[]; agentResults?: AgentAddResult[] }> {
-    return request(`/api/hermes/group-chat/rooms/${roomId}/clone`, {
+    return request(`/api/yi/group-chat/rooms/${roomId}/clone`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data || {}),
@@ -162,7 +162,7 @@ export async function cloneRoom(roomId: string, data?: { name?: string; inviteCo
 }
 
 export async function listRooms(): Promise<{ rooms: RoomInfo[] }> {
-    return request('/api/hermes/group-chat/rooms')
+    return request('/api/yi/group-chat/rooms')
 }
 
 export async function getRoomDetail(
@@ -173,15 +173,15 @@ export async function getRoomDetail(
     if (options.offset != null) params.set('offset', String(options.offset))
     if (options.limit != null) params.set('limit', String(options.limit))
     const query = params.toString()
-    return request(`/api/hermes/group-chat/rooms/${roomId}${query ? `?${query}` : ''}`)
+    return request(`/api/yi/group-chat/rooms/${roomId}${query ? `?${query}` : ''}`)
 }
 
 export async function joinRoomByCode(code: string): Promise<{ room: RoomInfo }> {
-    return request(`/api/hermes/group-chat/rooms/join/${code}`)
+    return request(`/api/yi/group-chat/rooms/join/${code}`)
 }
 
 export async function updateInviteCode(roomId: string, inviteCode: string): Promise<void> {
-    return request(`/api/hermes/group-chat/rooms/${roomId}/invite-code`, {
+    return request(`/api/yi/group-chat/rooms/${roomId}/invite-code`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ inviteCode }),
@@ -194,7 +194,7 @@ export async function addAgent(roomId: string, data: {
     description?: string
     invited?: boolean
 }): Promise<{ agent: RoomAgent }> {
-    return request(`/api/hermes/group-chat/rooms/${roomId}/agents`, {
+    return request(`/api/yi/group-chat/rooms/${roomId}/agents`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -202,29 +202,29 @@ export async function addAgent(roomId: string, data: {
 }
 
 export async function listAgents(roomId: string): Promise<{ agents: RoomAgent[] }> {
-    return request(`/api/hermes/group-chat/rooms/${roomId}/agents`)
+    return request(`/api/yi/group-chat/rooms/${roomId}/agents`)
 }
 
 export async function removeAgent(roomId: string, agentId: string): Promise<{ success: boolean; agents: RoomAgent[]; members: MemberInfo[] }> {
-    return request(`/api/hermes/group-chat/rooms/${roomId}/agents/${agentId}`, {
+    return request(`/api/yi/group-chat/rooms/${roomId}/agents/${agentId}`, {
         method: 'DELETE',
     })
 }
 
 export async function deleteRoom(roomId: string): Promise<void> {
-    return request(`/api/hermes/group-chat/rooms/${roomId}`, {
+    return request(`/api/yi/group-chat/rooms/${roomId}`, {
         method: 'DELETE',
     })
 }
 
 export async function clearRoomContext(roomId: string): Promise<{ success: boolean; room: RoomInfo }> {
-    return request(`/api/hermes/group-chat/rooms/${roomId}/clear-context`, {
+    return request(`/api/yi/group-chat/rooms/${roomId}/clear-context`, {
         method: 'POST',
     })
 }
 
 export async function updateRoomConfig(roomId: string, config: { triggerTokens?: number; maxHistoryTokens?: number; tailMessageCount?: number }): Promise<{ room: RoomInfo }> {
-    return request(`/api/hermes/group-chat/rooms/${roomId}/config`, {
+    return request(`/api/yi/group-chat/rooms/${roomId}/config`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(config),
@@ -232,7 +232,7 @@ export async function updateRoomConfig(roomId: string, config: { triggerTokens?:
 }
 
 export async function forceCompress(roomId: string): Promise<{ success: boolean; summary: string }> {
-    return request(`/api/hermes/group-chat/rooms/${roomId}/compress`, {
+    return request(`/api/yi/group-chat/rooms/${roomId}/compress`, {
         method: 'POST',
     })
 }

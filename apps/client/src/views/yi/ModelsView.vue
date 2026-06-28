@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { NInput, NSwitch, NEmpty, NTag, NButton, NPopconfirm, useMessage } from 'naive-ui'
 import { useI18n } from 'vue-i18n'
 import AddProviderModal from '@/components/yi/models/AddProviderModal.vue'
@@ -46,9 +46,9 @@ function cancelEdit() {
   editingProvider.value = null
 }
 
-function saveProviderEdit() {
+async function saveProviderEdit() {
   if (!editingProvider.value) return
-  modelsStore.updateProvider(editingProvider.value.id, {
+  await modelsStore.updateProvider(editingProvider.value.id, {
     name: editingProvider.value.name,
     baseUrl: editingProvider.value.baseUrl,
     apiKey: editingProvider.value.apiKey,
@@ -101,6 +101,10 @@ function handleDelete(id: string) {
   if (selectedProviderId.value === id) selectedProviderId.value = null
   message.success(t('common.deleted'))
 }
+
+onMounted(() => {
+  modelsStore.loadFromServer()
+})
 </script>
 
 <template>

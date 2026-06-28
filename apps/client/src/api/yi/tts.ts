@@ -1,4 +1,4 @@
-import { getActiveProfileName, getApiKey } from '../client'
+﻿import { getActiveProfileName, getApiKey } from '../client'
 
 export interface TtsOptions {
   text: string
@@ -38,14 +38,14 @@ function ttsHeaders(): Record<string, string> {
   }
   const profile = getActiveProfileName()
   if (profile) {
-    headers['X-Hermes-Profile'] = profile
+    headers['X-Yi-Profile'] = profile
   }
   return headers
 }
 
 export async function generateSpeech(opts: TtsOptions): Promise<{ audio: Blob; engine: string }> {
   const res = await fetch(
-    `${localStorage.getItem('hermes_server_url') || ''}/api/hermes/tts`,
+    `${localStorage.getItem('hermes_server_url') || ''}/api/yi/tts`,
     {
       method: 'POST',
       headers: ttsHeaders(),
@@ -66,7 +66,7 @@ export async function synthesizeSpeech(
   req: SynthesizeSpeechRequest,
 ): Promise<{ audio: Blob; engine: string; provider: string }> {
   const res = await fetch(
-    `${localStorage.getItem('hermes_server_url') || ''}/api/hermes/tts/synthesize`,
+    `${localStorage.getItem('hermes_server_url') || ''}/api/yi/tts/synthesize`,
     {
       method: 'POST',
       headers: ttsHeaders(),

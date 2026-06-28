@@ -286,14 +286,14 @@ async function handleAddAgent() {
 }
 
 onMounted(() => {
-    window.addEventListener('hermes:open-page-sidebar', openPageSidebar)
+    window.addEventListener('yi:open-page-sidebar', openPageSidebar)
     if (profilesStore.profiles.length === 0) {
         void profilesStore.fetchProfiles()
     }
 })
 
 onUnmounted(() => {
-    window.removeEventListener('hermes:open-page-sidebar', openPageSidebar)
+    window.removeEventListener('yi:open-page-sidebar', openPageSidebar)
 })
 
 async function confirmAddAgent() {

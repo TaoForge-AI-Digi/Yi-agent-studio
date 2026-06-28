@@ -1,4 +1,4 @@
-import { request } from '../client'
+﻿import { request } from '../client'
 
 export interface McpServerInfo {
   name: string
@@ -49,7 +49,7 @@ export interface McpServerConfig {
 }
 
 export async function fetchMcpServers(): Promise<McpServersResponse> {
-  return request<McpServersResponse>('/api/hermes/mcp/servers')
+  return request<McpServersResponse>('/api/yi/mcp/servers')
 }
 
 export async function fetchMcpTools(server?: string, raw?: boolean): Promise<McpToolsResponse> {
@@ -57,24 +57,24 @@ export async function fetchMcpTools(server?: string, raw?: boolean): Promise<Mcp
   if (server) params.set('server', server)
   if (raw) params.set('raw', '1')
   const query = params.toString() ? `?${params.toString()}` : ''
-  return request<McpToolsResponse>(`/api/hermes/mcp/tools${query}`)
+  return request<McpToolsResponse>(`/api/yi/mcp/tools${query}`)
 }
 
 export async function mcpServerAdd(name: string, config: McpServerConfig): Promise<{ ok: boolean; name?: string; error?: string }> {
-  return request('/api/hermes/mcp/servers', {
+  return request('/api/yi/mcp/servers', {
     method: 'POST',
     body: JSON.stringify({ name, config }),
   })
 }
 
 export async function mcpServerRemove(name: string): Promise<{ ok: boolean; error?: string }> {
-  return request(`/api/hermes/mcp/servers/${encodeURIComponent(name)}`, {
+  return request(`/api/yi/mcp/servers/${encodeURIComponent(name)}`, {
     method: 'DELETE',
   })
 }
 
 export async function mcpServerUpdate(name: string, config: McpServerConfig): Promise<{ ok: boolean; error?: string }> {
-  return request(`/api/hermes/mcp/servers/${encodeURIComponent(name)}`, {
+  return request(`/api/yi/mcp/servers/${encodeURIComponent(name)}`, {
     method: 'PATCH',
     body: JSON.stringify({ config }),
   })
@@ -82,9 +82,9 @@ export async function mcpServerUpdate(name: string, config: McpServerConfig): Pr
 
 export async function mcpReload(name?: string): Promise<{ ok: boolean; message?: string; error?: string }> {
   const query = name ? `?server=${encodeURIComponent(name)}` : ''
-  return request(`/api/hermes/mcp/reload${query}`, { method: 'POST' })
+  return request(`/api/yi/mcp/reload${query}`, { method: 'POST' })
 }
 
 export async function mcpServerTest(name: string): Promise<{ ok: boolean; tools?: string[]; error?: string }> {
-  return request(`/api/hermes/mcp/servers/${encodeURIComponent(name)}/test`, { method: 'POST' })
+  return request(`/api/yi/mcp/servers/${encodeURIComponent(name)}/test`, { method: 'POST' })
 }

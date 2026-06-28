@@ -1,4 +1,4 @@
-import { request, getActiveProfileName, getApiKey, getBaseUrlValue } from '../client'
+﻿import { request, getActiveProfileName, getApiKey, getBaseUrlValue } from '../client'
 
 export interface FileEntry {
   name: string
@@ -23,47 +23,47 @@ export async function listFiles(path: string = ''): Promise<{ entries: FileEntry
   const params = new URLSearchParams()
   if (path) params.set('path', path)
   const query = params.toString()
-  return request<{ entries: FileEntry[]; path: string }>(`/api/hermes/files/list${query ? `?${query}` : ''}`)
+  return request<{ entries: FileEntry[]; path: string }>(`/api/yi/files/list${query ? `?${query}` : ''}`)
 }
 
 export async function statFile(path: string): Promise<FileStat> {
-  return request<FileStat>(`/api/hermes/files/stat?path=${encodeURIComponent(path)}`)
+  return request<FileStat>(`/api/yi/files/stat?path=${encodeURIComponent(path)}`)
 }
 
 export async function readFile(path: string): Promise<{ content: string; path: string; size: number }> {
-  return request<{ content: string; path: string; size: number }>(`/api/hermes/files/read?path=${encodeURIComponent(path)}`)
+  return request<{ content: string; path: string; size: number }>(`/api/yi/files/read?path=${encodeURIComponent(path)}`)
 }
 
 export async function writeFile(path: string, content: string): Promise<void> {
-  await request<{ ok: boolean }>('/api/hermes/files/write', {
+  await request<{ ok: boolean }>('/api/yi/files/write', {
     method: 'PUT',
     body: JSON.stringify({ path, content }),
   })
 }
 
 export async function deleteFile(path: string, recursive: boolean = false): Promise<void> {
-  await request<{ ok: boolean }>('/api/hermes/files/delete', {
+  await request<{ ok: boolean }>('/api/yi/files/delete', {
     method: 'DELETE',
     body: JSON.stringify({ path, recursive }),
   })
 }
 
 export async function renameFile(oldPath: string, newPath: string): Promise<void> {
-  await request<{ ok: boolean }>('/api/hermes/files/rename', {
+  await request<{ ok: boolean }>('/api/yi/files/rename', {
     method: 'POST',
     body: JSON.stringify({ oldPath, newPath }),
   })
 }
 
 export async function mkDir(path: string): Promise<void> {
-  await request<{ ok: boolean }>('/api/hermes/files/mkdir', {
+  await request<{ ok: boolean }>('/api/yi/files/mkdir', {
     method: 'POST',
     body: JSON.stringify({ path }),
   })
 }
 
 export async function copyFile(srcPath: string, destPath: string): Promise<void> {
-  await request<{ ok: boolean }>('/api/hermes/files/copy', {
+  await request<{ ok: boolean }>('/api/yi/files/copy', {
     method: 'POST',
     body: JSON.stringify({ srcPath, destPath }),
   })
@@ -78,13 +78,13 @@ export async function uploadFiles(targetDir: string, files: File[]): Promise<{ n
   const params = new URLSearchParams()
   if (targetDir) params.set('path', targetDir)
   const query = params.toString()
-  const url = `${base}/api/hermes/files/upload${query ? `?${query}` : ''}`
+  const url = `${base}/api/yi/files/upload${query ? `?${query}` : ''}`
 
   const headers: Record<string, string> = {}
   const token = getApiKey()
   if (token) headers['Authorization'] = `Bearer ${token}`
   const profileName = getActiveProfileName()
-  if (profileName) headers['X-Hermes-Profile'] = profileName
+  if (profileName) headers['X-Yi-Profile'] = profileName
 
   const res = await fetch(url, { method: 'POST', headers, body: formData })
   if (!res.ok) {
@@ -106,7 +106,7 @@ export async function uploadRuntimeFiles(files: File[]): Promise<{ name: string;
   const token = getApiKey()
   if (token) headers.Authorization = `Bearer ${token}`
   const profileName = getActiveProfileName()
-  if (profileName) headers['X-Hermes-Profile'] = profileName
+  if (profileName) headers['X-Yi-Profile'] = profileName
 
   const res = await fetch(`${base}/upload`, { method: 'POST', headers, body: formData })
   if (!res.ok) {
@@ -125,5 +125,5 @@ export function getFileDownloadUrl(relativePath: string, fileName?: string): str
   if (profileName) params.set('profile', profileName)
   const token = getApiKey()
   if (token) params.set('token', token)
-  return `${base}/api/hermes/download?${params.toString()}`
+  return `${base}/api/yi/download?${params.toString()}`
 }

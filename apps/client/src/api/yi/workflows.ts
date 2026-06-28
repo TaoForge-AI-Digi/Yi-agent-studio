@@ -1,4 +1,4 @@
-import { request } from '../client'
+﻿import { request } from '../client'
 
 export interface WorkflowViewport {
   x: number
@@ -108,18 +108,18 @@ function appendProfile(path: string, profile?: string | null): string {
 }
 
 export async function listWorkflows(profile?: string | null): Promise<WorkflowRecord[]> {
-  const path = appendProfile('/api/hermes/workflows', profile)
+  const path = appendProfile('/api/yi/workflows', profile)
   const res = await request<{ workflows: WorkflowRecord[] }>(path)
   return res.workflows
 }
 
 export async function fetchWorkflow(id: string): Promise<WorkflowRecord> {
-  const res = await request<{ workflow: WorkflowRecord }>(`/api/hermes/workflows/${encodeURIComponent(id)}`)
+  const res = await request<{ workflow: WorkflowRecord }>(`/api/yi/workflows/${encodeURIComponent(id)}`)
   return res.workflow
 }
 
 export async function createWorkflow(input: WorkflowCreateRequest): Promise<WorkflowRecord> {
-  const res = await request<{ workflow: WorkflowRecord }>('/api/hermes/workflows', {
+  const res = await request<{ workflow: WorkflowRecord }>('/api/yi/workflows', {
     method: 'POST',
     body: JSON.stringify(input),
   })
@@ -127,7 +127,7 @@ export async function createWorkflow(input: WorkflowCreateRequest): Promise<Work
 }
 
 export async function updateWorkflow(id: string, patch: WorkflowUpdateRequest): Promise<WorkflowRecord> {
-  const res = await request<{ workflow: WorkflowRecord }>(`/api/hermes/workflows/${encodeURIComponent(id)}`, {
+  const res = await request<{ workflow: WorkflowRecord }>(`/api/yi/workflows/${encodeURIComponent(id)}`, {
     method: 'PATCH',
     body: JSON.stringify(patch),
   })
@@ -135,11 +135,11 @@ export async function updateWorkflow(id: string, patch: WorkflowUpdateRequest): 
 }
 
 export async function deleteWorkflow(id: string): Promise<void> {
-  await request<{ ok: true }>(`/api/hermes/workflows/${encodeURIComponent(id)}`, { method: 'DELETE' })
+  await request<{ ok: true }>(`/api/yi/workflows/${encodeURIComponent(id)}`, { method: 'DELETE' })
 }
 
 export async function batchDeleteWorkflows(ids: string[]): Promise<WorkflowBatchDeleteResult> {
-  return request<WorkflowBatchDeleteResult>('/api/hermes/workflows/batch-delete', {
+  return request<WorkflowBatchDeleteResult>('/api/yi/workflows/batch-delete', {
     method: 'POST',
     body: JSON.stringify({ ids }),
   })
@@ -148,13 +148,13 @@ export async function batchDeleteWorkflows(ids: string[]): Promise<WorkflowBatch
 export async function listWorkflowRuns(id: string, limit = 100): Promise<WorkflowRunRecord[]> {
   const params = new URLSearchParams()
   params.set('limit', String(limit))
-  const res = await request<{ runs: WorkflowRunRecord[] }>(`/api/hermes/workflows/${encodeURIComponent(id)}/runs?${params}`)
+  const res = await request<{ runs: WorkflowRunRecord[] }>(`/api/yi/workflows/${encodeURIComponent(id)}/runs?${params}`)
   return res.runs
 }
 
 export async function stopWorkflowRun(id: string, runId: string): Promise<WorkflowRunRecord> {
   const res = await request<{ ok: true; run: WorkflowRunRecord }>(
-    `/api/hermes/workflows/${encodeURIComponent(id)}/runs/${encodeURIComponent(runId)}/stop`,
+    `/api/yi/workflows/${encodeURIComponent(id)}/runs/${encodeURIComponent(runId)}/stop`,
     { method: 'POST' },
   )
   return res.run
@@ -162,13 +162,13 @@ export async function stopWorkflowRun(id: string, runId: string): Promise<Workfl
 
 export async function deleteWorkflowRun(id: string, runId: string): Promise<void> {
   await request<{ ok: true }>(
-    `/api/hermes/workflows/${encodeURIComponent(id)}/runs/${encodeURIComponent(runId)}`,
+    `/api/yi/workflows/${encodeURIComponent(id)}/runs/${encodeURIComponent(runId)}`,
     { method: 'DELETE' },
   )
 }
 
 export async function runWorkflowNow(id: string, input: WorkflowRunNowRequest = {}): Promise<WorkflowRunStartResult> {
-  return request<WorkflowRunStartResult>(`/api/hermes/workflows/${encodeURIComponent(id)}/run`, {
+  return request<WorkflowRunStartResult>(`/api/yi/workflows/${encodeURIComponent(id)}/run`, {
     method: 'POST',
     body: JSON.stringify(input),
   })
@@ -181,7 +181,7 @@ export async function rerunWorkflowRunFromNode(
   input: WorkflowRerunFromNodeRequest = {},
 ): Promise<WorkflowRunStartResult> {
   return request<WorkflowRunStartResult>(
-    `/api/hermes/workflows/${encodeURIComponent(id)}/runs/${encodeURIComponent(runId)}/rerun-from-node`,
+    `/api/yi/workflows/${encodeURIComponent(id)}/runs/${encodeURIComponent(runId)}/rerun-from-node`,
     {
       method: 'POST',
       body: JSON.stringify({

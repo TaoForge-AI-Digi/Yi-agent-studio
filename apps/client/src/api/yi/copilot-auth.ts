@@ -1,4 +1,4 @@
-import { request } from '../client'
+﻿import { request } from '../client'
 
 export type CopilotTokenSource = 'env' | 'gh-cli' | 'apps-json' | null
 
@@ -22,21 +22,21 @@ export interface CopilotCheckTokenResult {
 }
 
 export async function startCopilotLogin(): Promise<CopilotStartResult> {
-  return request<CopilotStartResult>('/api/hermes/auth/copilot/start', { method: 'POST' })
+  return request<CopilotStartResult>('/api/yi/auth/copilot/start', { method: 'POST' })
 }
 
 export async function pollCopilotLogin(sessionId: string): Promise<CopilotPollResult> {
-  return request<CopilotPollResult>(`/api/hermes/auth/copilot/poll/${sessionId}`)
+  return request<CopilotPollResult>(`/api/yi/auth/copilot/poll/${sessionId}`)
 }
 
 export async function checkCopilotToken(): Promise<CopilotCheckTokenResult> {
-  return request<CopilotCheckTokenResult>('/api/hermes/auth/copilot/check-token')
+  return request<CopilotCheckTokenResult>('/api/yi/auth/copilot/check-token')
 }
 
 export async function enableCopilot(): Promise<{ ok: boolean }> {
-  return request<{ ok: boolean }>('/api/hermes/auth/copilot/enable', { method: 'POST' })
+  return request<{ ok: boolean }>('/api/yi/auth/copilot/enable', { method: 'POST' })
 }
 
 export async function disableCopilot(): Promise<{ ok: boolean; cleared_env: boolean; cleared_default?: boolean }> {
-  return request<{ ok: boolean; cleared_env: boolean; cleared_default?: boolean }>('/api/hermes/auth/copilot/disable', { method: 'POST' })
+  return request<{ ok: boolean; cleared_env: boolean; cleared_default?: boolean }>('/api/yi/auth/copilot/disable', { method: 'POST' })
 }

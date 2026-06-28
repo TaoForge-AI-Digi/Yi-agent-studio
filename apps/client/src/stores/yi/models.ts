@@ -1,30 +1,15 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { YiProviderConfig, YiModelConfig } from '@/types/model'
-import { BUILTIN_PROVIDERS } from '@/types/model'
-
-const STORAGE_KEY = 'yi_providers'
-
-function loadProviders(): YiProviderConfig[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return [...BUILTIN_PROVIDERS]
-    const saved: YiProviderConfig[] = JSON.parse(raw)
-    // Merge: keep saved data, add any new builtins
-    const savedIds = new Set(saved.map(p => p.id))
-    const newBuiltins = BUILTIN_PROVIDERS.filter(b => !savedIds.has(b.id))
-    return [...saved, ...newBuiltins]
-  } catch {
-    return [...BUILTIN_PROVIDERS]
-  }
-}
-
-function saveProviders(providers: YiProviderConfig[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(providers))
-}
+import type { YiProviderConfig } from '@/types/model'
+import {
+  fetchProviders,
+  createProviderApi,
+  updateProviderApi,
+  deleteProviderApi,
+} from '@/api/yi/models'
 
 export const useModelsStore = defineStore('models', () => {
-  const providers = ref<YiProviderConfig[]>(loadProviders())
+  const providers = ref<YiProviderConfig[]>([])
   const loading = ref(false)
 
   const enabledProviders = computed(() => providers.value.filter(p => p.enabled))
@@ -33,51 +18,59 @@ export const useModelsStore = defineStore('models', () => {
     return providers.value.find(p => p.id === id)
   }
 
-  function addProvider(config: Omit<YiProviderConfig, 'enabled'>) {
-    const provider: YiProviderConfig = { ...config, enabled: true }
+  async function loadFromServer() {
+    loading.value = true
+    try {
+      providers.value = await fetchProviders()
+    } finally {
+      loading.value = false
+    }
+  }
+
+  async function addProvider(config: Omit<YiProviderConfig, 'enabled'>): Promise<YiProviderConfig> {
+    const provider = await createProviderApi(config)
     providers.value.push(provider)
-    saveProviders(providers.value)
+    return provider
   }
 
-  function updateProvider(id: string, patch: Partial<YiProviderConfig>) {
+  async function updateProvider(id: string, patch: Partial<YiProviderConfig>) {
+    const updated = await updateProviderApi(id, patch)
     const idx = providers.value.findIndex(p => p.id === id)
-    if (idx === -1) return
-    providers.value[idx] = { ...providers.value[idx], ...patch }
-    saveProviders(providers.value)
+    if (idx >= 0) {
+      providers.value[idx] = updated
+    } else {
+      providers.value.push(updated)
+    }
   }
 
-  function deleteProvider(id: string) {
-    const provider = providers.value.find(p => p.id === id)
-    if (!provider || provider.builtin) return
+  async function deleteProvider(id: string) {
+    await deleteProviderApi(id)
     providers.value = providers.value.filter(p => p.id !== id)
-    saveProviders(providers.value)
   }
 
-  function toggleProvider(id: string) {
+  async function toggleProvider(id: string) {
     const provider = providers.value.find(p => p.id === id)
     if (!provider) return
-    provider.enabled = !provider.enabled
-    saveProviders(providers.value)
+    await updateProvider(id, { enabled: !provider.enabled })
   }
 
-  function toggleModel(providerId: string, modelId: string) {
+  async function toggleModel(providerId: string, modelId: string) {
     const provider = providers.value.find(p => p.id === providerId)
     if (!provider) return
     const model = provider.models.find(m => m.id === modelId)
     if (!model) return
-    model.visible = !model.visible
-    saveProviders(providers.value)
+    const newModels = provider.models.map(m =>
+      m.id === modelId ? { ...m, visible: !m.visible } : m
+    )
+    await updateProvider(providerId, { models: newModels })
   }
 
-  function setApiKey(providerId: string, apiKey: string) {
-    const provider = providers.value.find(p => p.id === providerId)
-    if (!provider) return
-    provider.apiKey = apiKey
-    saveProviders(providers.value)
+  async function setApiKey(providerId: string, apiKey: string) {
+    await updateProvider(providerId, { apiKey })
   }
 
-  function getVisibleModels(): Array<{ model: YiModelConfig; provider: YiProviderConfig }> {
-    const result: Array<{ model: YiModelConfig; provider: YiProviderConfig }> = []
+  function getVisibleModels(): Array<{ model: YiProviderConfig['models'][number]; provider: YiProviderConfig }> {
+    const result: Array<{ model: YiProviderConfig['models'][number]; provider: YiProviderConfig }> = []
     for (const p of providers.value) {
       if (!p.enabled) continue
       for (const m of p.models) {
@@ -92,6 +85,7 @@ export const useModelsStore = defineStore('models', () => {
     loading,
     enabledProviders,
     getProvider,
+    loadFromServer,
     addProvider,
     updateProvider,
     deleteProvider,

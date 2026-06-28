@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { computed, ref, onUnmounted } from 'vue'
 import { NPopconfirm, NCheckbox, NTooltip } from 'naive-ui'
 import { useI18n } from 'vue-i18n'
@@ -50,7 +50,7 @@ const sessionAgentLogo = computed(() => {
     }
     return { label: 'Claude Code', src: '/coding-agents/claude-code.svg' }
   }
-  return { label: 'Hermes', src: '/coding-agents/hermes.png' }
+  return { label: 'Hermes', src: '/coding-agents/yi.png' }
 })
 
 let longPressTimer: ReturnType<typeof setTimeout> | null = null

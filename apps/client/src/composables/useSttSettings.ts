@@ -1,4 +1,4 @@
-import { ref, watch } from 'vue'
+﻿import { ref, watch } from 'vue'
 import { fetchSttSettings } from '@/api/yi/stt-settings'
 import type {
   FetchSttSettingsResponse,
@@ -17,7 +17,7 @@ interface SttSettingsData {
   customPrompt: string
 }
 
-const STORAGE_KEY = 'hermes-stt-settings-v1'
+const STORAGE_KEY = 'yi-stt-settings-v1'
 
 function browserSttAvailable(): boolean {
   if (typeof window === 'undefined') return false
@@ -168,7 +168,7 @@ export function clearSttSettingsAuthState() {
 }
 
 if (typeof window !== 'undefined') {
-  window.addEventListener('hermes-auth-cleared', clearSttSettingsAuthState)
+  window.addEventListener('yi-auth-cleared', clearSttSettingsAuthState)
 }
 
 watch(

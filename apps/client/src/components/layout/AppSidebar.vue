@@ -18,7 +18,7 @@ const selectedKey = computed(() => {
 });
 const isSuperAdmin = computed(() => isStoredSuperAdmin());
 const isDesktopShell = computed(() =>
-  (window as typeof window & { hermesDesktop?: { isDesktop?: boolean } }).hermesDesktop?.isDesktop === true,
+  (window as typeof window & { yiDesktop?: { isDesktop?: boolean } }).yiDesktop?.isDesktop === true,
 );
 
 function hasRoute(name: string): boolean {
@@ -113,13 +113,13 @@ function handleSidebarClick(event: MouseEvent) {
             </svg>
             <span>{{ t("sidebar.mcp") }}</span>
           </RouteLinkItem>
-          <RouteLinkItem class="nav-item" :to="{ name: 'yi.agents' }" :active="selectedKey === 'yi.agents'">
+          <RouteLinkItem class="nav-item" :to="{ name: 'yi.characters' }" :active="selectedKey === 'yi.characters'">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="11" width="18" height="10" rx="2" />
               <circle cx="12" cy="5" r="2" />
               <path d="M12 7v4" />
             </svg>
-            <span>{{ t("sidebar.agents") }}</span>
+            <span>{{ t("sidebar.characters") }}</span>
           </RouteLinkItem>
           <RouteLinkItem class="nav-item" :to="{ name: 'yi.archive' }" :active="selectedKey === 'yi.archive'">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">

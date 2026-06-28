@@ -1,4 +1,4 @@
-import { request } from '../client'
+﻿import { request } from '../client'
 import type { TtsProviderId } from './tts'
 
 export type StoredTtsProvider = TtsProviderId
@@ -58,7 +58,7 @@ function normalizeProviders(body: unknown): FetchTtsSettingsResponse {
 
 export async function fetchTtsSettings(): Promise<FetchTtsSettingsResponse> {
   const body = await request<{ providers?: TtsProviderSettingsResponse[]; settings?: TtsProviderSettingsResponse[]; activeProvider?: StoredTtsProvider | null }>(
-    '/api/hermes/tts/settings',
+    '/api/yi/tts/settings',
   )
   return normalizeProviders(body)
 }
@@ -68,7 +68,7 @@ export async function saveTtsSettings(
   payload: { settings?: TtsStoredSettings; secrets?: TtsStoredSecretsInput; activeProvider?: StoredTtsProvider },
 ): Promise<TtsProviderSettingsResponse> {
   const body = await request<TtsProviderSettingsResponse | { setting: TtsProviderSettingsResponse }>(
-    `/api/hermes/tts/settings/${provider}`,
+    `/api/yi/tts/settings/${provider}`,
     {
       method: 'PUT',
       body: JSON.stringify(payload),
@@ -79,7 +79,7 @@ export async function saveTtsSettings(
 
 export async function saveActiveTtsProvider(provider: StoredTtsProvider): Promise<StoredTtsProvider> {
   const body = await request<{ activeProvider: StoredTtsProvider }>(
-    '/api/hermes/tts/settings/active',
+    '/api/yi/tts/settings/active',
     {
       method: 'PUT',
       body: JSON.stringify({ provider }),
@@ -97,7 +97,7 @@ export async function clearTtsSecret(
     { setting: TtsProviderSettingsResponse | null } |
     { success?: boolean; setting: TtsProviderSettingsResponse | null }
   >(
-    `/api/hermes/tts/settings/${provider}/secret/${secretName}`,
+    `/api/yi/tts/settings/${provider}/secret/${secretName}`,
     { method: 'DELETE' },
   )
 
@@ -111,7 +111,7 @@ export async function deleteTtsProvider(
   provider: Exclude<StoredTtsProvider, 'edge'>,
 ): Promise<{ success?: boolean; deleted?: boolean; activeProvider?: StoredTtsProvider | null }> {
   return request<{ success?: boolean; deleted?: boolean; activeProvider?: StoredTtsProvider | null }>(
-    `/api/hermes/tts/settings/${provider}`,
+    `/api/yi/tts/settings/${provider}`,
     { method: 'DELETE' },
   )
 }
@@ -124,7 +124,7 @@ export async function deleteTtsBaseUrlPreset(
     { success?: boolean; setting: TtsProviderSettingsResponse | null } |
     TtsProviderSettingsResponse
   >(
-    `/api/hermes/tts/settings/${provider}/base-url-preset?url=${encodeURIComponent(url)}`,
+    `/api/yi/tts/settings/${provider}/base-url-preset?url=${encodeURIComponent(url)}`,
     { method: 'DELETE' },
   )
 

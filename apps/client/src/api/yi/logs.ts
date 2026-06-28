@@ -1,4 +1,4 @@
-import { request } from '../client'
+﻿import { request } from '../client'
 
 export interface LogFileInfo {
   name: string
@@ -15,7 +15,7 @@ export interface LogEntry {
 }
 
 export async function fetchLogFiles(): Promise<LogFileInfo[]> {
-  const res = await request<{ files: LogFileInfo[] }>('/api/hermes/logs')
+  const res = await request<{ files: LogFileInfo[] }>('/api/yi/logs')
   return res.files
 }
 
@@ -31,6 +31,6 @@ export async function fetchLogs(name: string, params?: {
   if (params?.session) query.set('session', params.session)
   if (params?.since) query.set('since', params.since)
   const qs = query.toString()
-  const res = await request<{ entries: (LogEntry | null)[] }>(`/api/hermes/logs/${name}${qs ? `?${qs}` : ''}`)
+  const res = await request<{ entries: (LogEntry | null)[] }>(`/api/yi/logs/${name}${qs ? `?${qs}` : ''}`)
   return res.entries.filter((e): e is LogEntry => e !== null)
 }

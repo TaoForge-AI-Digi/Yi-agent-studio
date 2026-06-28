@@ -102,7 +102,7 @@ async function searchTaskSessions() {
   sessionLoading.value = true
   try {
     const res = await request<{ results: any[] }>(
-      `/api/hermes/kanban/search-sessions?task_id=${encodeURIComponent(taskId)}&profile=${encodeURIComponent(profile)}&board=${encodeURIComponent(board)}`
+      `/api/yi/kanban/search-sessions?task_id=${encodeURIComponent(taskId)}&profile=${encodeURIComponent(profile)}&board=${encodeURIComponent(board)}`
     )
     if (isActiveTask(taskId, board)) sessionResults.value = res.results
   } catch {

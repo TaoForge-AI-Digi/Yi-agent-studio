@@ -35,16 +35,16 @@ const nodeVersionLow = computed(() => {
 })
 
 const isDesktopShell = computed(() =>
-  (window as typeof window & { hermesDesktop?: { isDesktop?: boolean } }).hermesDesktop?.isDesktop === true,
+  (window as typeof window & { yiDesktop?: { isDesktop?: boolean } }).yiDesktop?.isDesktop === true,
 )
 const hasDesktopTitleBar = computed(() => {
-  const platform = (window as typeof window & { hermesDesktop?: { platform?: string } }).hermesDesktop?.platform
+  const platform = (window as typeof window & { yiDesktop?: { platform?: string } }).yiDesktop?.platform
   return isDesktopShell.value && (platform === 'darwin' || platform === 'win32')
 })
 
 function handleMobileMenuClick() {
   if (usesPageSidebar.value) {
-    window.dispatchEvent(new CustomEvent('hermes:open-page-sidebar'))
+    window.dispatchEvent(new CustomEvent('yi:open-page-sidebar'))
     return
   }
   appStore.toggleSidebar()

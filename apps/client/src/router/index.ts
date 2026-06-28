@@ -137,9 +137,9 @@ const router = createRouter({
       meta: { requiresSuperAdmin: true },
     },
     {
-      path: '/yi/agents',
-      name: 'yi.agents',
-      component: () => import('@/views/yi/AgentsView.vue'),
+      path: '/yi/characters',
+      name: 'yi.characters',
+      component: () => import('@/views/yi/CharactersView.vue'),
     },
   ],
 })

@@ -1,4 +1,4 @@
-import { request } from '../client'
+﻿import { request } from '../client'
 
 export interface ProcessUsage {
   pid: number
@@ -59,5 +59,5 @@ export interface PerformanceRuntimeSnapshot {
 }
 
 export async function fetchPerformanceRuntime(): Promise<PerformanceRuntimeSnapshot> {
-  return request<PerformanceRuntimeSnapshot>('/api/hermes/performance/runtime')
+  return request<PerformanceRuntimeSnapshot>('/api/yi/performance/runtime')
 }

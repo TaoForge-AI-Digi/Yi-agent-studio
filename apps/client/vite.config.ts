@@ -71,5 +71,17 @@ export default defineConfig({
   server: {
     port: 5173,
     strictPort: true,
+    proxy: {
+      '/api/yi': {
+        target: 'http://localhost:3001',
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+      '/socket.io': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+        ws: true,
+      },
+      '/upload': 'http://localhost:3001',
+    },
   },
 })

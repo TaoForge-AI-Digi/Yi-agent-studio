@@ -52,21 +52,19 @@ function goBack() {
   selectedPreset.value = null
 }
 
-function handleSave() {
+async function handleSave() {
   if (!formName.value.trim() || !formUrl.value.trim()) return
 
   const id = formName.value.trim().toLowerCase().replace(/\s+/g, '-')
 
-  // Check if already exists
   if (modelsStore.getProvider(id)) {
-    // Update existing
-    modelsStore.updateProvider(id, {
+    await modelsStore.updateProvider(id, {
       name: formName.value.trim(),
       baseUrl: formUrl.value.trim(),
       apiKey: formApiKey.value.trim(),
     })
   } else {
-    modelsStore.addProvider({
+    const created = await modelsStore.addProvider({
       id,
       name: formName.value.trim(),
       baseUrl: formUrl.value.trim(),
@@ -74,6 +72,8 @@ function handleSave() {
       models: [],
       builtin: false,
     })
+    emit('saved', created.id)
+    return
   }
 
   emit('saved', id)

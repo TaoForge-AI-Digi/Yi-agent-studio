@@ -14,7 +14,7 @@ import SessionListItem from '@/components/yi/chat/SessionListItem.vue'
 import OutlinePanel from '@/components/yi/chat/OutlinePanel.vue'
 import PageSidebarNav from '@/components/layout/PageSidebarNav.vue'
 import PageSidebarFooter from '@/components/layout/PageSidebarFooter.vue'
-import { batchDeleteSessions, deleteSession, fetchHermesSessions, fetchHermesSession, fetchSessionMessagesPage, importHermesSession, type HermesMessage, type SessionSummary } from '@/api/yi/sessions'
+import { batchDeleteSessions, deleteSession, fetchYiSessions, fetchYiSession, fetchSessionMessagesPage, importHermesSession, type YiMessage, type SessionSummary } from '@/api/yi/sessions'
 
 const appStore = useAppStore()
 const profilesStore = useProfilesStore()
@@ -36,7 +36,7 @@ const routeProfile = computed(() => {
 
 const effectiveHistoryProfile = computed(() => profilesStore.activeProfileName || routeProfile.value || null)
 
-// Hermes history sessions (exclude api_server)
+// Yi history sessions (exclude api_server)
 const hermesSessions = ref<SessionSummary[]>([])
 const hermesSessionsLoading = ref(false)
 const hermesSessionsLoaded = ref(false)
@@ -70,12 +70,12 @@ async function loadHermesSessions() {
   const requestId = ++hermesSessionsRequestId
   hermesSessionsLoading.value = true
   try {
-    const sessions = await fetchHermesSessions(undefined, undefined, effectiveHistoryProfile.value)
+    const sessions = await fetchYiSessions(undefined, undefined, effectiveHistoryProfile.value)
     if (requestId !== hermesSessionsRequestId) return
     hermesSessions.value = sessions
     hermesSessionsLoaded.value = true
   } catch (err) {
-    console.error('Failed to load Hermes sessions:', err)
+    console.error('Failed to load Yi sessions:', err)
   } finally {
     if (requestId === hermesSessionsRequestId) {
       hermesSessionsLoading.value = false
@@ -116,7 +116,7 @@ const contextMenuOptions = computed<DropdownOption[]>(() => {
   return options
 })
 
-function mapHistoryMessages(messages: HermesMessage[]): Session['messages'] {
+function mapHistoryMessages(messages: YiMessage[]): Session['messages'] {
   return messages.map(m => {
     const msg: Session['messages'][number] = {
       id: String(m.id),
@@ -180,9 +180,9 @@ async function loadHistorySession(sessionId: string, profile?: string | null) {
     sessionData.loadedMessageCount = page.messages.length
     sessionData.hasMoreBefore = page.hasMore
   } else {
-    // Some imported/legacy Hermes sessions may only exist in Hermes state.db.
+    // Some imported/legacy Yi sessions may only exist in Yi state.db.
     // Keep the old full-detail path as a compatibility fallback.
-    const sessionDetail = await fetchHermesSession(sessionId, sessionProfile)
+    const sessionDetail = await fetchYiSession(sessionId, sessionProfile)
     if (!sessionDetail) {
       message.error(t('chat.sessionNotFound'))
       return
@@ -316,12 +316,12 @@ onMounted(async () => {
   mobileQuery = window.matchMedia('(max-width: 768px)')
   handleMobileChange(mobileQuery)
   mobileQuery.addEventListener('change', handleMobileChange)
-  window.addEventListener('hermes:open-page-sidebar', openPageSidebar)
+  window.addEventListener('yi:open-page-sidebar', openPageSidebar)
 })
 
 onUnmounted(() => {
   mobileQuery?.removeEventListener('change', handleMobileChange)
-  window.removeEventListener('hermes:open-page-sidebar', openPageSidebar)
+  window.removeEventListener('yi:open-page-sidebar', openPageSidebar)
 })
 
 watch([routeSessionId, routeProfile], async ([sessionId]) => {
@@ -506,7 +506,7 @@ watch(groupedSessions, groups => {
   }
 }, { once: true })
 
-// Auto-load the first CLI session when Hermes sessions are loaded.
+// Auto-load the first CLI session when Yi sessions are loaded.
 watch(hermesSessionsLoaded, (loaded) => {
   if (loaded && hermesSessions.value.length > 0 && !routeSessionId.value) {
     void openDefaultHistorySession(false)

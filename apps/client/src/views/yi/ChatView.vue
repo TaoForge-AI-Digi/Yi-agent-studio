@@ -24,7 +24,7 @@ const routeProfile = computed(() => {
   return typeof value === 'string' && value.trim() ? value : null
 })
 
-const productTitle = 'Hermes Studio'
+const productTitle = 'Yi Studio'
 const tabTitle = computed(() => {
   if (route.name !== 'yi.session') return productTitle
   return chatStore.activeSession?.title?.trim() || productTitle
@@ -48,8 +48,6 @@ async function loadRouteSession() {
 onMounted(async () => {
   chatStore.setRuntimeMode('default')
   appStore.loadModels()
-  // 先加载 profile，确保缓存 key 使用正确的 profile name；同时预取显示设置，
-  // 让聊天完成提示音不依赖用户先打开 Settings 页面。
   await Promise.all([
     profilesStore.fetchProfiles(),
     settingsStore.fetchSettings(),

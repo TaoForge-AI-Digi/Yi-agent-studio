@@ -1,7 +1,7 @@
-import { request, getBaseUrlValue, getApiKey, getActiveProfileName } from '../client'
+﻿import { request, getBaseUrlValue, getApiKey, getActiveProfileName } from '../client'
 
 export type SkillSource = 'builtin' | 'hub' | 'local' | 'external'
-export type SkillTarget = 'hermes' | 'claude' | 'codex'
+export type SkillTarget = 'yi' | 'claude' | 'codex'
 
 export interface SkillInfo {
   name: string
@@ -103,67 +103,67 @@ export interface SkillUsageStats {
   top_skills: SkillUsageRow[]
 }
 
-export async function fetchSkills(profile?: string, target: SkillTarget = 'hermes'): Promise<SkillsData> {
+export async function fetchSkills(profile?: string, target: SkillTarget = 'yi'): Promise<SkillsData> {
   const params = new URLSearchParams()
   if (profile) params.set('profile', profile)
-  if (target !== 'hermes') params.set('target', target)
+  if (target !== 'yi') params.set('target', target)
   const query = params.toString() ? `?${params.toString()}` : ''
-  const res = await request<SkillListResponse>(`/api/hermes/skills${query}`)
+  const res = await request<SkillListResponse>(`/api/yi/skills${query}`)
   return { categories: res.categories, archived: res.archived ?? [], paths: res.paths }
 }
 
 export async function fetchSkillUsageStats(days = 7): Promise<SkillUsageStats> {
   const params = new URLSearchParams({ days: String(days) })
-  return request<SkillUsageStats>(`/api/hermes/skills/usage/stats?${params}`)
+  return request<SkillUsageStats>(`/api/yi/skills/usage/stats?${params}`)
 }
 
-function targetQuery(target: SkillTarget = 'hermes'): string {
-  if (target === 'hermes') return ''
+function targetQuery(target: SkillTarget = 'yi'): string {
+  if (target === 'yi') return ''
   return `?target=${encodeURIComponent(target)}`
 }
 
-export async function fetchSkillContent(skillPath: string, target: SkillTarget = 'hermes'): Promise<string> {
-  const res = await request<{ content: string }>(`/api/hermes/skills/${skillPath}${targetQuery(target)}`)
+export async function fetchSkillContent(skillPath: string, target: SkillTarget = 'yi'): Promise<string> {
+  const res = await request<{ content: string }>(`/api/yi/skills/${skillPath}${targetQuery(target)}`)
   return res.content
 }
 
-export async function fetchSkillFiles(category: string, skill: string, target: SkillTarget = 'hermes'): Promise<SkillFileEntry[]> {
-  const res = await request<{ files: SkillFileEntry[] }>(`/api/hermes/skills/${category}/${skill}/files${targetQuery(target)}`)
+export async function fetchSkillFiles(category: string, skill: string, target: SkillTarget = 'yi'): Promise<SkillFileEntry[]> {
+  const res = await request<{ files: SkillFileEntry[] }>(`/api/yi/skills/${category}/${skill}/files${targetQuery(target)}`)
   return res.files
 }
 
 export async function fetchMemory(): Promise<MemoryData> {
-  return request<MemoryData>('/api/hermes/memory')
+  return request<MemoryData>('/api/yi/memory')
 }
 
 export async function saveMemory(section: 'memory' | 'user' | 'soul', content: string): Promise<void> {
-  await request('/api/hermes/memory', {
+  await request('/api/yi/memory', {
     method: 'POST',
     body: JSON.stringify({ section, content }),
   })
 }
 
 export async function toggleSkill(name: string, enabled: boolean): Promise<void> {
-  await request('/api/hermes/skills/toggle', {
+  await request('/api/yi/skills/toggle', {
     method: 'PUT',
     body: JSON.stringify({ name, enabled }),
   })
 }
 
 export async function pinSkillApi(name: string, pinned: boolean): Promise<void> {
-  await request('/api/hermes/skills/pin', {
+  await request('/api/yi/skills/pin', {
     method: 'PUT',
     body: JSON.stringify({ name, pinned }),
   })
 }
 
 export async function fetchExternalDirs(): Promise<ExternalDirEntry[]> {
-  const res = await request<{ dirs: ExternalDirEntry[] }>('/api/hermes/skills/external-dirs')
+  const res = await request<{ dirs: ExternalDirEntry[] }>('/api/yi/skills/external-dirs')
   return res.dirs ?? []
 }
 
 export async function saveExternalDirs(dirs: string[]): Promise<void> {
-  await request('/api/hermes/skills/external-dirs', {
+  await request('/api/yi/skills/external-dirs', {
     method: 'PUT',
     body: JSON.stringify({ dirs }),
   })
@@ -172,7 +172,7 @@ export async function saveExternalDirs(dirs: string[]): Promise<void> {
 export async function deleteSkillApi(category: string, name: string): Promise<void> {
   const c = encodeURIComponent(category)
   const n = encodeURIComponent(name)
-  await request(`/api/hermes/skills/${c}/${n}`, { method: 'DELETE' })
+  await request(`/api/yi/skills/${c}/${n}`, { method: 'DELETE' })
 }
 
 /**
@@ -187,7 +187,7 @@ export async function importSkill(files: File[], category?: string): Promise<{ n
   const headers: Record<string, string> = {}
   if (token) headers['Authorization'] = `Bearer ${token}`
   const profile = getActiveProfileName()
-  if (profile) headers['X-Hermes-Profile'] = profile
+  if (profile) headers['X-Yi-Profile'] = profile
 
   const formData = new FormData()
   for (const f of files) {
@@ -196,7 +196,7 @@ export async function importSkill(files: File[], category?: string): Promise<{ n
   }
   if (category) formData.append('category', category)
 
-  const res = await fetch(`${baseUrl}/api/hermes/skills/import`, {
+  const res = await fetch(`${baseUrl}/api/yi/skills/import`, {
     method: 'POST',
     headers,
     body: formData,

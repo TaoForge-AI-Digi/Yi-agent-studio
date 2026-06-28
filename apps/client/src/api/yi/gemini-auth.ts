@@ -1,4 +1,4 @@
-import { request } from '../client'
+﻿import { request } from '../client'
 
 export interface GeminiStartResult {
   session_id: string
@@ -18,13 +18,13 @@ export interface GeminiStatusResult {
 }
 
 export async function startGeminiLogin(): Promise<GeminiStartResult> {
-  return request<GeminiStartResult>('/api/hermes/auth/gemini/start', { method: 'POST' })
+  return request<GeminiStartResult>('/api/yi/auth/gemini/start', { method: 'POST' })
 }
 
 export async function pollGeminiLogin(sessionId: string): Promise<GeminiPollResult> {
-  return request<GeminiPollResult>(`/api/hermes/auth/gemini/poll/${sessionId}`)
+  return request<GeminiPollResult>(`/api/yi/auth/gemini/poll/${sessionId}`)
 }
 
 export async function getGeminiAuthStatus(): Promise<GeminiStatusResult> {
-  return request<GeminiStatusResult>('/api/hermes/auth/gemini/status')
+  return request<GeminiStatusResult>('/api/yi/auth/gemini/status')
 }

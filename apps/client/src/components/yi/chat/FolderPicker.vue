@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { ref, computed, nextTick, onMounted, watch } from 'vue'
 import { NButton, NDropdown, NInput, NModal, NSpace, NSpin, useDialog, useMessage } from 'naive-ui'
 import { useI18n } from 'vue-i18n'
@@ -65,7 +65,7 @@ function updateSelectedPath(value: string | null) {
 async function loadFolders(subPath = ''): Promise<FolderListResponse | null> {
   try {
     const query = subPath ? `?path=${encodeURIComponent(subPath)}` : ''
-    return await request<FolderListResponse>(`/api/hermes/workspace/folders${query}`)
+    return await request<FolderListResponse>(`/api/yi/workspace/folders${query}`)
   } catch {
     return null
   }
@@ -204,7 +204,7 @@ async function handleContextSelect(key: string) {
         negativeText: t('common.cancel'),
         onPositiveClick: async () => {
           try {
-            await request('/api/hermes/workspace/folders', {
+            await request('/api/yi/workspace/folders', {
               method: 'DELETE',
               body: JSON.stringify({ path: folder.path }),
             })
@@ -233,7 +233,7 @@ async function submitRenameModal() {
   try {
     if (renameMode.value === 'create') {
       const parentPath = contextTarget.value?.path || ''
-      await request('/api/hermes/workspace/folders', {
+      await request('/api/yi/workspace/folders', {
         method: 'POST',
         body: JSON.stringify({ parentPath, name }),
       })
@@ -245,7 +245,7 @@ async function submitRenameModal() {
       message.success(t('files.created'))
     } else if (contextTarget.value) {
       const oldFolder = contextTarget.value
-      await request('/api/hermes/workspace/folders/rename', {
+      await request('/api/yi/workspace/folders/rename', {
         method: 'POST',
         body: JSON.stringify({ path: oldFolder.path, name }),
       })

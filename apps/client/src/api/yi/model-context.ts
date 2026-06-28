@@ -1,4 +1,4 @@
-import { request } from '../client'
+﻿import { request } from '../client'
 
 export interface ModelContext {
   id: number
@@ -13,7 +13,7 @@ export interface ModelContext {
 export async function getModelContext(provider: string, model: string): Promise<ModelContext | null> {
   try {
     const res = await request<{ data: ModelContext }>(
-      `/api/hermes/model-context?provider=${encodeURIComponent(provider)}&model=${encodeURIComponent(model)}`
+      `/api/yi/model-context?provider=${encodeURIComponent(provider)}&model=${encodeURIComponent(model)}`
     )
     return res.data
   } catch (err: any) {
@@ -31,7 +31,7 @@ export async function setModelContext(
   contextLimit: number
 ): Promise<ModelContext> {
   const res = await request<{ success: boolean; data: ModelContext }>(
-    `/api/hermes/model-context/${encodeURIComponent(provider)}/${encodeURIComponent(model)}`,
+    `/api/yi/model-context/${encodeURIComponent(provider)}/${encodeURIComponent(model)}`,
     {
       method: 'PUT',
       body: JSON.stringify({ provider, model, context_limit: contextLimit }),

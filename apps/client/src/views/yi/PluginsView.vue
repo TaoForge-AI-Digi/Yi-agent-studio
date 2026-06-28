@@ -1,8 +1,8 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { NAlert, NButton, NEmpty, NInput, NSelect, NSpin, NTag, useMessage } from 'naive-ui'
 import { useI18n } from 'vue-i18n'
-import { fetchPlugins, type HermesPluginInfo, type HermesPluginsMetadata } from '@/api/yi/plugins'
+import { fetchPlugins, type YiPluginInfo, type YiPluginsMetadata } from '@/api/yi/plugins'
 import { useProfilesStore } from '@/stores/yi/profiles'
 import { copyToClipboard } from '@/utils/clipboard'
 
@@ -10,9 +10,9 @@ const { t, te } = useI18n()
 const message = useMessage()
 const profilesStore = useProfilesStore()
 
-const plugins = ref<HermesPluginInfo[]>([])
+const plugins = ref<YiPluginInfo[]>([])
 const warnings = ref<string[]>([])
-const metadata = ref<HermesPluginsMetadata | null>(null)
+const metadata = ref<YiPluginsMetadata | null>(null)
 const loading = ref(false)
 const error = ref('')
 
@@ -75,17 +75,17 @@ async function loadPlugins() {
   }
 }
 
-function statusLabel(plugin: HermesPluginInfo) {
+function statusLabel(plugin: YiPluginInfo) {
   const key = `plugins.statusLabel.${plugin.effectiveStatus}`
   return te(key) ? t(key) : plugin.effectiveStatus
 }
 
-function configStatusLabel(plugin: HermesPluginInfo) {
+function configStatusLabel(plugin: YiPluginInfo) {
   const key = `plugins.configStatuses.${plugin.configStatus}`
   return te(key) ? t(key) : plugin.configStatus
 }
 
-function statusTagType(plugin: HermesPluginInfo): 'success' | 'warning' | 'error' | 'info' | 'default' {
+function statusTagType(plugin: YiPluginInfo): 'success' | 'warning' | 'error' | 'info' | 'default' {
   switch (plugin.effectiveStatus) {
     case 'enabled':
     case 'auto-active':
@@ -99,7 +99,7 @@ function statusTagType(plugin: HermesPluginInfo): 'success' | 'warning' | 'error
   }
 }
 
-function pluginCommand(plugin: HermesPluginInfo) {
+function pluginCommand(plugin: YiPluginInfo) {
   const escapedKey = plugin.key.replace(/'/g, `'\\''`)
   if (plugin.effectiveStatus === 'disabled' || plugin.effectiveStatus === 'inactive') {
     return `hermes plugins enable '${escapedKey}'`
@@ -110,7 +110,7 @@ function pluginCommand(plugin: HermesPluginInfo) {
   return ''
 }
 
-async function copyCommand(plugin: HermesPluginInfo) {
+async function copyCommand(plugin: YiPluginInfo) {
   const command = pluginCommand(plugin)
   if (!command) return
   const copied = await copyToClipboard(command)

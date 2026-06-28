@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+﻿import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import {
   checkHealth,
@@ -19,8 +19,8 @@ import { hasApiKey } from '@/api/client'
 
 const WEB_UI_VERSION = __APP_VERSION__
 
-const SIDEBAR_COLLAPSED_KEY = 'hermes_sidebar_collapsed'
-const ACTIVE_PROFILE_STORAGE_KEY = 'hermes_active_profile_name'
+const SIDEBAR_COLLAPSED_KEY = 'yi_sidebar_collapsed'
+const ACTIVE_PROFILE_STORAGE_KEY = 'yi_active_profile_name'
 const MODELS_CACHE_TTL_MS = 30000
 
 export const useAppStore = defineStore('app', () => {
@@ -61,7 +61,7 @@ export const useAppStore = defineStore('app', () => {
       }
       return res.success
     } catch (err) {
-      console.error('Failed to update Hermes Web UI:', err)
+      console.error('Failed to update Yi Web UI:', err)
       return false
     } finally {
       updating.value = false

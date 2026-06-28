@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { NDrawer, NDrawerContent, NSpin, useMessage } from 'naive-ui'
@@ -112,7 +112,7 @@ md.renderer.rules.fence = (tokens, idx, options, env, self) => {
 }
 
 const markdownBody = ref<HTMLElement | null>(null)
-const componentId = `hermes-mermaid-${Math.random().toString(36).slice(2)}`
+const componentId = `yi-mermaid-${Math.random().toString(36).slice(2)}`
 const previewUrl = ref<string | null>(null)
 
 // Preview config variable
@@ -444,8 +444,8 @@ async function handleMarkdownClick(event: MouseEvent): Promise<void> {
     return
   }
 
-  // Full download URL: open directly (already has /api/hermes/download?path=...)
-  if (href.startsWith('/api/hermes/download?')) {
+  // Full download URL: open directly (already has /api/yi/download?path=...)
+  if (href.startsWith('/api/yi/download?')) {
     event.preventDefault()
     event.stopPropagation()
     const linkText = link.textContent || ''

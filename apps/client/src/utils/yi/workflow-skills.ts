@@ -1,10 +1,10 @@
-import type { SkillInfo, SkillTarget, SkillsData } from '@/api/yi/skills'
+﻿import type { SkillInfo, SkillTarget, SkillsData } from '@/api/yi/skills'
 import type { WorkflowSelectOption } from '@/components/yi/workflow/types'
 
 export function workflowAgentToSkillTarget(agent: string): SkillTarget {
   if (agent === 'claude-code') return 'claude'
   if (agent === 'codex') return 'codex'
-  return 'hermes'
+  return 'yi'
 }
 
 export function buildWorkflowSkillOptions(data: SkillsData): WorkflowSelectOption[] {

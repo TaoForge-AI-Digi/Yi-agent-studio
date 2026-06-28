@@ -265,7 +265,7 @@ const workflowFlowKey = computed(() => activeWorkflowId.value || 'workflow-empty
 
 function skillOptionsCacheKey(agent: string, profile = activeWorkflowProfile.value): string {
   const target = workflowAgentToSkillTarget(agent)
-  return target === 'hermes' ? `${target}:${profile || 'default'}` : target
+  return target === 'yi' ? `${target}:${profile || 'default'}` : target
 }
 
 function skillOptionsForAgent(agent: string, profile = activeWorkflowProfile.value): WorkflowSelectOption[] {
@@ -303,7 +303,7 @@ async function ensureSkillOptionsForAgent(agent: string, profile = activeWorkflo
   skillOptionsLoadingByKey.value = { ...skillOptionsLoadingByKey.value, [key]: true }
   refreshWorkflowNodeSkillOptions()
 
-  const request = fetchSkills(target === 'hermes' ? profile : undefined, target)
+  const request = fetchSkills(target === 'yi' ? profile : undefined, target)
     .then((data) => {
       skillOptionsByKey.value = {
         ...skillOptionsByKey.value,
@@ -406,7 +406,7 @@ onMounted(() => {
   mobileQuery = window.matchMedia('(max-width: 768px)')
   handleMobileChange(mobileQuery)
   mobileQuery.addEventListener('change', handleMobileChange)
-  window.addEventListener('hermes:open-page-sidebar', openPageSidebar)
+  window.addEventListener('yi:open-page-sidebar', openPageSidebar)
   window.addEventListener('resize', handleWorkflowChatPanelViewportResize)
   handleWorkflowChatPanelViewportResize()
   void initializeWorkflowPage()
@@ -414,7 +414,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   mobileQuery?.removeEventListener('change', handleMobileChange)
-  window.removeEventListener('hermes:open-page-sidebar', openPageSidebar)
+  window.removeEventListener('yi:open-page-sidebar', openPageSidebar)
   window.removeEventListener('resize', handleWorkflowChatPanelViewportResize)
   stopWorkflowChatResize()
   removeWorkflowStatusListener?.()

@@ -1,4 +1,4 @@
-import { request } from '../client'
+﻿import { request } from '../client'
 
 export interface DisplayConfig {
   compact?: boolean
@@ -114,7 +114,7 @@ export interface AuxiliaryModelsResponse {
 
 export async function fetchConfig(sections?: string[]): Promise<AppConfig> {
   const query = sections ? `?sections=${sections.join(',')}` : ''
-  return request<AppConfig>(`/api/hermes/config${query}`)
+  return request<AppConfig>(`/api/yi/config${query}`)
 }
 
 export async function updateConfigSection(
@@ -122,21 +122,21 @@ export async function updateConfigSection(
   values: Record<string, any>,
   options?: { restart?: boolean },
 ): Promise<void> {
-  await request('/api/hermes/config', {
+  await request('/api/yi/config', {
     method: 'PUT',
     body: JSON.stringify({ section, values, ...options }),
   })
 }
 
 export async function fetchAuxiliaryModels(): Promise<AuxiliaryModelsResponse> {
-  return request<AuxiliaryModelsResponse>('/api/hermes/config/auxiliary-models')
+  return request<AuxiliaryModelsResponse>('/api/yi/config/auxiliary-models')
 }
 
 export async function saveAuxiliaryModels(auxiliary: AuxiliaryModelsConfig): Promise<{
   success: boolean
   auxiliary: AuxiliaryModelsConfig
 }> {
-  return request<{ success: boolean; auxiliary: AuxiliaryModelsConfig }>('/api/hermes/config/auxiliary-models', {
+  return request<{ success: boolean; auxiliary: AuxiliaryModelsConfig }>('/api/yi/config/auxiliary-models', {
     method: 'PUT',
     body: JSON.stringify({ auxiliary }),
   })
@@ -146,7 +146,7 @@ export async function saveCredentials(
   platform: string,
   values: Record<string, any>,
 ): Promise<void> {
-  await request('/api/hermes/config/credentials', {
+  await request('/api/yi/config/credentials', {
     method: 'PUT',
     body: JSON.stringify({ platform, values }),
   })
@@ -165,11 +165,11 @@ export interface WeixinQrStatus {
 }
 
 export async function fetchWeixinQrCode(): Promise<WeixinQrCode> {
-  return request<WeixinQrCode>('/api/hermes/weixin/qrcode')
+  return request<WeixinQrCode>('/api/yi/weixin/qrcode')
 }
 
 export async function pollWeixinQrStatus(qrcode: string): Promise<WeixinQrStatus> {
-  return request<WeixinQrStatus>(`/api/hermes/weixin/qrcode/status?qrcode=${encodeURIComponent(qrcode)}`)
+  return request<WeixinQrStatus>(`/api/yi/weixin/qrcode/status?qrcode=${encodeURIComponent(qrcode)}`)
 }
 
 export async function saveWeixinCredentials(data: {
@@ -177,7 +177,7 @@ export async function saveWeixinCredentials(data: {
   token: string
   base_url?: string
 }): Promise<void> {
-  await request('/api/hermes/weixin/save', {
+  await request('/api/yi/weixin/save', {
     method: 'POST',
     body: JSON.stringify(data),
   })

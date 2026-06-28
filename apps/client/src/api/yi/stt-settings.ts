@@ -1,4 +1,4 @@
-import { request } from '../client'
+﻿import { request } from '../client'
 
 export type SttProvider = 'browser' | 'openai' | 'custom' | 'doubao'
 export type StoredSttProvider = Exclude<SttProvider, 'browser'>
@@ -60,7 +60,7 @@ function normalizeProviders(body: unknown): FetchSttSettingsResponse {
 
 export async function fetchSttSettings(): Promise<FetchSttSettingsResponse> {
   const body = await request<{ providers?: SttProviderSettingsResponse[]; settings?: SttProviderSettingsResponse[]; activeProvider?: SttProvider | null }>(
-    '/api/hermes/stt/settings',
+    '/api/yi/stt/settings',
   )
   return normalizeProviders(body)
 }
@@ -70,7 +70,7 @@ export async function saveSttSettings(
   payload: { settings?: SttStoredSettings; secrets?: SttStoredSecretsInput; activeProvider?: SttProvider },
 ): Promise<SttProviderSettingsResponse> {
   const body = await request<SttProviderSettingsResponse | { setting: SttProviderSettingsResponse }>(
-    `/api/hermes/stt/settings/${provider}`,
+    `/api/yi/stt/settings/${provider}`,
     {
       method: 'PUT',
       body: JSON.stringify(payload),
@@ -81,7 +81,7 @@ export async function saveSttSettings(
 
 export async function saveActiveSttProvider(provider: SttProvider): Promise<SttProvider> {
   const body = await request<{ activeProvider: SttProvider }>(
-    '/api/hermes/stt/settings/active',
+    '/api/yi/stt/settings/active',
     {
       method: 'PUT',
       body: JSON.stringify({ provider }),
@@ -99,7 +99,7 @@ export async function clearSttSecret(
     { setting: SttProviderSettingsResponse | null } |
     { success?: boolean; setting: SttProviderSettingsResponse | null }
   >(
-    `/api/hermes/stt/settings/${provider}/secret/${secretName}`,
+    `/api/yi/stt/settings/${provider}/secret/${secretName}`,
     {
       method: 'DELETE',
     },
@@ -116,7 +116,7 @@ export async function deleteSttProvider(
   provider: StoredSttProvider,
 ): Promise<{ success?: boolean; deleted?: boolean; activeProvider?: SttProvider | null }> {
   return request<{ success?: boolean; deleted?: boolean; activeProvider?: SttProvider | null }>(
-    `/api/hermes/stt/settings/${provider}`,
+    `/api/yi/stt/settings/${provider}`,
     { method: 'DELETE' },
   )
 }
@@ -129,7 +129,7 @@ export async function deleteSttBaseUrlPreset(
     SttProviderSettingsResponse |
     { success?: boolean; setting: SttProviderSettingsResponse | null }
   >(
-    `/api/hermes/stt/settings/${provider}/base-url-preset?url=${encodeURIComponent(url)}`,
+    `/api/yi/stt/settings/${provider}/base-url-preset?url=${encodeURIComponent(url)}`,
     { method: 'DELETE' },
   )
 

@@ -1,8 +1,8 @@
-{
-  "name": "Hermes Studio",
-  "short_name": "Hermes",
-  "description": "Self-hosted AI chat dashboard for Hermes Agent",
-  "start_url": "/#/hermes/chat",
+﻿{
+  "name": "Yi Studio",
+  "short_name": "Yi",
+  "description": "Self-hosted AI chat dashboard for Yi Agent",
+  "start_url": "/#/yi/chat",
   "scope": "/",
   "display": "standalone",
   "background_color": "#f7f7f4",

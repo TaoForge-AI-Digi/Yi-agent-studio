@@ -16,11 +16,11 @@ const checkedToken = ref("");
 const promptedUserId = ref<number | null>(null);
 
 function dismissalKey(userId: number): string {
-  return `hermes_default_credentials_prompt_dismissed_${userId}`;
+  return `yi_default_credentials_prompt_dismissed_${userId}`;
 }
 
 function isDesktopShell(): boolean {
-  return (window as typeof window & { hermesDesktop?: { isDesktop?: boolean } }).hermesDesktop?.isDesktop === true;
+  return (window as typeof window & { yiDesktop?: { isDesktop?: boolean } }).yiDesktop?.isDesktop === true;
 }
 
 async function checkDefaultCredentials() {

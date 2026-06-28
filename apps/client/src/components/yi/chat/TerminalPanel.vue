@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { ref, onUnmounted, computed, watch } from "vue";
 import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
@@ -73,7 +73,7 @@ const TERMINAL_THEMES: Record<string, { label: string; theme: ITheme }> = {
   },
 };
 
-const STORAGE_KEY_THEME = "hermes_terminal_theme";
+const STORAGE_KEY_THEME = "yi_terminal_theme";
 
 // ─── Types ──────────────────────────────────────────────────────
 
@@ -149,14 +149,14 @@ function buildWsUrl(): string {
       : "ws:";
 
   if (base) {
-    return `${wsProtocol}//${new URL(base).host}/api/hermes/terminal${token ? `?token=${encodeURIComponent(token)}` : ""}`;
+    return `${wsProtocol}//${new URL(base).host}/api/yi/terminal${token ? `?token=${encodeURIComponent(token)}` : ""}`;
   }
 
-  const directDevPort = import.meta.env.VITE_HERMES_DIRECT_WS_PORT;
+  const directDevPort = import.meta.env.VITE_YI_DIRECT_WS_PORT;
   const host = import.meta.env.DEV && directDevPort
     ? formatHostForPort(location.hostname, Number(directDevPort))
     : location.host;
-  return `${wsProtocol}//${host}/api/hermes/terminal${token ? `?token=${encodeURIComponent(token)}` : ""}`;
+  return `${wsProtocol}//${host}/api/yi/terminal${token ? `?token=${encodeURIComponent(token)}` : ""}`;
 }
 
 function connect() {

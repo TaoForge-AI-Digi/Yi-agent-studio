@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { computed, ref } from 'vue'
 import { Handle, Position, type NodeProps } from '@vue-flow/core'
 import { NodeResizer } from '@vue-flow/node-resizer'
@@ -27,7 +27,7 @@ const statusTip = computed(() => (
     ? props.data.statusError.trim()
     : ''
 ))
-const isCodingAgent = computed(() => props.data.agent !== 'hermes')
+const isCodingAgent = computed(() => props.data.agent !== 'yi')
 const apiModeOptions = computed(() => [
   { label: t('codingAgents.protocolOpenAiChat'), value: 'chat_completions' },
   { label: t('codingAgents.protocolOpenAiResponses'), value: 'codex_responses' },

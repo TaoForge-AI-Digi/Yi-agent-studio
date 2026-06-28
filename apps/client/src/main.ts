@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+﻿import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import router from './router'
 import { i18n } from './i18n'
@@ -8,12 +8,12 @@ import 'katex/dist/katex.min.css'
 
 // ponytail: 奕默认亮色主题 (用户偏好)
 // 不强制设 dark; 让 useTheme 走 system 偏好; theme switch 切 light/dark
-if (!localStorage.getItem('hermes_brightness')) {
-  localStorage.setItem('hermes_brightness', 'light')
+if (!localStorage.getItem('yi_brightness')) {
+  localStorage.setItem('yi_brightness', 'light')
 }
 
-const savedBrightness = localStorage.getItem('hermes_brightness') || 'system'
-const savedStyle = localStorage.getItem('hermes_style') || 'ink'
+const savedBrightness = localStorage.getItem('yi_brightness') || 'system'
+const savedStyle = localStorage.getItem('yi_style') || 'ink'
 
 // Resolve dark mode
 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -22,7 +22,7 @@ const isDark = savedBrightness === 'dark' || (savedBrightness === 'system' && pr
 // Resolve style
 const isComic = savedStyle === 'comic'
 const isDesktopShell =
-  (window as typeof window & { hermesDesktop?: { isDesktop?: boolean } }).hermesDesktop?.isDesktop === true
+  (window as typeof window & { yiDesktop?: { isDesktop?: boolean } }).yiDesktop?.isDesktop === true
 
 // Apply classes to prevent FOUC
 if (isDark) {
@@ -32,7 +32,7 @@ if (isComic) {
   document.documentElement.classList.add('comic')
 }
 if (isDesktopShell) {
-  document.documentElement.classList.add('hermes-desktop-shell')
+  document.documentElement.classList.add('yi-desktop-shell')
 }
 
 // Read token from URL BEFORE router initializes (hash router strips params)

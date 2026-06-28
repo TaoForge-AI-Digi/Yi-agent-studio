@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { NButton, NSwitch, NSelect, useMessage } from 'naive-ui'
 import { useI18n } from 'vue-i18n'
 import { useSettingsStore } from '@/stores/yi/settings'
@@ -51,8 +51,8 @@ async function handleNotifyOnCompleteChange(value: boolean) {
     void showCompletionNotification({
       title: 'Hermes',
       body: t('settings.display.notifyOnCompleteTest'),
-      icon: '/coding-agents/hermes.png',
-      tag: `hermes-complete-test-${Date.now()}`,
+      icon: '/coding-agents/yi.png',
+      tag: `yi-complete-test-${Date.now()}`,
     })
   }
 }
@@ -66,8 +66,8 @@ async function testCompletionNotification() {
   const shown = await showCompletionNotification({
     title: 'Hermes',
     body: t('settings.display.notifyOnCompleteTest'),
-    icon: '/coding-agents/hermes.png',
-    tag: `hermes-complete-test-${Date.now()}`,
+    icon: '/coding-agents/yi.png',
+    tag: `yi-complete-test-${Date.now()}`,
   })
   if (!shown) {
     message.error(t('settings.display.notifyOnCompleteTestFailed'))

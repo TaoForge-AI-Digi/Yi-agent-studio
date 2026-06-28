@@ -47,6 +47,59 @@ const message = useMessage();
 const { t } = useI18n();
 const isSuperAdmin = computed(() => isStoredSuperAdmin());
 
+// --- Sidebar search & filter ---
+const sidebarSearch = ref('');
+const sidebarFilter = ref<'none' | 'workspace' | 'profile' | 'date'>('none');
+
+const sidebarFilterOptions = computed(() => [
+  { label: '不分组', value: 'none' },
+  { label: '按项目', value: 'workspace' },
+  { label: '按角色', value: 'profile' },
+  { label: '按日期', value: 'date' },
+]);
+
+const filteredSessions = computed(() => {
+  const q = sidebarSearch.value.trim().toLowerCase();
+  let list = chatStore.sessions;
+  if (q) {
+    list = list.filter(s =>
+      (s.title || '').toLowerCase().includes(q) ||
+      (s.model || '').toLowerCase().includes(q)
+    );
+  }
+  return list;
+});
+
+interface SessionGroup { label: string; sessions: Session[] }
+
+const groupedSessions = computed<SessionGroup[]>(() => {
+  if (sidebarFilter.value === 'none') {
+    return [{ label: '', sessions: filteredSessions.value }];
+  }
+  const groups = new Map<string, Session[]>();
+  for (const s of filteredSessions.value) {
+    let key = '';
+    if (sidebarFilter.value === 'workspace') {
+      key = s.workspace || '未分类';
+    } else if (sidebarFilter.value === 'profile') {
+      key = s.profile || 'default';
+    } else if (sidebarFilter.value === 'date') {
+      const d = new Date(s.createdAt);
+      const now = new Date();
+      const diff = now.getTime() - d.getTime();
+      const day = 86400000;
+      if (diff < day) key = '今天';
+      else if (diff < day * 2) key = '昨天';
+      else if (diff < day * 7) key = '本周';
+      else if (d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth()) key = '本月';
+      else key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+    }
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key)!.push(s);
+  }
+  return Array.from(groups.entries()).map(([label, sessions]) => ({ label, sessions }));
+});
+
 const showOutline = ref(false);
 const messageListRef = ref<InstanceType<typeof MessageList> | null>(null);
 const chatInputRef = ref<(InstanceType<typeof ChatInput> & { addFiles?: (files: File[]) => void }) | null>(null);
@@ -226,7 +279,7 @@ onMounted(() => {
   mobileQuery = window.matchMedia("(max-width: 768px)");
   handleMobileChange(mobileQuery);
   mobileQuery.addEventListener("change", handleMobileChange);
-  window.addEventListener("hermes:open-page-sidebar", openPageSidebar);
+  window.addEventListener("yi:open-page-sidebar", openPageSidebar);
   window.addEventListener("resize", handleToolPanelViewportResize);
   handleToolPanelViewportResize();
   if (profilesStore.profiles.length === 0) {
@@ -236,7 +289,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   mobileQuery?.removeEventListener("change", handleMobileChange);
-  window.removeEventListener("hermes:open-page-sidebar", openPageSidebar);
+  window.removeEventListener("yi:open-page-sidebar", openPageSidebar);
   window.removeEventListener("resize", handleToolPanelViewportResize);
   stopToolResize();
 });
@@ -319,7 +372,7 @@ const headerTitle = computed(() =>
 );
 
 const showNewChatModal = ref(false);
-const newChatAgent = ref<"hermes" | "claude-code" | "codex">("hermes");
+const newChatAgent = ref<"yi" | "claude-code" | "codex">("yi");
 const newChatAgentMode = ref<"global" | "scoped">("scoped");
 const newChatProfile = ref<string>("default");
 const newChatProvider = ref<string>("");
@@ -360,7 +413,7 @@ function isCodingAgentAuthProvider(provider?: string) {
 }
 
 function isNewChatProviderAllowed(group: AvailableModelGroup) {
-  if (!(newChatAgent.value !== "hermes" && newChatAgentMode.value === "scoped")) return true;
+  if (!(newChatAgent.value !== "yi" && newChatAgentMode.value === "scoped")) return true;
   return !isCodingAgentAuthProvider(group.provider);
 }
 
@@ -434,7 +487,7 @@ const selectedNewChatProviderGroup = computed(() =>
   newChatModelGroups.value.find((item) => item.provider === newChatProvider.value),
 );
 
-const isNewChatCodingAgent = computed(() => newChatAgent.value !== "hermes");
+const isNewChatCodingAgent = computed(() => newChatAgent.value !== "yi");
 const isNewChatGlobalCodingAgent = computed(() =>
   isNewChatCodingAgent.value && newChatAgentMode.value === "global",
 );
@@ -539,7 +592,7 @@ function handleNewChatProviderChange(value: string) {
 }
 
 async function confirmNewChat() {
-  if (newChatAgent.value !== "hermes") {
+  if (newChatAgent.value !== "yi") {
     newChatLoading.value = true;
     try {
       const agentId = newChatAgent.value as CodingAgentId;
@@ -561,7 +614,7 @@ async function confirmNewChat() {
   }
 
   // ponytail: 弹窗只剩 agent + workspace,profile/provider/model 用 store 默认
-  const source = newChatAgent.value === "hermes" ? "cli" : "coding_agent";
+  const source = newChatAgent.value === "yi" ? "cli" : "coding_agent";
   const agent = newChatAgent.value === "codex"
     ? "codex"
     : newChatAgent.value === "claude-code"
@@ -570,7 +623,7 @@ async function confirmNewChat() {
   const session = chatStore.newChat({
     source,
     agent,
-    codingAgentId: newChatAgent.value === "hermes" ? undefined : newChatAgent.value,
+    codingAgentId: newChatAgent.value === "yi" ? undefined : newChatAgent.value,
     workspace: newChatWorkspace.value || null,
   });
   await router.push({
@@ -1100,118 +1153,27 @@ async function handleSessionModelCustomSubmit() {
           @primary="quickNewChat"
         />
         <div class="session-list-toolbar">
-          <NSelect
-            class="session-profile-filter"
-            :value="sessionProfileFilter || '__all__'"
-            :options="profileFilterOptions"
-            size="small"
-            :loading="profilesStore.loading"
-            @update:value="handleProfileFilterChange"
-          />
-          <div class="session-list-actions">
-            <button class="session-close-btn" @click="showSessions = false">
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </button>
-            <NButton
-              v-if="!isBatchMode"
-              quaternary
-              size="tiny"
-              @click="toggleBatchMode"
-              :title="t('chat.toggleBatchMode')"
+          <div class="session-search-row">
+            <NInput
+              v-model:value="sidebarSearch"
+              :placeholder="'搜索对话…'"
+              clearable
+              size="small"
+              class="session-search-input"
             >
-              <template #icon>
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M9 11l3 3L22 4" />
-                  <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+              <template #prefix>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="m20 20-3.5-3.5" />
                 </svg>
               </template>
-            </NButton>
-            <NButton
-              v-if="isBatchMode"
-              quaternary
-              size="tiny"
-              @click="selectAllSessions"
-              :disabled="!canSelectAll || isBatchDeleting"
-              :title="t('chat.selectAll')"
-            >
-              <template #icon>
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M9 11l3 3L22 4" />
-                  <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-                </svg>
-              </template>
-            </NButton>
-            <NPopconfirm
-              v-if="isBatchMode && selectedCount > 0"
-              v-model:show="showBatchDeleteConfirm"
-              :positive-button-props="{ loading: isBatchDeleting, disabled: isBatchDeleting }"
-              :negative-button-props="{ disabled: isBatchDeleting }"
-              @positive-click="handleBatchDeleteConfirm"
-            >
-              <template #trigger>
-                <NButton quaternary size="tiny" type="error" :loading="isBatchDeleting" :disabled="isBatchDeleting">
-                  <template #icon>
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <polyline points="3 6 5 6 21 6" />
-                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                    </svg>
-                  </template>
-                </NButton>
-              </template>
-              {{ t('chat.confirmBatchDelete', { count: selectedCount }) }}
-            </NPopconfirm>
-            <NButton
-              v-if="isBatchMode"
-              quaternary
-              size="tiny"
-              @click="toggleBatchMode"
-              :disabled="isBatchDeleting"
-            >
-              <template #icon>
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-              </template>
-            </NButton>
+            </NInput>
+            <NSelect
+              v-model:value="sidebarFilter"
+              :options="sidebarFilterOptions"
+              size="small"
+              class="session-filter-select"
+            />
           </div>
         </div>
       </div>
@@ -1254,27 +1216,59 @@ async function handleSessionModelCustomSubmit() {
           />
         </template>
 
-        <SessionListItem
-          v-for="s in unpinnedSessions"
-          :key="s.id"
-          :session="s"
-          :active="s.id === chatStore.activeSessionId"
-          :pinned="false"
-          :can-delete="
-            s.id !== chatStore.activeSessionId ||
-            chatStore.sessions.length > 1
-          "
-          :streaming="chatStore.isSessionLive(s.id)"
-          :completed-unread="chatStore.isSessionCompletedUnread(s.id)"
-          :selectable="isBatchMode"
-          :selected="isSessionSelected(s)"
-          :show-profile="true"
-          :to="sessionHref(s.id)"
-          @select="handleSessionClick(s.id)"
-          @contextmenu="handleContextMenu($event, s.id)"
-          @delete="handleDeleteSession(s.id)"
-          @toggle-select="toggleSessionSelection(s)"
-        />
+        <template v-if="sidebarFilter === 'none'">
+          <SessionListItem
+            v-for="s in unpinnedSessions"
+            :key="s.id"
+            :session="s"
+            :active="s.id === chatStore.activeSessionId"
+            :pinned="false"
+            :can-delete="
+              s.id !== chatStore.activeSessionId ||
+              chatStore.sessions.length > 1
+            "
+            :streaming="chatStore.isSessionLive(s.id)"
+            :completed-unread="chatStore.isSessionCompletedUnread(s.id)"
+            :selectable="isBatchMode"
+            :selected="isSessionSelected(s)"
+            :show-profile="true"
+            :to="sessionHref(s.id)"
+            @select="handleSessionClick(s.id)"
+            @contextmenu="handleContextMenu($event, s.id)"
+            @delete="handleDeleteSession(s.id)"
+            @toggle-select="toggleSessionSelection(s)"
+          />
+        </template>
+
+        <template v-else>
+          <template v-for="group in groupedSessions" :key="group.label">
+            <div v-if="group.sessions.length > 0" class="session-group-header">
+              <span class="session-group-label">{{ group.label }}</span>
+              <span class="session-group-count">{{ group.sessions.length }}</span>
+            </div>
+            <SessionListItem
+              v-for="s in group.sessions"
+              :key="s.id"
+              :session="s"
+              :active="s.id === chatStore.activeSessionId"
+              :pinned="false"
+              :can-delete="
+                s.id !== chatStore.activeSessionId ||
+                chatStore.sessions.length > 1
+              "
+              :streaming="chatStore.isSessionLive(s.id)"
+              :completed-unread="chatStore.isSessionCompletedUnread(s.id)"
+              :selectable="isBatchMode"
+              :selected="isSessionSelected(s)"
+              :show-profile="true"
+              :to="sessionHref(s.id)"
+              @select="handleSessionClick(s.id)"
+              @contextmenu="handleContextMenu($event, s.id)"
+              @delete="handleDeleteSession(s.id)"
+              @toggle-select="toggleSessionSelection(s)"
+            />
+          </template>
+        </template>
       </div>
       <div v-if="showSessions" class="page-sidebar-bottom">
         <button class="page-sidebar-menu-btn" type="button" @click="openSettingsPage">
@@ -1921,10 +1915,6 @@ async function handleSessionModelCustomSubmit() {
 }
 
 @media (max-width: $breakpoint-mobile) {
-  .session-close-btn {
-    display: flex;
-  }
-
   .session-backdrop {
     position: absolute;
     inset: 0;
@@ -1993,38 +1983,28 @@ async function handleSessionModelCustomSubmit() {
 
 .session-list-toolbar {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  gap: 6px;
   margin-top: 12px;
 }
 
-.session-list-actions {
+.session-search-row {
   display: flex;
+  gap: 6px;
   align-items: center;
-  gap: 4px;
-  height: 22px;
-
-  .n-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 22px;
-    min-height: 22px;
-  }
 }
 
-.session-close-btn {
-  display: none;
-  border: none;
-  background: none;
-  cursor: pointer;
-  color: $text-secondary;
-  padding: 4px;
-  border-radius: $radius-sm;
-  height: 22px;
-  min-height: 22px;
-  align-items: center;
-  justify-content: center;
+.session-search-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.session-filter-select {
+  width: 110px;
+  flex-shrink: 0;
+}
+
+.session-group-header {
 
   &:hover {
     background: rgba($accent-primary, 0.06);

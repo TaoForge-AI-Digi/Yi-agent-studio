@@ -14,6 +14,9 @@ importers:
       '@audio/decode-wav':
         specifier: ^1.2.0
         version: 1.3.0
+      '@dietrichgebert/ponytail':
+        specifier: ^4.8.3
+        version: 4.8.3
       '@vscode/markdown-it-katex':
         specifier: ^1.1.2
         version: 1.1.2
@@ -46,16 +49,16 @@ importers:
         version: 0.17.0
       node-edge-tts:
         specifier: ^1.2.10
-        version: 1.2.10
+        version: 1.2.10(supports-color@5.5.0)
       node-pty:
         specifier: ^1.1.0
         version: 1.1.0
       socket.io:
         specifier: ^4.8.3
-        version: 4.8.3
+        version: 4.8.3(supports-color@5.5.0)
       socket.io-client:
         specifier: ^4.8.3
-        version: 4.8.3
+        version: 4.8.3(supports-color@5.5.0)
     devDependencies:
       '@koa/bodyparser':
         specifier: ^5.0.0
@@ -65,7 +68,7 @@ importers:
         version: 5.0.0
       '@koa/router':
         specifier: ^15.4.0
-        version: 15.6.0(koa@2.16.4)
+        version: 15.6.0(koa@2.16.4(supports-color@5.5.0))(supports-color@5.5.0)
       '@multiavatar/multiavatar':
         specifier: ^1.0.7
         version: 1.0.7
@@ -131,7 +134,7 @@ importers:
         version: 6.0.0
       axios:
         specifier: ^1.9.0
-        version: 1.18.1
+        version: 1.18.1(supports-color@5.5.0)
       concurrently:
         specifier: ^9.2.1
         version: 9.2.3
@@ -149,13 +152,13 @@ importers:
         version: 4.2.0
       jsdom:
         specifier: ^27.0.1
-        version: 27.4.0
+        version: 27.4.0(supports-color@5.5.0)
       koa:
         specifier: ^2.15.3
-        version: 2.16.4
+        version: 2.16.4(supports-color@5.5.0)
       koa-send:
         specifier: ^5.0.1
-        version: 5.0.1
+        version: 5.0.1(supports-color@5.5.0)
       koa-static:
         specifier: ^5.0.0
         version: 5.0.0
@@ -203,7 +206,7 @@ importers:
         version: 8.1.0(@types/node@24.13.2)(esbuild@0.27.7)(sass@1.101.0)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.4
-        version: 3.2.6(@types/node@24.13.2)(jsdom@27.4.0)(lightningcss@1.32.0)(sass@1.101.0)(yaml@2.9.0)
+        version: 3.2.6(@types/node@24.13.2)(jsdom@27.4.0(supports-color@5.5.0))(lightningcss@1.32.0)(sass@1.101.0)(supports-color@5.5.0)(yaml@2.9.0)
       vue:
         specifier: ^3.5.32
         version: 3.5.38(typescript@5.8.2)
@@ -315,6 +318,9 @@ packages:
   '@csstools/css-tokenizer@4.0.0':
     resolution: {integrity: sha512-QxULHAm7cNu72w97JUNCBFODFaXpbDg+dP8b/oWFAZ2MTRppA3U00Y2L1HqaS4J6yBqxwa/Y3nMBaxVKbB/NsA==}
     engines: {node: '>=20.19.0'}
+
+  '@dietrichgebert/ponytail@4.8.3':
+    resolution: {integrity: sha512-UDhTgDqFhB2sIhohom9BwB65jgPY0effo6QXDfch9KET1KEAz5FJF6BU04Zie91rJWAH6BWUWRfjvycgRGf9Pg==}
 
   '@emnapi/core@1.11.1':
     resolution: {integrity: sha512-RSvbQmHzdKzNsLYa/wHrbc3KN4sYLKAdPZxqiM2HATqv/SBk2/ENSHpvXGaLOMcsAyz0poEGqkmmKYG3OWiJEQ==}
@@ -3581,6 +3587,8 @@ snapshots:
 
   '@csstools/css-tokenizer@4.0.0': {}
 
+  '@dietrichgebert/ponytail@4.8.3': {}
+
   '@emnapi/core@1.11.1':
     dependencies:
       '@emnapi/wasi-threads': 1.2.2
@@ -3875,7 +3883,7 @@ snapshots:
   '@isaacs/cliui@8.0.2':
     dependencies:
       string-width: 5.1.2
-      string-width-cjs: string-width@4.2.0
+      string-width-cjs: string-width@4.2.3
       strip-ansi: 7.2.0
       strip-ansi-cjs: strip-ansi@6.0.1
       wrap-ansi: 8.1.0
@@ -3895,11 +3903,11 @@ snapshots:
     dependencies:
       vary: 1.1.2
 
-  '@koa/router@15.6.0(koa@2.16.4)':
+  '@koa/router@15.6.0(koa@2.16.4(supports-color@5.5.0))(supports-color@5.5.0)':
     dependencies:
       debug: 4.4.3(supports-color@5.5.0)
       http-errors: 2.0.1
-      koa: 2.16.4
+      koa: 2.16.4(supports-color@5.5.0)
       koa-compose: 4.1.0
       path-to-regexp: 8.4.2
     transitivePeerDependencies:
@@ -4661,25 +4669,25 @@ snapshots:
 
   adm-zip@0.5.17: {}
 
-  agent-base@6.0.0:
+  agent-base@6.0.0(supports-color@5.5.0):
     dependencies:
       debug: 4.4.3(supports-color@5.5.0)
     transitivePeerDependencies:
       - supports-color
 
-  agent-base@7.0.2:
+  agent-base@7.0.2(supports-color@5.5.0):
     dependencies:
       debug: 4.4.3(supports-color@5.5.0)
     transitivePeerDependencies:
       - supports-color
 
-  agent-base@7.1.0:
+  agent-base@7.1.0(supports-color@5.5.0):
     dependencies:
       debug: 4.4.3(supports-color@5.5.0)
     transitivePeerDependencies:
       - supports-color
 
-  agent-base@7.1.2:
+  agent-base@7.1.2(supports-color@5.5.0):
     dependencies:
       debug: 4.4.3(supports-color@5.5.0)
     transitivePeerDependencies:
@@ -4714,11 +4722,11 @@ snapshots:
 
   atomic-sleep@1.0.0: {}
 
-  axios@1.18.1:
+  axios@1.18.1(supports-color@5.5.0):
     dependencies:
       follow-redirects: 1.16.0
       form-data: 4.0.6
-      https-proxy-agent: 5.0.1
+      https-proxy-agent: 5.0.1(supports-color@5.5.0)
       proxy-from-env: 2.1.0
     transitivePeerDependencies:
       - debug
@@ -5221,7 +5229,7 @@ snapshots:
     dependencies:
       once: 1.4.0
 
-  engine.io-client@6.6.6:
+  engine.io-client@6.6.6(supports-color@5.5.0):
     dependencies:
       '@socket.io/component-emitter': 3.1.2
       debug: 4.4.3(supports-color@5.5.0)
@@ -5235,7 +5243,7 @@ snapshots:
 
   engine.io-parser@5.2.3: {}
 
-  engine.io@6.6.9:
+  engine.io@6.6.9(supports-color@5.5.0):
     dependencies:
       '@types/cors': 2.8.19
       '@types/node': 24.13.2
@@ -5530,30 +5538,30 @@ snapshots:
       statuses: 2.0.2
       toidentifier: 1.0.1
 
-  http-proxy-agent@7.0.2:
+  http-proxy-agent@7.0.2(supports-color@5.5.0):
     dependencies:
-      agent-base: 7.1.0
+      agent-base: 7.1.0(supports-color@5.5.0)
       debug: 4.4.3(supports-color@5.5.0)
     transitivePeerDependencies:
       - supports-color
 
-  https-proxy-agent@5.0.1:
+  https-proxy-agent@5.0.1(supports-color@5.5.0):
     dependencies:
-      agent-base: 6.0.0
+      agent-base: 6.0.0(supports-color@5.5.0)
       debug: 4.4.3(supports-color@5.5.0)
     transitivePeerDependencies:
       - supports-color
 
-  https-proxy-agent@7.0.1:
+  https-proxy-agent@7.0.1(supports-color@5.5.0):
     dependencies:
-      agent-base: 7.0.2
+      agent-base: 7.0.2(supports-color@5.5.0)
       debug: 4.4.3(supports-color@5.5.0)
     transitivePeerDependencies:
       - supports-color
 
-  https-proxy-agent@7.0.6:
+  https-proxy-agent@7.0.6(supports-color@5.5.0):
     dependencies:
-      agent-base: 7.1.2
+      agent-base: 7.1.2(supports-color@5.5.0)
       debug: 4.4.3(supports-color@5.5.0)
     transitivePeerDependencies:
       - supports-color
@@ -5651,7 +5659,7 @@ snapshots:
     dependencies:
       argparse: 2.0.1
 
-  jsdom@27.4.0:
+  jsdom@27.4.0(supports-color@5.5.0):
     dependencies:
       '@acemir/cssom': 0.9.31
       '@asamuzakjp/dom-selector': 6.8.1
@@ -5660,8 +5668,8 @@ snapshots:
       data-urls: 6.0.1
       decimal.js: 10.6.0
       html-encoding-sniffer: 6.0.0
-      http-proxy-agent: 7.0.2
-      https-proxy-agent: 7.0.6
+      http-proxy-agent: 7.0.2(supports-color@5.5.0)
+      https-proxy-agent: 7.0.6(supports-color@5.5.0)
       is-potential-custom-element-name: 1.0.1
       parse5: 8.0.1
       saxes: 6.0.0
@@ -5706,7 +5714,7 @@ snapshots:
       co: 4.6.0
       koa-compose: 4.1.0
 
-  koa-send@5.0.1:
+  koa-send@5.0.1(supports-color@5.5.0):
     dependencies:
       debug: 4.4.3(supports-color@5.5.0)
       http-errors: 1.8.1
@@ -5717,11 +5725,11 @@ snapshots:
   koa-static@5.0.0:
     dependencies:
       debug: 3.2.7
-      koa-send: 5.0.1
+      koa-send: 5.0.1(supports-color@5.5.0)
     transitivePeerDependencies:
       - supports-color
 
-  koa@2.16.4:
+  koa@2.16.4(supports-color@5.5.0):
     dependencies:
       accepts: 1.3.8
       cache-content-type: 1.0.1
@@ -5969,9 +5977,9 @@ snapshots:
 
   node-addon-api@7.1.0: {}
 
-  node-edge-tts@1.2.10:
+  node-edge-tts@1.2.10(supports-color@5.5.0):
     dependencies:
-      https-proxy-agent: 7.0.1
+      https-proxy-agent: 7.0.1(supports-color@5.5.0)
       ws: 8.21.0
       yargs: 17.7.3
     transitivePeerDependencies:
@@ -6380,7 +6388,7 @@ snapshots:
 
   simple-yenc@1.0.4: {}
 
-  socket.io-adapter@2.5.8:
+  socket.io-adapter@2.5.8(supports-color@5.5.0):
     dependencies:
       debug: 4.4.3(supports-color@5.5.0)
       ws: 8.21.0
@@ -6389,11 +6397,11 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  socket.io-client@4.8.3:
+  socket.io-client@4.8.3(supports-color@5.5.0):
     dependencies:
       '@socket.io/component-emitter': 3.1.2
       debug: 4.4.3(supports-color@5.5.0)
-      engine.io-client: 6.6.6
+      engine.io-client: 6.6.6(supports-color@5.5.0)
       socket.io-parser: 4.2.6
     transitivePeerDependencies:
       - bufferutil
@@ -6407,14 +6415,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  socket.io@4.8.3:
+  socket.io@4.8.3(supports-color@5.5.0):
     dependencies:
       accepts: 1.3.8
       base64id: 2.0.0
       cors: 2.8.6
       debug: 4.4.3(supports-color@5.5.0)
-      engine.io: 6.6.9
-      socket.io-adapter: 2.5.8
+      engine.io: 6.6.9(supports-color@5.5.0)
+      socket.io-adapter: 2.5.8(supports-color@5.5.0)
       socket.io-parser: 4.2.6
     transitivePeerDependencies:
       - bufferutil
@@ -6597,7 +6605,7 @@ snapshots:
       evtd: 0.2.4
       vue: 3.5.38(typescript@5.8.2)
 
-  vite-node@3.2.4(@types/node@24.13.2)(lightningcss@1.32.0)(sass@1.101.0)(yaml@2.9.0):
+  vite-node@3.2.4(@types/node@24.13.2)(lightningcss@1.32.0)(sass@1.101.0)(supports-color@5.5.0)(yaml@2.9.0):
     dependencies:
       cac: 6.7.14
       debug: 4.4.3(supports-color@5.5.0)
@@ -6647,7 +6655,7 @@ snapshots:
       sass: 1.101.0
       yaml: 2.9.0
 
-  vitest@3.2.6(@types/node@24.13.2)(jsdom@27.4.0)(lightningcss@1.32.0)(sass@1.101.0)(yaml@2.9.0):
+  vitest@3.2.6(@types/node@24.13.2)(jsdom@27.4.0(supports-color@5.5.0))(lightningcss@1.32.0)(sass@1.101.0)(supports-color@5.5.0)(yaml@2.9.0):
     dependencies:
       '@types/chai': 5.2.3
       '@vitest/expect': 3.2.6
@@ -6670,11 +6678,11 @@ snapshots:
       tinypool: 1.1.1
       tinyrainbow: 2.0.0
       vite: 7.3.5(@types/node@24.13.2)(lightningcss@1.32.0)(sass@1.101.0)(yaml@2.9.0)
-      vite-node: 3.2.4(@types/node@24.13.2)(lightningcss@1.32.0)(sass@1.101.0)(yaml@2.9.0)
+      vite-node: 3.2.4(@types/node@24.13.2)(lightningcss@1.32.0)(sass@1.101.0)(supports-color@5.5.0)(yaml@2.9.0)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 24.13.2
-      jsdom: 27.4.0
+      jsdom: 27.4.0(supports-color@5.5.0)
     transitivePeerDependencies:
       - jiti
       - less

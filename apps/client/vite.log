@@ -1,0 +1,216 @@
+
+  [32m[1mVITE[22m v8.1.0[39m  [2mready in [0m[1m303[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[2m  [32m➜[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+[2m[32m  ➜[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m
+[2m09:39:36[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch profiles: Error: API Error 404: 404 Not Found
+    at request (http://localhost:5173/src/api/client.ts:172:9)
+    at async Module.fetchProfiles (http://localhost:5173/src/api/yi/profiles.ts:3:14)
+    at async Proxy.fetchProfiles (http://localhost:5173/src/stores/yi/profiles.ts:17:21)
+[2m09:39:36[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch settings: Error: API Error 404: 404 Not Found
+    at request (http://localhost:5173/src/api/client.ts:172:9)
+    at async Proxy.fetchSettings (http://localhost:5173/src/stores/yi/settings.ts:65:17)
+    at async Promise.all (index 1)
+    at async http://localhost:5173/src/views/yi/ChatView.vue:49:4
+[2m09:39:36[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch profiles: Error: API Error 404: 404 Not Found
+    at request (http://localhost:5173/src/api/client.ts:172:9)
+    at async Module.fetchProfiles (http://localhost:5173/src/api/yi/profiles.ts:3:14)
+    at async Proxy.fetchProfiles (http://localhost:5173/src/stores/yi/profiles.ts:17:21)
+    at async Promise.all (index 0)
+    at async http://localhost:5173/src/views/yi/ChatView.vue:49:4
+[2m09:39:36[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to load sessions: TypeError: localSessions is not iterable
+    at fetchRuntimeSessions (http://localhost:5173/src/stores/yi/chat.ts:480:29)
+    at async Proxy.loadSessions (http://localhost:5173/src/stores/yi/chat.ts:579:17)
+    at async loadRouteSession (http://localhost:5173/src/views/yi/ChatView.vue:39:4)
+    at async http://localhost:5173/src/views/yi/ChatView.vue:50:4
+[2m09:39:43[22m [31m[1m[vite][22m[39m [31mws proxy error:[39m
+Error: read ECONNRESET
+    at TCP.onStreamRead (node:internal/stream_base_commons:216:20)
+[2m09:39:43[22m [31m[1m[vite][22m[39m [31mws proxy socket error:[39m
+Error: read ECONNRESET
+    at TCP.onStreamRead (node:internal/stream_base_commons:216:20)
+[2m09:39:48[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to refresh session list: TypeError: localSessions is not iterable
+    at fetchRuntimeSessions (http://localhost:5173/src/stores/yi/chat.ts:480:29)
+    at async refreshSessionListOnly (http://localhost:5173/src/stores/yi/chat.ts:630:17)
+[2m09:40:00[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to refresh session list: TypeError: localSessions is not iterable
+    at fetchRuntimeSessions (http://localhost:5173/src/stores/yi/chat.ts:480:29)
+    at async refreshSessionListOnly (http://localhost:5173/src/stores/yi/chat.ts:630:17)
+[2m09:40:12[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to refresh session list: TypeError: localSessions is not iterable
+    at fetchRuntimeSessions (http://localhost:5173/src/stores/yi/chat.ts:480:29)
+    at async refreshSessionListOnly (http://localhost:5173/src/stores/yi/chat.ts:630:17)
+[2m09:40:24[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to refresh session list: TypeError: localSessions is not iterable
+    at fetchRuntimeSessions (http://localhost:5173/src/stores/yi/chat.ts:480:29)
+    at async refreshSessionListOnly (http://localhost:5173/src/stores/yi/chat.ts:630:17)
+[2m09:40:36[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to refresh session list: TypeError: localSessions is not iterable
+    at fetchRuntimeSessions (http://localhost:5173/src/stores/yi/chat.ts:480:29)
+    at async refreshSessionListOnly (http://localhost:5173/src/stores/yi/chat.ts:630:17)
+[2m09:40:48[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to refresh session list: TypeError: localSessions is not iterable
+    at fetchRuntimeSessions (http://localhost:5173/src/stores/yi/chat.ts:480:29)
+    at async refreshSessionListOnly (http://localhost:5173/src/stores/yi/chat.ts:630:17)
+[2m09:41:00[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to refresh session list: TypeError: localSessions is not iterable
+    at fetchRuntimeSessions (http://localhost:5173/src/stores/yi/chat.ts:480:29)
+    at async refreshSessionListOnly (http://localhost:5173/src/stores/yi/chat.ts:630:17)
+[2m09:41:12[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to refresh session list: TypeError: localSessions is not iterable
+    at fetchRuntimeSessions (http://localhost:5173/src/stores/yi/chat.ts:480:29)
+    at async refreshSessionListOnly (http://localhost:5173/src/stores/yi/chat.ts:630:17)
+[2m09:41:24[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to refresh session list: TypeError: localSessions is not iterable
+    at fetchRuntimeSessions (http://localhost:5173/src/stores/yi/chat.ts:480:29)
+    at async refreshSessionListOnly (http://localhost:5173/src/stores/yi/chat.ts:630:17)
+[2m09:41:29[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22m[Vue warn]: Unhandled error during execution of render function 
+  at <ChatPanel> 
+  at <ChatView onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< {} > > 
+  at <RouterView> 
+  at <NotificationProvider> 
+  at <DialogProvider> 
+  at <MessageProvider> 
+  at <ConfigProvider theme=null theme-overrides= {"common":{"primaryColor":"#333333","primaryColorHover":"#1a1a1a","primaryColorPressed":"#000000","primaryColorSuppl":"#333333","bodyColor":"#fafafa","cardColor":"#ffffff","modalColor":"#ffffff","popoverColor":"#ffffff","tableColor":"#ffffff","inputColor":"#ffffff","actionColor":"#f0f0f0","textColorBase":"#1a1a1a","textColor1":"#1a1a1a","textColor2":"#666666","textColor3":"#999999","dividerColor":"#e0e0e0","borderColor":"#e0e0e0","hoverColor":"rgba(0, 0, 0, 0.04)","borderRadius":"8px","borderRadiusSmall":"6px","fontSize":"14px","fontSizeMedium":"14px","heightMedium":"36px","fontFamily":"Inter, system-ui, -apple-system, sans-serif","fontFamilyMono":"JetBrains Mono, Fira Code, Consolas, monospace"},"Layout":{"color":"#fafafa","siderColor":"#f5f5f5","headerColor":"#fafafa"},"Menu":{"itemTextColorActive":"#1a1a1a","itemTextColorActiveHover":"#1a1a1a","itemTextColorChildActive":"#1a1a1a","itemIconColorActive":"#1a1a1a","itemIconColorActiveHover":"#000000","itemColorActive":"rgba(0, 0, 0, 0.06)","itemColorActiveHover":"rgba(0, 0, 0, 0.1)","arrowColorActive":"#1a1a1a"},"Button":{"textColorPrimary":"#ffffff","colorPrimary":"#333333","colorHoverPrimary":"#1a1a1a","colorPressedPrimary":"#000000"},"Input":{"color":"#ffffff","colorFocus":"#ffffff","border":"1px solid #e0e0e0","borderHover":"1px solid #999999","borderFocus":"1px solid #333333","borderDisabled":"1px solid #ebebeb","groupLabelBorder":"1px solid #e0e0e0","placeholderColor":"#999999","caretColor":"#1a1a1a"},"InternalSelection":{"border":"1px solid #e0e0e0","borderHover":"1px solid #999999","borderActive":"1px solid #333333","borderFocus":"1px solid #333333"},"Card":{"color":"#ffffff","borderColor":"#e0e0e0"},"Modal":{"color":"#ffffff"},"Tag":{"borderRadius":"6px"}} > 
+  at <App>
+[2m09:41:29[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22m[Vue warn]: Unhandled error during execution of component update 
+  at <ChatPanel> 
+  at <ChatView onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< {} > > 
+  at <RouterView> 
+  at <NotificationProvider> 
+  at <DialogProvider> 
+  at <MessageProvider> 
+  at <ConfigProvider theme=null theme-overrides= {"common":{"primaryColor":"#333333","primaryColorHover":"#1a1a1a","primaryColorPressed":"#000000","primaryColorSuppl":"#333333","bodyColor":"#fafafa","cardColor":"#ffffff","modalColor":"#ffffff","popoverColor":"#ffffff","tableColor":"#ffffff","inputColor":"#ffffff","actionColor":"#f0f0f0","textColorBase":"#1a1a1a","textColor1":"#1a1a1a","textColor2":"#666666","textColor3":"#999999","dividerColor":"#e0e0e0","borderColor":"#e0e0e0","hoverColor":"rgba(0, 0, 0, 0.04)","borderRadius":"8px","borderRadiusSmall":"6px","fontSize":"14px","fontSizeMedium":"14px","heightMedium":"36px","fontFamily":"Inter, system-ui, -apple-system, sans-serif","fontFamilyMono":"JetBrains Mono, Fira Code, Consolas, monospace"},"Layout":{"color":"#fafafa","siderColor":"#f5f5f5","headerColor":"#fafafa"},"Menu":{"itemTextColorActive":"#1a1a1a","itemTextColorActiveHover":"#1a1a1a","itemTextColorChildActive":"#1a1a1a","itemIconColorActive":"#1a1a1a","itemIconColorActiveHover":"#000000","itemColorActive":"rgba(0, 0, 0, 0.06)","itemColorActiveHover":"rgba(0, 0, 0, 0.1)","arrowColorActive":"#1a1a1a"},"Button":{"textColorPrimary":"#ffffff","colorPrimary":"#333333","colorHoverPrimary":"#1a1a1a","colorPressedPrimary":"#000000"},"Input":{"color":"#ffffff","colorFocus":"#ffffff","border":"1px solid #e0e0e0","borderHover":"1px solid #999999","borderFocus":"1px solid #333333","borderDisabled":"1px solid #ebebeb","groupLabelBorder":"1px solid #e0e0e0","placeholderColor":"#999999","caretColor":"#1a1a1a"},"InternalSelection":{"border":"1px solid #e0e0e0","borderHover":"1px solid #999999","borderActive":"1px solid #333333","borderFocus":"1px solid #333333"},"Card":{"color":"#ffffff","borderColor":"#e0e0e0"},"Modal":{"color":"#ffffff"},"Tag":{"borderRadius":"6px"}} > 
+  at <App>
+[2m09:41:29[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22m[Vue warn]: Unhandled error during execution of render function 
+  at <ChatPanel> 
+  at <ChatView onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< {} > > 
+  at <RouterView> 
+  at <NotificationProvider> 
+  at <DialogProvider> 
+  at <MessageProvider> 
+  at <ConfigProvider theme=null theme-overrides= {"common":{"primaryColor":"#333333","primaryColorHover":"#1a1a1a","primaryColorPressed":"#000000","primaryColorSuppl":"#333333","bodyColor":"#fafafa","cardColor":"#ffffff","modalColor":"#ffffff","popoverColor":"#ffffff","tableColor":"#ffffff","inputColor":"#ffffff","actionColor":"#f0f0f0","textColorBase":"#1a1a1a","textColor1":"#1a1a1a","textColor2":"#666666","textColor3":"#999999","dividerColor":"#e0e0e0","borderColor":"#e0e0e0","hoverColor":"rgba(0, 0, 0, 0.04)","borderRadius":"8px","borderRadiusSmall":"6px","fontSize":"14px","fontSizeMedium":"14px","heightMedium":"36px","fontFamily":"Inter, system-ui, -apple-system, sans-serif","fontFamilyMono":"JetBrains Mono, Fira Code, Consolas, monospace"},"Layout":{"color":"#fafafa","siderColor":"#f5f5f5","headerColor":"#fafafa"},"Menu":{"itemTextColorActive":"#1a1a1a","itemTextColorActiveHover":"#1a1a1a","itemTextColorChildActive":"#1a1a1a","itemIconColorActive":"#1a1a1a","itemIconColorActiveHover":"#000000","itemColorActive":"rgba(0, 0, 0, 0.06)","itemColorActiveHover":"rgba(0, 0, 0, 0.1)","arrowColorActive":"#1a1a1a"},"Button":{"textColorPrimary":"#ffffff","colorPrimary":"#333333","colorHoverPrimary":"#1a1a1a","colorPressedPrimary":"#000000"},"Input":{"color":"#ffffff","colorFocus":"#ffffff","border":"1px solid #e0e0e0","borderHover":"1px solid #999999","borderFocus":"1px solid #333333","borderDisabled":"1px solid #ebebeb","groupLabelBorder":"1px solid #e0e0e0","placeholderColor":"#999999","caretColor":"#1a1a1a"},"InternalSelection":{"border":"1px solid #e0e0e0","borderHover":"1px solid #999999","borderActive":"1px solid #333333","borderFocus":"1px solid #333333"},"Card":{"color":"#ffffff","borderColor":"#e0e0e0"},"Modal":{"color":"#ffffff"},"Tag":{"borderRadius":"6px"}} > 
+  at <App>
+[2m09:41:29[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22m[Vue warn]: Unhandled error during execution of component update 
+  at <ChatPanel> 
+  at <ChatView onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< {} > > 
+  at <RouterView> 
+  at <NotificationProvider> 
+  at <DialogProvider> 
+  at <MessageProvider> 
+  at <ConfigProvider theme=null theme-overrides= {"common":{"primaryColor":"#333333","primaryColorHover":"#1a1a1a","primaryColorPressed":"#000000","primaryColorSuppl":"#333333","bodyColor":"#fafafa","cardColor":"#ffffff","modalColor":"#ffffff","popoverColor":"#ffffff","tableColor":"#ffffff","inputColor":"#ffffff","actionColor":"#f0f0f0","textColorBase":"#1a1a1a","textColor1":"#1a1a1a","textColor2":"#666666","textColor3":"#999999","dividerColor":"#e0e0e0","borderColor":"#e0e0e0","hoverColor":"rgba(0, 0, 0, 0.04)","borderRadius":"8px","borderRadiusSmall":"6px","fontSize":"14px","fontSizeMedium":"14px","heightMedium":"36px","fontFamily":"Inter, system-ui, -apple-system, sans-serif","fontFamilyMono":"JetBrains Mono, Fira Code, Consolas, monospace"},"Layout":{"color":"#fafafa","siderColor":"#f5f5f5","headerColor":"#fafafa"},"Menu":{"itemTextColorActive":"#1a1a1a","itemTextColorActiveHover":"#1a1a1a","itemTextColorChildActive":"#1a1a1a","itemIconColorActive":"#1a1a1a","itemIconColorActiveHover":"#000000","itemColorActive":"rgba(0, 0, 0, 0.06)","itemColorActiveHover":"rgba(0, 0, 0, 0.1)","arrowColorActive":"#1a1a1a"},"Button":{"textColorPrimary":"#ffffff","colorPrimary":"#333333","colorHoverPrimary":"#1a1a1a","colorPressedPrimary":"#000000"},"Input":{"color":"#ffffff","colorFocus":"#ffffff","border":"1px solid #e0e0e0","borderHover":"1px solid #999999","borderFocus":"1px solid #333333","borderDisabled":"1px solid #ebebeb","groupLabelBorder":"1px solid #e0e0e0","placeholderColor":"#999999","caretColor":"#1a1a1a"},"InternalSelection":{"border":"1px solid #e0e0e0","borderHover":"1px solid #999999","borderActive":"1px solid #333333","borderFocus":"1px solid #333333"},"Card":{"color":"#ffffff","borderColor":"#e0e0e0"},"Modal":{"color":"#ffffff"},"Tag":{"borderRadius":"6px"}} > 
+  at <App>
+[2m09:41:29[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled rejection] [1mError[22m: No match for
+ {"name":"yi.`session","params":{"sessionId":"mqx4hxfgrb5wui"}}
+[39m > createRouterError node_modules/.pnpm/vue-router@4.6.4_vue@3.5.38_typescript@5.8.2_/node_modules/vue-router/dist/devtools-EWN81iOl.mjs:526:67
+ > Object.resolve node_modules/.pnpm/vue-router@4.6.4_vue@3.5.38_typescript@5.8.2_/node_modules/vue-router/dist/vue-router.mjs:707:23
+ > Object.resolve node_modules/.pnpm/vue-router@4.6.4_vue@3.5.38_typescript@5.8.2_/node_modules/vue-router/dist/vue-router.mjs:1225:31
+ > Proxy.sessionHref src/components/yi/chat/ChatPanel.vue:89:16
+    87 |  
+    88 |  function sessionHref(sessionId: string) {
+    89 |    return router.resolve({
+       |                  ^
+    90 |      name: chatStore.runtimeMode === "global_agent" ? "yi.`globalAgentSession" : "yi.`session",
+    91 |      params: { sessionId },
+ > src/components/yi/chat/ChatPanel.vue:1272:15
+ > renderList node_modules/.pnpm/@vue+runtime-core@3.5.38/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js:3195:15
+ > Proxy._sfc_render src/components/yi/chat/ChatPanel.vue:1277:10
+ > renderComponentRoot node_modules/.pnpm/@vue+runtime-core@3.5.38/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js:4580:15
+ > ReactiveEffect.componentUpdateFn [as fn] node_modules/.pnpm/@vue+runtime-core@3.5.38/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js:6223:25
+ > ReactiveEffect.run node_modules/.pnpm/@vue+reactivity@3.5.38/node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js:260:18
+
+[2m09:41:29[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled rejection] [1mError[22m: No match for
+ {"name":"yi.`session","params":{"sessionId":"mqx4hxfgrb5wui"}}
+[39m > createRouterError node_modules/.pnpm/vue-router@4.6.4_vue@3.5.38_typescript@5.8.2_/node_modules/vue-router/dist/devtools-EWN81iOl.mjs:526:67
+ > Object.resolve node_modules/.pnpm/vue-router@4.6.4_vue@3.5.38_typescript@5.8.2_/node_modules/vue-router/dist/vue-router.mjs:707:23
+ > Object.resolve node_modules/.pnpm/vue-router@4.6.4_vue@3.5.38_typescript@5.8.2_/node_modules/vue-router/dist/vue-router.mjs:1225:31
+ > Proxy.sessionHref src/components/yi/chat/ChatPanel.vue:89:16
+    87 |  
+    88 |  function sessionHref(sessionId: string) {
+    89 |    return router.resolve({
+       |                  ^
+    90 |      name: chatStore.runtimeMode === "global_agent" ? "yi.`globalAgentSession" : "yi.`session",
+    91 |      params: { sessionId },
+ > src/components/yi/chat/ChatPanel.vue:1272:15
+ > renderList node_modules/.pnpm/@vue+runtime-core@3.5.38/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js:3195:15
+ > Proxy._sfc_render src/components/yi/chat/ChatPanel.vue:1277:10
+ > renderComponentRoot node_modules/.pnpm/@vue+runtime-core@3.5.38/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js:4580:15
+ > ReactiveEffect.componentUpdateFn [as fn] node_modules/.pnpm/@vue+runtime-core@3.5.38/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js:6223:25
+ > ReactiveEffect.run node_modules/.pnpm/@vue+reactivity@3.5.38/node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js:260:18
+
+[2m09:41:29[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled rejection] [1mError[22m: No match for
+ {"name":"yi.`session","params":{"sessionId":"mqx4hxfgrb5wui"}}
+[39m > createRouterError node_modules/.pnpm/vue-router@4.6.4_vue@3.5.38_typescript@5.8.2_/node_modules/vue-router/dist/devtools-EWN81iOl.mjs:526:67
+ > Object.resolve node_modules/.pnpm/vue-router@4.6.4_vue@3.5.38_typescript@5.8.2_/node_modules/vue-router/dist/vue-router.mjs:707:23
+ > Object.resolve node_modules/.pnpm/vue-router@4.6.4_vue@3.5.38_typescript@5.8.2_/node_modules/vue-router/dist/vue-router.mjs:1225:31
+ > Proxy.sessionHref src/components/yi/chat/ChatPanel.vue:89:16
+    87 |  
+    88 |  function sessionHref(sessionId: string) {
+    89 |    return router.resolve({
+       |                  ^
+    90 |      name: chatStore.runtimeMode === "global_agent" ? "yi.`globalAgentSession" : "yi.`session",
+    91 |      params: { sessionId },
+ > src/components/yi/chat/ChatPanel.vue:1272:15
+ > renderList node_modules/.pnpm/@vue+runtime-core@3.5.38/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js:3195:15
+ > Proxy._sfc_render src/components/yi/chat/ChatPanel.vue:1277:10
+ > renderComponentRoot node_modules/.pnpm/@vue+runtime-core@3.5.38/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js:4580:15
+ > ReactiveEffect.componentUpdateFn [as fn] node_modules/.pnpm/@vue+runtime-core@3.5.38/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js:6223:25
+ > ReactiveEffect.run node_modules/.pnpm/@vue+reactivity@3.5.38/node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js:260:18
+
+[2m09:41:29[22m [31m[1m[vite][22m[39m [31mws proxy error:[39m
+Error: write ECONNABORTED
+    at afterWriteDispatched (node:internal/stream_base_commons:159:15)
+    at writeGeneric (node:internal/stream_base_commons:150:3)
+    at Socket._writeGeneric (node:net:966:11)
+    at Socket._write (node:net:978:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Socket.ondata (node:internal/streams/readable:1012:24)
+    at Socket.emit (node:events:508:28)
+    at addChunk (node:internal/streams/readable:563:12)
+[2m09:41:29[22m [31m[1m[vite][22m[39m [31mws proxy socket error:[39m
+Error: write ECONNABORTED
+    at afterWriteDispatched (node:internal/stream_base_commons:159:15)
+    at writeGeneric (node:internal/stream_base_commons:150:3)
+    at Socket._writeGeneric (node:net:966:11)
+    at Socket._write (node:net:978:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Socket.ondata (node:internal/streams/readable:1012:24)
+    at Socket.emit (node:events:508:28)
+    at addChunk (node:internal/streams/readable:563:12)
+[2m09:41:29[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22m[Vue warn]: Unhandled error during execution of render function 
+  at <ChatPanel> 
+  at <ChatView onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< {} > > 
+  at <RouterView> 
+  at <NotificationProvider> 
+  at <DialogProvider> 
+  at <MessageProvider> 
+  at <ConfigProvider theme=null theme-overrides= {"common":{"primaryColor":"#333333","primaryColorHover":"#1a1a1a","primaryColorPressed":"#000000","primaryColorSuppl":"#333333","bodyColor":"#fafafa","cardColor":"#ffffff","modalColor":"#ffffff","popoverColor":"#ffffff","tableColor":"#ffffff","inputColor":"#ffffff","actionColor":"#f0f0f0","textColorBase":"#1a1a1a","textColor1":"#1a1a1a","textColor2":"#666666","textColor3":"#999999","dividerColor":"#e0e0e0","borderColor":"#e0e0e0","hoverColor":"rgba(0, 0, 0, 0.04)","borderRadius":"8px","borderRadiusSmall":"6px","fontSize":"14px","fontSizeMedium":"14px","heightMedium":"36px","fontFamily":"Inter, system-ui, -apple-system, sans-serif","fontFamilyMono":"JetBrains Mono, Fira Code, Consolas, monospace"},"Layout":{"color":"#fafafa","siderColor":"#f5f5f5","headerColor":"#fafafa"},"Menu":{"itemTextColorActive":"#1a1a1a","itemTextColorActiveHover":"#1a1a1a","itemTextColorChildActive":"#1a1a1a","itemIconColorActive":"#1a1a1a","itemIconColorActiveHover":"#000000","itemColorActive":"rgba(0, 0, 0, 0.06)","itemColorActiveHover":"rgba(0, 0, 0, 0.1)","arrowColorActive":"#1a1a1a"},"Button":{"textColorPrimary":"#ffffff","colorPrimary":"#333333","colorHoverPrimary":"#1a1a1a","colorPressedPrimary":"#000000"},"Input":{"color":"#ffffff","colorFocus":"#ffffff","border":"1px solid #e0e0e0","borderHover":"1px solid #999999","borderFocus":"1px solid #333333","borderDisabled":"1px solid #ebebeb","groupLabelBorder":"1px solid #e0e0e0","placeholderColor":"#999999","caretColor":"#1a1a1a"},"InternalSelection":{"border":"1px solid #e0e0e0","borderHover":"1px solid #999999","borderActive":"1px solid #333333","borderFocus":"1px solid #333333"},"Card":{"color":"#ffffff","borderColor":"#e0e0e0"},"Modal":{"color":"#ffffff"},"Tag":{"borderRadius":"6px"}} > 
+  at <App>
+[2m09:41:29[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22m[Vue warn]: Unhandled error during execution of component update 
+  at <ChatPanel> 
+  at <ChatView onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< {} > > 
+  at <RouterView> 
+  at <NotificationProvider> 
+  at <DialogProvider> 
+  at <MessageProvider> 
+  at <ConfigProvider theme=null theme-overrides= {"common":{"primaryColor":"#333333","primaryColorHover":"#1a1a1a","primaryColorPressed":"#000000","primaryColorSuppl":"#333333","bodyColor":"#fafafa","cardColor":"#ffffff","modalColor":"#ffffff","popoverColor":"#ffffff","tableColor":"#ffffff","inputColor":"#ffffff","actionColor":"#f0f0f0","textColorBase":"#1a1a1a","textColor1":"#1a1a1a","textColor2":"#666666","textColor3":"#999999","dividerColor":"#e0e0e0","borderColor":"#e0e0e0","hoverColor":"rgba(0, 0, 0, 0.04)","borderRadius":"8px","borderRadiusSmall":"6px","fontSize":"14px","fontSizeMedium":"14px","heightMedium":"36px","fontFamily":"Inter, system-ui, -apple-system, sans-serif","fontFamilyMono":"JetBrains Mono, Fira Code, Consolas, monospace"},"Layout":{"color":"#fafafa","siderColor":"#f5f5f5","headerColor":"#fafafa"},"Menu":{"itemTextColorActive":"#1a1a1a","itemTextColorActiveHover":"#1a1a1a","itemTextColorChildActive":"#1a1a1a","itemIconColorActive":"#1a1a1a","itemIconColorActiveHover":"#000000","itemColorActive":"rgba(0, 0, 0, 0.06)","itemColorActiveHover":"rgba(0, 0, 0, 0.1)","arrowColorActive":"#1a1a1a"},"Button":{"textColorPrimary":"#ffffff","colorPrimary":"#333333","colorHoverPrimary":"#1a1a1a","colorPressedPrimary":"#000000"},"Input":{"color":"#ffffff","colorFocus":"#ffffff","border":"1px solid #e0e0e0","borderHover":"1px solid #999999","borderFocus":"1px solid #333333","borderDisabled":"1px solid #ebebeb","groupLabelBorder":"1px solid #e0e0e0","placeholderColor":"#999999","caretColor":"#1a1a1a"},"InternalSelection":{"border":"1px solid #e0e0e0","borderHover":"1px solid #999999","borderActive":"1px solid #333333","borderFocus":"1px solid #333333"},"Card":{"color":"#ffffff","borderColor":"#e0e0e0"},"Modal":{"color":"#ffffff"},"Tag":{"borderRadius":"6px"}} > 
+  at <App>
+[2m09:41:29[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled rejection] [1mError[22m: No match for
+ {"name":"yi.`session","params":{"sessionId":"mqx4hxfgrb5wui"}}
+[39m > createRouterError node_modules/.pnpm/vue-router@4.6.4_vue@3.5.38_typescript@5.8.2_/node_modules/vue-router/dist/devtools-EWN81iOl.mjs:526:67
+ > Object.resolve node_modules/.pnpm/vue-router@4.6.4_vue@3.5.38_typescript@5.8.2_/node_modules/vue-router/dist/vue-router.mjs:707:23
+ > Object.resolve node_modules/.pnpm/vue-router@4.6.4_vue@3.5.38_typescript@5.8.2_/node_modules/vue-router/dist/vue-router.mjs:1225:31
+ > Proxy.sessionHref src/components/yi/chat/ChatPanel.vue:89:16
+    87 |  
+    88 |  function sessionHref(sessionId: string) {
+    89 |    return router.resolve({
+       |                  ^
+    90 |      name: chatStore.runtimeMode === "global_agent" ? "yi.`globalAgentSession" : "yi.`session",
+    91 |      params: { sessionId },
+ > src/components/yi/chat/ChatPanel.vue:1272:15
+ > renderList node_modules/.pnpm/@vue+runtime-core@3.5.38/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js:3195:15
+ > Proxy._sfc_render src/components/yi/chat/ChatPanel.vue:1277:10
+ > renderComponentRoot node_modules/.pnpm/@vue+runtime-core@3.5.38/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js:4580:15
+ > ReactiveEffect.componentUpdateFn [as fn] node_modules/.pnpm/@vue+runtime-core@3.5.38/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js:6223:25
+ > ReactiveEffect.run node_modules/.pnpm/@vue+reactivity@3.5.38/node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js:260:18
+
+[2m09:41:34[22m [31m[1m[vite][22m[39m [31mws proxy error:[39m
+Error: read ECONNRESET
+    at TCP.onStreamRead (node:internal/stream_base_commons:216:20)

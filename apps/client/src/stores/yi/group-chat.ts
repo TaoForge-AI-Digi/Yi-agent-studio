@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+﻿import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { getActiveProfileName, getApiKey, getStoredUsername } from '@/api/client'
 import { fetchCurrentUser } from '@/api/auth'
@@ -36,7 +36,7 @@ async function uploadGroupFiles(attachments: Attachment[]): Promise<{ name: stri
     const profileName = getActiveProfileName()
     const headers: Record<string, string> = {}
     if (token) headers.Authorization = `Bearer ${token}`
-    if (profileName) headers['X-Hermes-Profile'] = profileName
+    if (profileName) headers['X-Yi-Profile'] = profileName
     const res = await fetch('/upload', {
         method: 'POST',
         body: formData,

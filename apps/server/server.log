@@ -1,0 +1,14 @@
+Socket.IO /chat-run namespace ready
+Yi server running on http://localhost:3001
+[chat-run] client connected: HrpU62W-gSlJ7-tvAAAB
+[chat-run] client disconnected: HrpU62W-gSlJ7-tvAAAB
+[chat-run] client connected: ssLQdsAXunB0dFIHAAAD
+[chat-run] client disconnected: ssLQdsAXunB0dFIHAAAD
+[chat-run] client connected: C6H9Y-dVfzlSBp4xAAAF
+[agent] model=deepseek-v4-flash-free provider=opencode-zen baseUrl=https://opencode.ai/zen/v1/ hasKey=false
+[chat-run] client connected: 94UXvZkJhBVgrynqAAAH
+[chat-run] client disconnected: 94UXvZkJhBVgrynqAAAH
+[chat-run] client connected: IUI5lC116iTkwDZLAAAJ
+[chat-run] client disconnected: IUI5lC116iTkwDZLAAAJ
+
+C:\Users\dmql\Documents\GitHub\Yi-agent-studio\apps\server>

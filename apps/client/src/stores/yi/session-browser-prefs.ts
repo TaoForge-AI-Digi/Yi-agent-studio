@@ -1,16 +1,16 @@
-import { defineStore } from 'pinia'
+﻿import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 import { useProfilesStore } from './profiles'
 
-const PIN_KEY_PREFIX = 'hermes_session_pins_v1_'
-const HUMAN_ONLY_KEY_PREFIX = 'hermes_human_only_v1_'
+const PIN_KEY_PREFIX = 'yi_session_pins_v1_'
+const HUMAN_ONLY_KEY_PREFIX = 'yi_human_only_v1_'
 
 function currentProfileName(): string {
   try {
     return useProfilesStore().activeProfileName || 'default'
   } catch {
     // Fallback during store initialization
-    return localStorage.getItem('hermes_active_profile_name') || 'default'
+    return localStorage.getItem('yi_active_profile_name') || 'default'
   }
 }
 

@@ -1,4 +1,4 @@
-import { request } from '../client'
+﻿import { request } from '../client'
 
 export interface ConversationSummary {
   id: string
@@ -46,7 +46,7 @@ export async function fetchConversationSummaries(params: { humanOnly?: boolean; 
   if (params.source) query.set('source', params.source)
   if (params.limit != null) query.set('limit', String(params.limit))
   const suffix = query.toString() ? `?${query.toString()}` : ''
-  const res = await request<{ sessions: ConversationSummary[] }>(`/api/hermes/sessions/conversations${suffix}`)
+  const res = await request<{ sessions: ConversationSummary[] }>(`/api/yi/sessions/conversations${suffix}`)
   return res.sessions
 }
 
@@ -55,5 +55,5 @@ export async function fetchConversationDetail(sessionId: string, params: { human
   if (params.humanOnly === false) query.set('humanOnly', 'false')
   if (params.source) query.set('source', params.source)
   const suffix = query.toString() ? `?${query.toString()}` : ''
-  return request<ConversationDetail>(`/api/hermes/sessions/conversations/${encodeURIComponent(sessionId)}/messages${suffix}`)
+  return request<ConversationDetail>(`/api/yi/sessions/conversations/${encodeURIComponent(sessionId)}/messages${suffix}`)
 }

@@ -1,10 +1,10 @@
-import { ref, watch, computed } from 'vue'
+﻿import { ref, watch, computed } from 'vue'
 
 export type BrightnessMode = 'light' | 'dark' | 'system'
 export type ThemeStyle = 'ink' | 'comic'
 
-const BRIGHTNESS_KEY = 'hermes_brightness'
-const STYLE_KEY = 'hermes_style'
+const BRIGHTNESS_KEY = 'yi_brightness'
+const STYLE_KEY = 'yi_style'
 
 const brightness = ref<BrightnessMode>(
   (localStorage.getItem(BRIGHTNESS_KEY) as BrightnessMode) || 'system',

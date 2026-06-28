@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { NSelect } from 'naive-ui'
 import { switchLocale } from '@/i18n'
@@ -20,7 +20,7 @@ const options = [
 
 function handleChange(val: string) {
   switchLocale(val)
-  localStorage.setItem('hermes_locale', val)
+  localStorage.setItem('yi_locale', val)
 }
 </script>
 

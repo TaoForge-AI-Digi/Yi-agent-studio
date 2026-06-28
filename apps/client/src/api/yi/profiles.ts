@@ -1,6 +1,6 @@
-import { request, getBaseUrlValue, getApiKey } from '../client'
+﻿import { request, getBaseUrlValue, getApiKey } from '../client'
 
-export interface HermesProfile {
+export interface YiProfile {
   name: string
   active: boolean
   model: string
@@ -9,7 +9,7 @@ export interface HermesProfile {
   avatar?: ProfileAvatar | null
 }
 
-export interface HermesProfileDetail {
+export interface YiProfileDetail {
   name: string
   path: string
   model: string
@@ -59,23 +59,23 @@ export interface ProfileRuntimeStatusesResponse {
   refreshing?: boolean
 }
 
-export async function fetchProfiles(): Promise<HermesProfile[]> {
-  const res = await request<{ profiles: HermesProfile[] }>('/api/hermes/profiles')
+export async function fetchProfiles(): Promise<YiProfile[]> {
+  const res = await request<{ profiles: YiProfile[] }>('/api/yi/profiles')
   return res.profiles
 }
 
-export async function fetchProfileDetail(name: string): Promise<HermesProfileDetail> {
-  const res = await request<{ profile: HermesProfileDetail }>(`/api/hermes/profiles/${encodeURIComponent(name)}`)
+export async function fetchProfileDetail(name: string): Promise<YiProfileDetail> {
+  const res = await request<{ profile: YiProfileDetail }>(`/api/yi/profiles/${encodeURIComponent(name)}`)
   return res.profile
 }
 
 export async function fetchProfileRuntimeStatus(name: string): Promise<ProfileRuntimeStatus> {
-  return request<ProfileRuntimeStatus>(`/api/hermes/profiles/${encodeURIComponent(name)}/runtime-status`)
+  return request<ProfileRuntimeStatus>(`/api/yi/profiles/${encodeURIComponent(name)}/runtime-status`)
 }
 
 export async function fetchProfileRuntimeStatusesWithMeta(options: { refresh?: boolean } = {}): Promise<ProfileRuntimeStatusesResponse> {
   const query = options.refresh === false ? '?refresh=0' : ''
-  return request<ProfileRuntimeStatusesResponse>(`/api/hermes/profiles/runtime-statuses${query}`)
+  return request<ProfileRuntimeStatusesResponse>(`/api/yi/profiles/runtime-statuses${query}`)
 }
 
 export async function fetchProfileRuntimeStatuses(): Promise<ProfileRuntimeStatus[]> {
@@ -84,7 +84,7 @@ export async function fetchProfileRuntimeStatuses(): Promise<ProfileRuntimeStatu
 }
 
 export async function updateProfileAvatar(name: string, avatar: ProfileAvatar): Promise<ProfileAvatar> {
-  const res = await request<{ avatar: ProfileAvatar }>(`/api/hermes/profiles/${encodeURIComponent(name)}/avatar`, {
+  const res = await request<{ avatar: ProfileAvatar }>(`/api/yi/profiles/${encodeURIComponent(name)}/avatar`, {
     method: 'PUT',
     body: JSON.stringify(avatar),
   })
@@ -92,12 +92,12 @@ export async function updateProfileAvatar(name: string, avatar: ProfileAvatar): 
 }
 
 export async function deleteProfileAvatar(name: string): Promise<void> {
-  await request(`/api/hermes/profiles/${encodeURIComponent(name)}/avatar`, { method: 'DELETE' })
+  await request(`/api/yi/profiles/${encodeURIComponent(name)}/avatar`, { method: 'DELETE' })
 }
 
 export async function restartProfileGateway(name: string): Promise<ProfileRuntimeStatus['gateway']> {
   const res = await request<{ success: boolean; gateway: ProfileRuntimeStatus['gateway'] }>(
-    `/api/hermes/profiles/${encodeURIComponent(name)}/gateway/restart`,
+    `/api/yi/profiles/${encodeURIComponent(name)}/gateway/restart`,
     { method: 'POST' },
   )
   return res.gateway
@@ -105,7 +105,7 @@ export async function restartProfileGateway(name: string): Promise<ProfileRuntim
 
 export async function restartProfileRuntime(name: string): Promise<ProfileRuntimeStatus> {
   const res = await request<{ success: boolean; status: ProfileRuntimeStatus }>(
-    `/api/hermes/profiles/${encodeURIComponent(name)}/restart`,
+    `/api/yi/profiles/${encodeURIComponent(name)}/restart`,
     { method: 'POST' },
   )
   return res.status
@@ -129,7 +129,7 @@ export async function createProfile(name: string, clone?: boolean): Promise<Crea
       disabledPlatforms?: string[]
       strippedConfigCredentials?: string[]
       error?: string
-    }>('/api/hermes/profiles', {
+    }>('/api/yi/profiles', {
       method: 'POST',
       body: JSON.stringify({ name, clone }),
     })
@@ -147,7 +147,7 @@ export async function createProfile(name: string, clone?: boolean): Promise<Crea
 
 export async function deleteProfile(name: string): Promise<boolean> {
   try {
-    await request(`/api/hermes/profiles/${encodeURIComponent(name)}`, { method: 'DELETE' })
+    await request(`/api/yi/profiles/${encodeURIComponent(name)}`, { method: 'DELETE' })
     return true
   } catch {
     return false
@@ -156,7 +156,7 @@ export async function deleteProfile(name: string): Promise<boolean> {
 
 export async function renameProfile(name: string, newName: string): Promise<boolean> {
   try {
-    await request(`/api/hermes/profiles/${encodeURIComponent(name)}/rename`, {
+    await request(`/api/yi/profiles/${encodeURIComponent(name)}/rename`, {
       method: 'POST',
       body: JSON.stringify({ new_name: newName }),
     })
@@ -170,9 +170,9 @@ export async function switchProfile(name: string): Promise<boolean> {
   return !!name
 }
 
-export async function switchHermesProfile(name: string): Promise<boolean> {
+export async function switchYiProfile(name: string): Promise<boolean> {
   try {
-    await request('/api/hermes/profiles/active', {
+    await request('/api/yi/profiles/active', {
       method: 'PUT',
       body: JSON.stringify({ name }),
     })
@@ -189,7 +189,7 @@ export async function exportProfile(name: string): Promise<boolean> {
     const headers: Record<string, string> = {}
     if (token) headers['Authorization'] = `Bearer ${token}`
 
-    const res = await fetch(`${baseUrl}/api/hermes/profiles/${encodeURIComponent(name)}/export`, {
+    const res = await fetch(`${baseUrl}/api/yi/profiles/${encodeURIComponent(name)}/export`, {
       method: 'POST',
       headers,
     })
@@ -199,7 +199,7 @@ export async function exportProfile(name: string): Promise<boolean> {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `hermes-profile-${name}.tar.gz`
+    a.download = `yi-profile-${name}.tar.gz`
     a.click()
     URL.revokeObjectURL(url)
     return true
@@ -218,7 +218,7 @@ export async function importProfile(file: File): Promise<boolean> {
     const formData = new FormData()
     formData.append('file', file)
 
-    const res = await fetch(`${baseUrl}/api/hermes/profiles/import`, {
+    const res = await fetch(`${baseUrl}/api/yi/profiles/import`, {
       method: 'POST',
       headers,
       body: formData,

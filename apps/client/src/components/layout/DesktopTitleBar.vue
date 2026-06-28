@@ -1,19 +1,19 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 
 type WindowControlAction = 'minimize' | 'toggle-maximize' | 'close'
 
-interface HermesDesktopBridge {
+interface YiDesktopBridge {
   platform?: string
   getWindowState?: () => Promise<{ isMaximized: boolean }>
   windowControl?: (action: WindowControlAction) => Promise<{ isMaximized: boolean }>
 }
 
-type WindowWithHermesDesktop = Window & typeof globalThis & {
-  hermesDesktop?: HermesDesktopBridge
+type WindowWithYiDesktop = Window & typeof globalThis & {
+  yiDesktop?: YiDesktopBridge
 }
 
-const desktop = (window as WindowWithHermesDesktop).hermesDesktop
+const desktop = (window as WindowWithYiDesktop).yiDesktop
 const platform = desktop?.platform
 const isMac = computed(() => platform === 'darwin')
 const showTitleBar = computed(() => platform === 'darwin' || platform === 'win32')
@@ -50,7 +50,7 @@ onMounted(() => {
     <div class="desktop-titlebar__drag">
       <div class="desktop-titlebar__brand">
         <img class="desktop-titlebar__logo" src="/logo.png" alt="" draggable="false">
-        <span class="desktop-titlebar__title">Hermes Studio</span>
+        <span class="desktop-titlebar__title">Yi Studio</span>
       </div>
     </div>
     <div v-if="showWindowButtons" class="desktop-titlebar__controls" @dblclick.stop>

@@ -1,4 +1,4 @@
-import { request } from '../client'
+﻿import { request } from '../client'
 
 export interface XaiStartResult {
   session_id: string
@@ -17,13 +17,13 @@ export interface XaiStatusResult {
 }
 
 export async function startXaiLogin(): Promise<XaiStartResult> {
-  return request<XaiStartResult>('/api/hermes/auth/xai/start', { method: 'POST' })
+  return request<XaiStartResult>('/api/yi/auth/xai/start', { method: 'POST' })
 }
 
 export async function pollXaiLogin(sessionId: string): Promise<XaiPollResult> {
-  return request<XaiPollResult>(`/api/hermes/auth/xai/poll/${sessionId}`)
+  return request<XaiPollResult>(`/api/yi/auth/xai/poll/${sessionId}`)
 }
 
 export async function getXaiAuthStatus(): Promise<XaiStatusResult> {
-  return request<XaiStatusResult>('/api/hermes/auth/xai/status')
+  return request<XaiStatusResult>('/api/yi/auth/xai/status')
 }

@@ -1,9 +1,9 @@
-import { request } from '../client'
+﻿import { request } from '../client'
 
 export type PluginConfigStatus = 'enabled' | 'disabled' | 'not-enabled' | 'auto' | 'provider-managed'
 export type PluginEffectiveStatus = 'enabled' | 'disabled' | 'inactive' | 'auto-active' | 'provider-managed'
 
-export interface HermesPluginInfo {
+export interface YiPluginInfo {
   key: string
   name: string
   kind: string
@@ -19,19 +19,19 @@ export interface HermesPluginInfo {
   requiresEnv: Array<string | Record<string, unknown>>
 }
 
-export interface HermesPluginsMetadata {
+export interface YiPluginsMetadata {
   hermesAgentRoot: string
   pythonExecutable: string
   cwd: string
   projectPluginsEnabled: boolean
 }
 
-export interface HermesPluginsResponse {
-  plugins: HermesPluginInfo[]
+export interface YiPluginsResponse {
+  plugins: YiPluginInfo[]
   warnings: string[]
-  metadata: HermesPluginsMetadata
+  metadata: YiPluginsMetadata
 }
 
-export async function fetchPlugins(): Promise<HermesPluginsResponse> {
-  return request<HermesPluginsResponse>('/api/hermes/plugins')
+export async function fetchPlugins(): Promise<YiPluginsResponse> {
+  return request<YiPluginsResponse>('/api/yi/plugins')
 }

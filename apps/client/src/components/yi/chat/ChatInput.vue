@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import type { Attachment } from '@/stores/yi/chat'
 import { useChatStore } from '@/stores/yi/chat'
 import { useAppStore } from '@/stores/yi/app'
@@ -12,7 +12,7 @@ import { useI18n } from 'vue-i18n'
 import { useToolTraceVisibility } from '@/composables/useToolTraceVisibility'
 import VoiceDialogueControls from './VoiceDialogueControls.vue'
 import YiModelSelector from '@/components/chat/ModelSelector.vue'
-import AgentSelector from '@/components/yi/agents/AgentSelector.vue'
+import CharacterSelector from '@/components/yi/characters/CharacterSelector.vue'
 import { useMicRecorder } from '@/composables/useMicRecorder'
 import { useGlobalSpeech } from '@/composables/useSpeech'
 import { useVoiceDialogue } from '@/composables/useVoiceDialogue'
@@ -52,7 +52,7 @@ function onReasoningEffortChange(value: string | null | undefined) {
   if (!sid) return
   chatStore.setSessionReasoningEffort(sid, value || '')
 }
-const DRAFT_STORAGE_KEY = 'hermes_chat_input_drafts_v1'
+const DRAFT_STORAGE_KEY = 'yi_chat_input_drafts_v1'
 type DraftMap = Record<string, string>
 const inputText = ref('')
 const textareaRef = ref<HTMLTextAreaElement>()
@@ -786,7 +786,7 @@ function handleCompositionEnd() {
 }
 
 function isImeEnter(e: KeyboardEvent): boolean {
-  return isComposing.value || e.isComposing || e.keyCode === 229
+  return e.isComposing
 }
 
 function handleKeydown(e: KeyboardEvent) {
@@ -874,7 +874,7 @@ function isImage(type: string): boolean {
   <div class="chat-input-area">
     <!-- Top bar: attach + auto play speech + context info -->
     <div class="input-top-bar">
-      <AgentSelector v-if="!isCodingAgentSession" />
+      <CharacterSelector v-if="!isCodingAgentSession" />
 
       <NTooltip trigger="hover">
         <template #trigger>

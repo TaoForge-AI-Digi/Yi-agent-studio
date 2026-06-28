@@ -1,11 +1,11 @@
-interface CompletionNotificationPayload {
+﻿interface CompletionNotificationPayload {
   title: string
   body?: string
   icon?: string
   tag?: string
 }
 
-interface HermesDesktopBridge {
+interface YiDesktopBridge {
   isDesktop?: boolean
   notifyCompletion?: (payload: CompletionNotificationPayload) => Promise<boolean>
 }
@@ -15,8 +15,8 @@ export interface CompletionNotificationPermissionResult {
   reason?: 'unsupported' | 'insecure' | 'denied'
 }
 
-type WindowWithHermesDesktop = Window & typeof globalThis & {
-  hermesDesktop?: HermesDesktopBridge
+type WindowWithYiDesktop = Window & typeof globalThis & {
+  yiDesktop?: YiDesktopBridge
 }
 
 function withTimeout<T>(promise: Promise<T>, timeoutMs: number, fallback: T): Promise<T> {
@@ -35,9 +35,9 @@ function withTimeout<T>(promise: Promise<T>, timeoutMs: number, fallback: T): Pr
   })
 }
 
-function desktopBridge(): HermesDesktopBridge | undefined {
+function desktopBridge(): YiDesktopBridge | undefined {
   if (typeof window === 'undefined') return undefined
-  return (window as WindowWithHermesDesktop).hermesDesktop
+  return (window as WindowWithYiDesktop).yiDesktop
 }
 
 function supportsBrowserNotification(): boolean {

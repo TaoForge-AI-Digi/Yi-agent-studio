@@ -1,4 +1,4 @@
-import { ref, watch } from 'vue'
+﻿import { ref, watch } from 'vue'
 import { DOUBAO_TTS_2_RESOURCE_ID, DOUBAO_TTS_DEFAULT_VOICE } from '@/constants/doubaoTtsVoices'
 
 export type TtsProvider = 'webspeech' | 'openai' | 'custom' | 'edge' | 'mimo' | 'doubao'
@@ -46,7 +46,7 @@ export interface VoiceSettingsData {
   doubaoStylePrompt: string
 }
 
-const STORAGE_KEY = 'hermes-tts-settings-v2'
+const STORAGE_KEY = 'yi-tts-settings-v2'
 
 function migrateOldKeys() {
   const oldKey = 'hermes-tts-settings'

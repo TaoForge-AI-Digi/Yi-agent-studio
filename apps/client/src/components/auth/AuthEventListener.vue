@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useMessage } from 'naive-ui'
@@ -22,11 +22,11 @@ function onAuthNotice(event: Event) {
 }
 
 onMounted(() => {
-  window.addEventListener('hermes-auth-notice', onAuthNotice)
+  window.addEventListener('yi-auth-notice', onAuthNotice)
 })
 
 onUnmounted(() => {
-  window.removeEventListener('hermes-auth-notice', onAuthNotice)
+  window.removeEventListener('yi-auth-notice', onAuthNotice)
 })
 </script>
 

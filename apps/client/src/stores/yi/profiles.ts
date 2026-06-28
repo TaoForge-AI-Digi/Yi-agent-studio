@@ -1,17 +1,17 @@
-import { defineStore } from 'pinia'
+﻿import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import * as profilesApi from '@/api/yi/profiles'
-import type { HermesProfile, HermesProfileDetail } from '@/api/yi/profiles'
+import type { YiProfile, YiProfileDetail } from '@/api/yi/profiles'
 import { useAppStore } from './app'
 
-const ACTIVE_PROFILE_STORAGE_KEY = 'hermes_active_profile_name'
+const ACTIVE_PROFILE_STORAGE_KEY = 'yi_active_profile_name'
 
 export const useProfilesStore = defineStore('profiles', () => {
-  const profiles = ref<HermesProfile[]>([])
+  const profiles = ref<YiProfile[]>([])
   // 初始化时同步读 localStorage，确保其他 store（如 chat）在启动时能拿到 profile name
   const activeProfileName = ref<string | null>(localStorage.getItem(ACTIVE_PROFILE_STORAGE_KEY))
-  const activeProfile = ref<HermesProfile | null>(null)
-  const detailMap = ref<Record<string, HermesProfileDetail>>({})
+  const activeProfile = ref<YiProfile | null>(null)
+  const detailMap = ref<Record<string, YiProfileDetail>>({})
   const loading = ref(false)
   const switching = ref(false)
 
@@ -46,14 +46,14 @@ export const useProfilesStore = defineStore('profiles', () => {
     }
   }
 
-  async function fetchHermesProfiles() {
+  async function fetchYiProfiles() {
     loading.value = true
     try {
       profiles.value = await profilesApi.fetchProfiles()
       activeProfile.value = profiles.value.find(profile => profile.active) ?? null
       clearAllSessionCaches()
     } catch (err) {
-      console.error('Failed to fetch Hermes profiles:', err)
+      console.error('Failed to fetch Yi profiles:', err)
     } finally {
       loading.value = false
     }
@@ -147,11 +147,11 @@ export const useProfilesStore = defineStore('profiles', () => {
     }
   }
 
-  async function switchHermesProfile(name: string) {
+  async function switchYiProfile(name: string) {
     switching.value = true
     try {
-      const ok = await profilesApi.switchHermesProfile(name)
-      if (ok) await fetchHermesProfiles()
+      const ok = await profilesApi.switchYiProfile(name)
+      if (ok) await fetchYiProfiles()
       return ok
     } finally {
       switching.value = false
@@ -176,13 +176,13 @@ export const useProfilesStore = defineStore('profiles', () => {
     loading,
     switching,
     fetchProfiles,
-    fetchHermesProfiles,
+    fetchYiProfiles,
     fetchProfileDetail,
     createProfile,
     deleteProfile,
     renameProfile,
     switchProfile,
-    switchHermesProfile,
+    switchYiProfile,
     exportProfile,
     importProfile,
     updateAvatar,

@@ -1,4 +1,4 @@
-import { request } from '../client'
+﻿import { request } from '../client'
 import type { StoredSttProvider } from './stt-settings'
 
 export interface TranscribeSpeechRequest {
@@ -33,7 +33,7 @@ export async function transcribeSpeech(req: TranscribeSpeechRequest): Promise<Tr
     formData.append('prompt', req.prompt)
   }
 
-  return request<TranscribeSpeechResponse>('/api/hermes/stt/transcribe', {
+  return request<TranscribeSpeechResponse>('/api/yi/stt/transcribe', {
     method: 'POST',
     body: formData,
   })
